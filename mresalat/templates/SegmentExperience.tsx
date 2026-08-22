@@ -30,7 +30,7 @@ function ActivityList({ segment }: { segment: SegmentConfig }) {
 export function SegmentExperience({ segment, view, shellActive = 'segments' }: { segment: SegmentConfig; view: SegmentView; shellActive?: string }) {
   const isYoung = segment.mode === 'young';
   const isOperational = segment.mode === 'operational';
-  const showCharacter = segment.id === 'general' || isYoung;
+  const showCharacter = isYoung;
 
   return (
     <AppShell active={shellActive}>
@@ -38,9 +38,9 @@ export function SegmentExperience({ segment, view, shellActive = 'segments' }: {
         <header className="segment-context-head"><div><span className="domain-icon"><MResalatIcon name={segment.icon} size={20} /></span><div><small>تجربه متناسب با نقش</small><strong>{segment.name}</strong></div></div><SegmentNav segment={segment} view={view} /></header>
 
         {view === 'home' && <>
-          <ParallaxLayer className="segment-hero" strength={isYoung ? 22 : 7}>
+          <ParallaxLayer className={`segment-hero ${segment.id === 'general' ? 'segment-hero-general' : ''}`} strength={isYoung ? 22 : 7}>
             <div className="segment-hero-copy"><span className="eyebrow">{segment.home.eyebrow}</span><h1>{segment.home.title}</h1><p>{segment.home.intro}</p>{isYoung && <div className="young-decor" aria-hidden="true"><span /><span /><span /></div>}</div>
-            {showCharacter ? <div className={`segment-assistant-stage ${isYoung ? 'segment-assistant-young' : ''}`}><SmartAssistant3D mode="complete" emotion={isYoung ? 'happy' : 'listening'} /><AssistantShell variant={segment.assistantVariant} title="از اینجا شروع کنید" placeholder={segment.home.prompt} /></div> : <AssistantShell variant={segment.assistantVariant} title={isOperational ? 'دستیار عملیات' : 'از اینجا شروع کنید'} placeholder={segment.home.prompt} />}
+            {showCharacter ? <div className={`segment-assistant-stage ${isYoung ? 'segment-assistant-young' : ''}`}><SmartAssistant3D mode="complete" emotion={isYoung ? 'happy' : 'listening'} /><AssistantShell variant={segment.assistantVariant} title="از اینجا شروع کنید" placeholder={segment.home.prompt} /></div> : <AssistantShell variant={segment.assistantVariant} title={isOperational ? 'دستیار عملیات' : 'نیازتان را بگویید؛ مسیر را با هم پیدا می‌کنیم'} placeholder={segment.home.prompt} prompts={segment.id === 'general' ? [{ label: 'عضویت ام‌رسالت', href: '/examples' }, { label: 'ام‌بازار', href: '/examples' }, { label: 'مشاوره آنلاین', href: '/examples' }] : undefined} />}
           </ParallaxLayer>
           {isOperational ? <><QuickActions segment={segment} /><Metrics segment={segment} /></> : <><Metrics segment={segment} /><QuickActions segment={segment} /></>}
           <ProcessReviewWizard title={segment.journey.title} steps={segment.journey.steps} progress={segment.journey.progress} variant={isYoung ? 'featured' : isOperational ? 'compact' : 'standard'} currentAction={{ label: segment.journey.action, href: `/segments/${segment.slug}/journey` }} />

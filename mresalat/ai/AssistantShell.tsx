@@ -2,7 +2,8 @@ import { MResalatIcon } from '@/mresalat/core/MResalatIcon';
 
 export type AssistantVariant = 'hero' | 'context' | 'compact';
 
-export function AssistantShell({ variant = 'hero', title, placeholder }: { variant?: AssistantVariant; title?: string; placeholder?: string }) {
+export function AssistantShell({ variant = 'hero', title, placeholder, prompts }: { variant?: AssistantVariant; title?: string; placeholder?: string; prompts?: { label: string; href: string }[] }) {
+  const heroPrompts = prompts ?? [{ label: 'عضویت ام‌رسالت', href: '/examples' }, { label: 'ام‌بازار', href: '/examples' }, { label: 'پیگیری درخواست', href: '/examples' }];
   return (
     <div className={`assistant-shell assistant-${variant}`}>
       {variant !== 'compact' && (
@@ -16,7 +17,7 @@ export function AssistantShell({ variant = 'hero', title, placeholder }: { varia
         <input id={`assistant-input-${variant}`} name="q" placeholder={placeholder ?? (variant === 'compact' ? 'از دستیار بپرسید…' : 'مثلاً: برای دریافت وام چه شرایطی لازم است؟')} />
         <button type="submit" aria-label="ارسال پیام"><MResalatIcon name="next" size={20} /></button>
       </form>
-      {variant === 'hero' && <div className="prompt-row"><span>پیشنهاد:</span><a href="/loan">شرایط وام</a><a href="/showcase">افتتاح حساب</a><a href="/seller">خدمات فروشندگان</a></div>}
+      {variant === 'hero' && <div className="prompt-row"><span>پیشنهاد:</span>{heroPrompts.map((prompt) => <a href={prompt.href} key={prompt.label}>{prompt.label}</a>)}</div>}
     </div>
   );
 }

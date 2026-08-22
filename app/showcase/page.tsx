@@ -6,6 +6,7 @@ import { AppShell } from '@/mresalat/core/AppShell';
 import { BrandLogo } from '@/mresalat/core/BrandLogo';
 import { componentInventory } from '@/mresalat/core/component-inventory';
 import { iconGalleryNames, MResalatIcon } from '@/mresalat/core/MResalatIcon';
+import { MResalatServiceIcon } from '@/mresalat/core/MResalatServiceIcon';
 import { Alert, Badge, Button } from '@/mresalat/core/primitives';
 import { ecosystemServices } from '@/mresalat/domains/ecosystem';
 import { loanJourney, loanSources } from '@/mresalat/domains/mock-data';
@@ -20,13 +21,13 @@ export const metadata: Metadata = { title: 'مرجع کدنویسی سیستم' 
 
 const sections = [
   ['brand', 'برند'], ['typography', 'تایپوگرافی'], ['color', 'رنگ'], ['foundations', 'پایه‌ها'], ['grid', 'شبکه و چیدمان'],
-  ['icons', 'آیکون‌ها'], ['core', 'اجزای پایه'], ['navigation', 'ناوبری'], ['ai', 'دستیار و سه‌بعدی'], ['rag', 'اعتماد و RAG'],
+  ['icons', 'آیکون‌ها'], ['service-identities', 'هویت خدمات'], ['core', 'اجزای پایه'], ['navigation', 'ناوبری'], ['ai', 'دستیار و سه‌بعدی'], ['rag', 'اعتماد و RAG'],
   ['journeys', 'مسیرها'], ['secure', 'اقدام امن'], ['motion', 'حرکت'], ['templates', 'قالب‌ها'], ['inventory', 'موجودی'], ['segments', 'سگمنت‌ها'],
 ] as const;
 
 const palette = [
   { group: 'Brand', items: [['brand.50', '#EEF6FD', '#10283D', 'پس‌زمینه برند'], ['brand.500', '#1976C9', '#4FA3EA', 'تأکید اصلی'], ['brand.700', '#075AA7', '#72B7EF', 'اقدام اصلی'], ['accent.500', '#16A8B7', '#42C7C8', 'دستیار و پیشرفت']] },
-  { group: 'Neutral', items: [['surface.canvas', '#F6F9FC', '#091827', 'بوم صفحه'], ['surface.default', '#FFFFFF', '#102235', 'کارت و سطح'], ['border.subtle', '#DCE6EF', '#294056', 'مرز آرام'], ['text.primary', '#10233F', '#EDF6FF', 'متن اصلی']] },
+  { group: 'Surface', items: [['surface.canvas', '#F2F5FA', '#091827', 'بوم خنک صفحه'], ['surface.default', '#FFFFFF', '#102235', 'سطح اصلی'], ['surface.secondary', '#EEF3F8', '#11283B', 'سطح ثانویه'], ['surface.selected', '#DCEEFA', '#194665', 'سطح انتخاب‌شده']] },
   { group: 'Semantic', items: [['status.success', '#14805E', '#4FC49A', 'موفق'], ['status.warning', '#A96808', '#E6B259', 'نیازمند توجه'], ['status.danger', '#BD3F4F', '#EF7C8D', 'خطر'], ['status.info', '#176CB5', '#63ACE8', 'اطلاعات']] },
   { group: 'AI Trust', items: [['trust.official', '#14805E', '#5ED0A7', 'دانش رسمی'], ['trust.live', '#176CB5', '#69B5F2', 'داده زنده'], ['trust.ai', '#6552A1', '#B6A4EC', 'توضیح AI'], ['trust.recommendation', '#A96808', '#EFC36F', 'پیشنهاد شخصی']] },
 ] as const;
@@ -54,6 +55,8 @@ export default function ShowcasePage() {
           <ShowcaseSection id="grid" eyebrow="ترکیب صفحه" title="Grid & Layout" description="مقادیر واقعی CSS: موبایل تا ۶۴۰px، تبلت تا ۹۰۰px، و کانتینر عریض ۱۱۸۰px."><div className="layout-spec-grid"><article><span>Mobile</span><strong>۱–۴ ستون</strong><p>حاشیه صفحه ۱۴px، کارت‌ها عموماً تک‌ستونه.</p></article><article><span>Tablet</span><strong>۸ ستون منطقی</strong><p>حاشیه ۲۴px، ماژول‌های اصلی یک یا دو ستون.</p></article><article><span>Desktop</span><strong>۱۲ ستون منطقی</strong><p>حداکثر عرض ۱۱۸۰px و فاصله معمول ۱۶px.</p></article><article><span>Reading</span><strong>حدود ۶۸۰px</strong><p>متن‌های طولانی و پاسخ‌های مستند از عرض کامل استفاده نمی‌کنند.</p></article></div><GridLayoutDemo /><CodeExample title="Page container" code={showcaseSnippets.grid} /></ShowcaseSection>
 
           <ShowcaseSection id="icons" eyebrow="زبان بصری واحد" title="Iconography" description="Lucide با ضخامت ۱٫۸، اندازه‌های ۱۶، ۲۰، ۲۴ و ۳۲ و جهت صحیح پیکان‌ها در RTL."><div className="icon-size-demo">{([16,20,24,32] as const).map((size) => <span key={size}><MResalatIcon name="assistant" size={size} />{size}px</span>)}</div><div className="icon-gallery">{iconGalleryNames.map((name) => <article key={name}><span className="domain-icon"><MResalatIcon name={name} size={20} /></span><code>{name}</code></article>)}</div><CodeExample title="MResalatIcon" code={showcaseSnippets.icon} /></ShowcaseSection>
+
+          <ShowcaseSection id="service-identities" eyebrow="هویت خدمات" title="Service Identities / هویت خدمات" description="نشانه‌های رسمیِ ذخیره‌شده در پروژه، در کنار هویت‌های طراحی‌شده برای گروه‌هایی که نشان مستقل مناسبی ندارند."><div className="service-identity-showcase">{ecosystemServices.map((service) => <article key={service.id}><header><MResalatServiceIcon service={service} size={64} /><div><strong>{service.titleFa}</strong><code>{service.slug}</code></div></header><div className="service-identity-sizes"><span><MResalatServiceIcon service={service} size={32} />32</span><span><MResalatServiceIcon service={service} size={40} />40</span><span><MResalatServiceIcon service={service} size={48} />48</span><span className="identity-dark-sample"><MResalatServiceIcon service={service} size={48} />Dark</span></div><footer><Badge tone={service.identity.source === 'official-asset' ? 'info' : 'neutral'}>{service.identity.source === 'official-asset' ? 'Official asset' : 'MResalat System designed'}</Badge><small>{service.source.reviewedAt}</small></footer></article>)}</div></ShowcaseSection>
 
           <ShowcaseSection id="core" eyebrow="کنترل‌های پایه" title="Core Components"><div className="primitive-row"><Button>اقدام اصلی</Button><Button tone="secondary">اقدام دوم</Button><Button tone="danger">اقدام حساس</Button><Button disabled>غیرفعال</Button><Badge tone="success">تکمیل شده</Badge><Badge tone="warning">نیازمند توجه</Badge></div><CodeExample title="Button & Badge" code={showcaseSnippets.controls} /><div className="alerts-demo"><Alert tone="success" title="درخواست ثبت شد">شماره پیگیری در سوابق ذخیره شد.</Alert><Alert tone="info" title="داده زنده دریافت شد">این اطلاعات همین حالا به‌روز شده است.</Alert><Alert tone="warning" title="اطلاعات بیشتری لازم است">فقط یک سؤال روشن‌کننده پاسخ دهید.</Alert><Alert tone="danger" title="عملیات انجام نشد">هیچ تغییری در حساب ثبت نشده است.</Alert></div><CodeExample title="Alert" code={showcaseSnippets.alerts} /></ShowcaseSection>
 

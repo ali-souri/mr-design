@@ -4,7 +4,7 @@ import {
   CircleX, ClipboardCheck, Clock3, CreditCard, FileSearch, Gift, GraduationCap,
   Code2, Copy, Grid3X3, HandCoins, HeartHandshake, HeartPulse, Home, Landmark, LifeBuoy, LockKeyhole, Menu, MessageCircleMore,
   MonitorCog, Moon, Package, PanelsTopLeft, Plus, Search, ShieldCheck, ShoppingBag, Sparkles,
-  Stethoscope, Store, Sun, Target, TriangleAlert, UserPlus, UsersRound, WalletCards,
+  Settings, Stethoscope, Store, Sun, Target, TriangleAlert, UserPlus, UserRound, UsersRound, WalletCards,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -20,6 +20,7 @@ export const iconMap = {
   settlement: BadgeDollarSign,
   reports: ChartNoAxesCombined,
   organization: Building2,
+  profile: UserRound,
   employee: BriefcaseBusiness,
   family: UsersRound,
   parent: UsersRound,
@@ -58,6 +59,8 @@ export const iconMap = {
   code: Code2,
   copy: Copy,
   grid: Grid3X3,
+  settings: Settings,
+  bank: Landmark,
   examples: PanelsTopLeft,
   insurance: ShieldCheck,
   advocacy: HeartHandshake,
