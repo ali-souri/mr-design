@@ -28,12 +28,12 @@ function StaticAssistant({ emotion, mode, compact = false }: { emotion: Assistan
   return (
     <div className={`assistant-static assistant-static-${emotion} assistant-static-${mode}${compact ? ' assistant-static-compact' : ''}`} role="img" aria-label={`دستیار هوشمند، حالت ${assistantEmotionLabels[emotion]}`}>
       <span className="static-android-head">
-        <span className="static-face"><i className="static-eye static-eye-right" /><i className="static-eye static-eye-left" /><b className="static-smile" /><small className="static-cheeks" /></span>
-        <em />
+        <span className="static-antenna" /><span className="static-ear static-ear-right" /><span className="static-ear static-ear-left" />
+        <span className="static-face"><i className="static-eye static-eye-right" /><i className="static-eye static-eye-left" /><b className="static-smile" /><span className="static-brows"><i /><i /></span></span>
       </span>
       <span className="static-neck" />
       <span className="static-android-body">
-        <span className="static-collar" /><span className="static-vest-trim" /><span className="static-sash" />
+        <span className="static-collar" /><span className="static-chest-panel" /><span className="static-vest-trim" /><span className="static-sash" />
         <span className="static-vest-mark"><MResalatIcon name={emotion === 'warning' ? 'warning' : emotion === 'handoff' ? 'support' : 'assistant'} size={compact ? 16 : 20} /></span>
         <i className="static-arm static-arm-right" /><i className="static-arm static-arm-left" />
       </span>
