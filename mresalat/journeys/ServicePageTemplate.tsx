@@ -1,12 +1,12 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 import { AssistantShell } from '@/mresalat/ai/AssistantShell';
 import { Alert, Badge } from '@/mresalat/core/primitives';
 import type { ServiceJourney } from '@/mresalat/domains/contracts';
-import Link from 'next/link';
 
 export function ServicePageTemplate({ journey }: { journey: ServiceJourney }) {
   return (
     <>
-      <div className="breadcrumbs"><Link href="/">خانه</Link><span>←</span><a href="/showcase">خدمات</a><span>←</span><b>وام قرض‌الحسنه</b></div>
+      <div className="breadcrumbs"><a href="/">خانه</a><span>←</span><a href="/showcase">خدمات</a><span>←</span><b>وام قرض‌الحسنه</b></div>
       <section className="service-hero-layout">
         <div className="service-hero-copy">
           <Badge tone="success">ام‌مشاور · راهنمای رسمی خدمت</Badge>

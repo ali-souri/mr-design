@@ -1,5 +1,5 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 import type { ReactNode } from 'react';
-import Link from 'next/link';
 
 const navItems = [
   { key: 'home', label: 'خانه', href: '/' },
@@ -12,10 +12,10 @@ export function AppShell({ children, active = 'home' }: { children: ReactNode; a
   return (
     <div className="app-shell">
       <header className="topbar">
-        <Link className="brand" href="/" aria-label="MResalat System، خانه">
+        <a className="brand" href="/" aria-label="MResalat System، خانه">
           <span className="brand-mark" aria-hidden="true">م</span>
           <span><strong>ام‌رسالت</strong><small>MResalat System</small></span>
-        </Link>
+        </a>
         <nav className="desktop-nav" aria-label="ناوبری اصلی">
           {navItems.map((item) => <a key={item.key} className={active === item.key ? 'active' : ''} href={item.href}>{item.label}</a>)}
         </nav>
