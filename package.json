@@ -1,6 +1,6 @@
 {
   "name": "mresalat-system",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "engines": {
     "node": ">=22.13.0"
@@ -12,10 +12,13 @@
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next"
   },
   "dependencies": {
+    "@react-three/fiber": "^9.7.0",
+    "@types/three": "^0.182.0",
     "lucide-react": "^1.33.0",
     "next": "16.2.6",
     "react": "19.2.6",
-    "react-dom": "19.2.6"
+    "react-dom": "19.2.6",
+    "three": "^0.182.0"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "1.37.1",

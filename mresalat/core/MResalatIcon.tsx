@@ -2,8 +2,8 @@ import {
   ArrowLeft, ArrowRight, BadgeDollarSign, Baby, Bell, BookOpenCheck, BriefcaseBusiness,
   Building2, CalendarDays, ChartNoAxesCombined, ChevronDown, CircleCheck, CircleHelp,
   CircleX, ClipboardCheck, Clock3, CreditCard, FileSearch, Gift, GraduationCap,
-  HandCoins, HeartPulse, Home, Landmark, LifeBuoy, LockKeyhole, Menu, MessageCircleMore,
-  MonitorCog, Moon, Package, Plus, Search, ShieldCheck, ShoppingBag, Sparkles,
+  Code2, Copy, Grid3X3, HandCoins, HeartHandshake, HeartPulse, Home, Landmark, LifeBuoy, LockKeyhole, Menu, MessageCircleMore,
+  MonitorCog, Moon, Package, PanelsTopLeft, Plus, Search, ShieldCheck, ShoppingBag, Sparkles,
   Stethoscope, Store, Sun, Target, TriangleAlert, UserPlus, UsersRound, WalletCards,
   type LucideIcon,
 } from 'lucide-react';
@@ -55,6 +55,12 @@ export const iconMap = {
   calendar: CalendarDays,
   clinic: Stethoscope,
   credit: HandCoins,
+  code: Code2,
+  copy: Copy,
+  grid: Grid3X3,
+  examples: PanelsTopLeft,
+  insurance: ShieldCheck,
+  advocacy: HeartHandshake,
 } satisfies Record<string, LucideIcon>;
 
 export type MResalatIconName = keyof typeof iconMap;

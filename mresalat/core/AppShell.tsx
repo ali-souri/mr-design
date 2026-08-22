@@ -7,6 +7,7 @@ import { ThemeToggle } from './ThemeController';
 const navItems = [
   { key: 'home', label: 'خانه', href: '/', icon: 'home' },
   { key: 'segments', label: 'تجربه‌ها', href: '/segments', icon: 'membership' },
+  { key: 'examples', label: 'نمونه‌ها', href: '/examples', icon: 'examples' },
   { key: 'assistant', label: 'دستیار هوشمند', href: '/rag', icon: 'assistant' },
   { key: 'system', label: 'MResalat System', href: '/showcase', icon: 'evidence' },
 ] satisfies { key: string; label: string; href: string; icon: MResalatIconName }[];

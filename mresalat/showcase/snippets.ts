@@ -1,0 +1,15 @@
+export const showcaseSnippets = {
+  brand: `<BrandLogo />\n<BrandLogo compact />\n<BrandLogo light />`,
+  icon: `<MResalatIcon name="loan" size={20} />\n<MResalatIcon name="next" size={16} label="ادامه" />`,
+  controls: `<Button>اقدام اصلی</Button>\n<Button tone="danger">اقدام حساس</Button>\n<Badge tone="success">تکمیل شده</Badge>`,
+  alerts: `<Alert tone="warning" title="اطلاعات بیشتری لازم است">\n  فقط یک سؤال روشن‌کننده پاسخ دهید.\n</Alert>`,
+  assistant: `<AssistantShell variant="hero" />\n<AssistantShell variant="context" />\n<AssistantShell variant="compact" />`,
+  trust: `<TrustLegend />\n<SourceCitation source={source} />\n<UncertainAnswer />\n<HumanHandoff />`,
+  journey: `<ProcessReviewWizard\n  title="درخواست وام"\n  steps={steps}\n  progress={48}\n  variant="featured"\n  currentAction={{ label: 'تکمیل مدرک', href: '/loan' }}\n/>`,
+  secure: `<SecureActionFlow action={secureAction} />`,
+  navigation: `<AppShell active="examples">\n  {children}\n</AppShell>`,
+  motion: `<ParallaxLayer strength={10}>\n  <ServiceCard />\n</ParallaxLayer>`,
+  segment: `<SegmentExperience\n  segment={segmentBySlug['loan-applicant']}\n  view="journey"\n/>`,
+  assistant3d: `<SmartAssistant3D emotion="thinking" />\n\n// idle | listening | thinking | explaining\n// happy | warning | uncertain | handoff`,
+  grid: `.page-container {\n  width: min(calc(100% - 48px), 1180px);\n}\n\n@media (max-width: 640px) {\n  .page-container { width: calc(100% - 28px); }\n}`,
+} as const;

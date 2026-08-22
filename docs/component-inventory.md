@@ -1,6 +1,6 @@
 # MResalat System component inventory
 
-This list reflects the exported React components in `mresalat/` for v0.2.
+This list reflects the exported React components in `mresalat/` for v0.3.
 
 ## Foundations
 
@@ -21,6 +21,9 @@ This list reflects the exported React components in `mresalat/` for v0.2.
 ## AI
 
 - `AssistantShell` — hero, context and compact assistant density.
+- `SmartAssistant3D` — lazy WebGL character with a static fallback and eight explicit emotion states.
+- `SmartAssistantCanvas` — lazy React Three Fiber scene and coded low-complexity character model.
+- `Assistant3DDemo` — interactive state-switching documentation for the 3D assistant.
 
 ## RAG / Trust
 
@@ -45,3 +48,8 @@ This list reflects the exported React components in `mresalat/` for v0.2.
 ## Motion
 
 - `ParallaxLayer` — restrained pointer depth, enhanced for young mode and disabled by reduced motion.
+
+## Documentation
+
+- `CodeExample` — expandable representative TSX with copy feedback.
+- `GridLayoutDemo` — toggleable 12-column desktop / 4-column mobile grid overlay.

@@ -1,4 +1,5 @@
 import { AssistantShell } from '@/mresalat/ai/AssistantShell';
+import { SmartAssistant3D } from '@/mresalat/ai/SmartAssistant3D';
 import { AppShell } from '@/mresalat/core/AppShell';
 import { MResalatIcon } from '@/mresalat/core/MResalatIcon';
 import { Badge } from '@/mresalat/core/primitives';
@@ -29,6 +30,7 @@ function ActivityList({ segment }: { segment: SegmentConfig }) {
 export function SegmentExperience({ segment, view, shellActive = 'segments' }: { segment: SegmentConfig; view: SegmentView; shellActive?: string }) {
   const isYoung = segment.mode === 'young';
   const isOperational = segment.mode === 'operational';
+  const showCharacter = segment.id === 'general' || isYoung;
 
   return (
     <AppShell active={shellActive}>
@@ -38,7 +40,7 @@ export function SegmentExperience({ segment, view, shellActive = 'segments' }: {
         {view === 'home' && <>
           <ParallaxLayer className="segment-hero" strength={isYoung ? 22 : 7}>
             <div className="segment-hero-copy"><span className="eyebrow">{segment.home.eyebrow}</span><h1>{segment.home.title}</h1><p>{segment.home.intro}</p>{isYoung && <div className="young-decor" aria-hidden="true"><span /><span /><span /></div>}</div>
-            <AssistantShell variant={segment.assistantVariant} title={isOperational ? 'دستیار عملیات' : 'از اینجا شروع کنید'} placeholder={segment.home.prompt} />
+            {showCharacter ? <div className={`segment-assistant-stage ${isYoung ? 'segment-assistant-young' : ''}`}><SmartAssistant3D emotion={isYoung ? 'happy' : 'listening'} /><AssistantShell variant={segment.assistantVariant} title="از اینجا شروع کنید" placeholder={segment.home.prompt} /></div> : <AssistantShell variant={segment.assistantVariant} title={isOperational ? 'دستیار عملیات' : 'از اینجا شروع کنید'} placeholder={segment.home.prompt} />}
           </ParallaxLayer>
           {isOperational ? <><QuickActions segment={segment} /><Metrics segment={segment} /></> : <><Metrics segment={segment} /><QuickActions segment={segment} /></>}
           <ProcessReviewWizard title={segment.journey.title} steps={segment.journey.steps} progress={segment.journey.progress} variant={isYoung ? 'featured' : isOperational ? 'compact' : 'standard'} currentAction={{ label: segment.journey.action, href: `/segments/${segment.slug}/journey` }} />
