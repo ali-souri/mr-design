@@ -1,6 +1,6 @@
 # MResalat System component inventory
 
-This list reflects the exported React components in `mresalat/` for v0.3.
+This list reflects the exported React components in `mresalat/` for v0.4.
 
 ## Foundations
 
@@ -21,9 +21,10 @@ This list reflects the exported React components in `mresalat/` for v0.3.
 ## AI
 
 - `AssistantShell` — hero, context and compact assistant density.
-- `SmartAssistant3D` — lazy WebGL character with a static fallback and eight explicit emotion states.
-- `SmartAssistantCanvas` — lazy React Three Fiber scene and coded low-complexity character model.
-- `Assistant3DDemo` — interactive state-switching documentation for the 3D assistant.
+- `SmartAssistant3D` — original humanoid android with independent `complete` / `portrait` framing, local gaze, a matching static fallback and eight explicit emotion states.
+- `SmartAssistantAvatar` — optimized static portrait of the same character at 32, 40, 48, 64 and 96 pixels.
+- `SmartAssistantCanvas` — lazy React Three Fiber scene with adaptive cameras, emotional gestures, smooth constrained eye/head tracking, neutral reset and reduced-motion handling.
+- `Assistant3DDemo` — interactive mode, emotion, pointer-tracking and avatar-size documentation for the 3D assistant.
 
 ## RAG / Trust
 

@@ -10,6 +10,6 @@ export const showcaseSnippets = {
   navigation: `<AppShell active="examples">\n  {children}\n</AppShell>`,
   motion: `<ParallaxLayer strength={10}>\n  <ServiceCard />\n</ParallaxLayer>`,
   segment: `<SegmentExperience\n  segment={segmentBySlug['loan-applicant']}\n  view="journey"\n/>`,
-  assistant3d: `<SmartAssistant3D emotion="thinking" />\n\n// idle | listening | thinking | explaining\n// happy | warning | uncertain | handoff`,
+  assistant3d: `<SmartAssistant3D mode="complete" emotion="thinking" />\n<SmartAssistant3D mode="portrait" emotion="listening" />\n<SmartAssistantAvatar size={48} emotion="happy" />\n\n// mode: complete | portrait\n// emotion: idle | listening | thinking | explaining\n// happy | warning | uncertain | handoff`,
   grid: `.page-container {\n  width: min(calc(100% - 48px), 1180px);\n}\n\n@media (max-width: 640px) {\n  .page-container { width: calc(100% - 28px); }\n}`,
 } as const;

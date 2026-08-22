@@ -3,6 +3,7 @@ import { AppShell } from '@/mresalat/core/AppShell';
 import { MResalatIcon } from '@/mresalat/core/MResalatIcon';
 import { Badge } from '@/mresalat/core/primitives';
 import { HumanHandoff, SourceCitation, TrustLegend, UncertainAnswer } from '@/mresalat/ai/StructuredAnswer';
+import { SmartAssistantAvatar } from '@/mresalat/ai/SmartAssistant3D';
 import { loanSources } from '@/mresalat/domains/mock-data';
 
 export const metadata: Metadata = { title: 'پاسخ هوشمند و مستند' };
@@ -17,7 +18,7 @@ export default function RagPage() {
           <div className="message-stream">
             <div className="user-message"><p>برای گرفتن وام قرض‌الحسنه حتماً باید ضامن داشته باشم؟</p><time>۱۰:۳۲</time></div>
             <article className="assistant-message">
-              <div className="message-avatar"><MResalatIcon name="assistant" size={16} /></div>
+              <div className="message-avatar"><SmartAssistantAvatar size={40} emotion="explaining" /></div>
               <div className="answer-body">
                 <div className="answer-label ai-label"><MResalatIcon name="assistant" size={16} />توضیح هوش مصنوعی</div>
                 <p className="answer-lead">نه، همیشه ضامن لازم نیست. نوع تضمین به نتیجه اعتبارسنجی، مبلغ درخواستی و توان بازپرداخت شما بستگی دارد.</p>

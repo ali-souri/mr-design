@@ -1,6 +1,6 @@
 # MResalat System
 
-MResalat System v0.3 is a code-first, Persian-first experience system for MResalat. It combines ten audience segments with readable typography, ecosystem examples, coded design-system documentation, and an accessible 3D assistant proof of concept.
+MResalat System v0.4 is a code-first, Persian-first experience system for MResalat. It combines ten audience segments with readable typography, ecosystem examples, coded design-system documentation, and an accessible humanoid 3D assistant with complete and portrait modes.
 
 ## Local development
 

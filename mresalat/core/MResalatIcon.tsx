@@ -74,5 +74,5 @@ export function MResalatIcon({ name, size = 20, strokeWidth = 1.8, className, la
   label?: string;
 }) {
   const Icon = iconMap[name];
-  return <Icon aria-hidden={label ? undefined : true} aria-label={label} className={className} size={size} strokeWidth={strokeWidth} />;
+  return <Icon data-mresalat-icon={name} aria-hidden={label ? undefined : true} aria-label={label} className={className} size={size} strokeWidth={strokeWidth} />;
 }
