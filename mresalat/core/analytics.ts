@@ -10,7 +10,11 @@ export type AnalyticsEventName =
   | 'mbazar_seller_opened' | 'mbazar_support_case_created'
   | 'segment_selected' | 'segment_landing_opened' | 'segment_procedure_started'
   | 'identity_verification_started' | 'otp_submitted' | 'youth_child_lookup_started'
-  | 'organization_owner_add_started' | 'request_status_opened';
+  | 'organization_owner_add_started' | 'request_status_opened'
+  | 'segment_ai_query_submitted' | 'segment_ai_result_opened'
+  | 'individual_journey_opened' | 'youth_goal_opened' | 'youth_reward_opened'
+  | 'organization_program_opened' | 'organization_personnel_opened' | 'organization_report_opened'
+  | 'mascot_greeting_shown' | 'mascot_assistant_answered';
 
 export type AnalyticsPayload = {
   event: AnalyticsEventName;

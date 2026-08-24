@@ -19,6 +19,7 @@ type EmotionStyle = {
 
 const emotionStyle: Record<AssistantEmotion, EmotionStyle> = {
   idle: { accent: '#42c7c8', eye: '#dfffff', tilt: 0, energy: .58, eyeScale: 1, smileWidth: .9, smileCurve: .3, browTilt: 0 },
+  greeting: { accent: '#4fc49a', eye: '#f2fff8', tilt: -.025, energy: 1, eyeScale: 1.04, smileWidth: 1.12, smileCurve: .58, browTilt: -.04 },
   listening: { accent: '#35d6d0', eye: '#efffff', tilt: -.045, energy: .82, eyeScale: 1.12, smileWidth: .84, smileCurve: .23, browTilt: 0 },
   thinking: { accent: '#8f7bd1', eye: '#e1d9ff', tilt: .085, energy: .45, eyeScale: .9, smileWidth: .7, smileCurve: .13, browTilt: .11 },
   explaining: { accent: '#4fa3ea', eye: '#e8f6ff', tilt: -.02, energy: .88, eyeScale: 1.02, smileWidth: 1, smileCurve: .37, browTilt: 0 },
@@ -53,12 +54,14 @@ function Hand({ side }: { side: -1 | 1 }) {
   const fingerOffsets = [-.052, 0, .052];
   return (
     <group position={[side * .04, -.72, .055]}>
+      <mesh position={[0, .065, 0]} rotation={[Math.PI / 2, 0, 0]}><torusGeometry args={[.07, .017, 10, 24]} /><meshStandardMaterial color="#36b8be" emissive="#36b8be" emissiveIntensity={.14} roughness={.42} metalness={.16} /></mesh>
       <mesh scale={[.9, .78, .56]}><sphereGeometry args={[.105, 20, 16]} /><meshStandardMaterial color="#edf5f8" roughness={.5} metalness={.08} /></mesh>
+      <mesh position={[0, .006, .067]} scale={[.66, .52, .18]}><sphereGeometry args={[.08, 18, 12]} /><meshStandardMaterial color="#cce1e9" roughness={.46} metalness={.12} /></mesh>
       {fingerOffsets.map((x) => (
-        <mesh key={x} position={[x, -.105, .015]} scale={[.58, 1, .56]}>
-          <sphereGeometry args={[.038, 16, 12]} />
-          <meshStandardMaterial color="#edf5f8" roughness={.52} metalness={.06} />
-        </mesh>
+        <group key={x} position={[x, -.105, .015]}>
+          <mesh scale={[.58, 1, .56]}><sphereGeometry args={[.038, 16, 12]} /><meshStandardMaterial color="#edf5f8" roughness={.52} metalness={.06} /></mesh>
+          <mesh position={[0, -.032, .012]} scale={[.48, .28, .46]}><sphereGeometry args={[.038, 14, 10]} /><meshStandardMaterial color="#d5e7ed" roughness={.5} metalness={.08} /></mesh>
+        </group>
       ))}
       <mesh position={[side * .095, -.025, .01]} rotation={[0, 0, side * -.52]} scale={[.62, 1, .56]}>
         <sphereGeometry args={[.043, 16, 12]} />
@@ -75,7 +78,9 @@ function Arm({ side, armRef }: { side: -1 | 1; armRef: MutableRefObject<Group | 
       <mesh position={[side * .035, 0, 0]} scale={[.92, 1, .82]} castShadow><sphereGeometry args={[.145, 24, 18]} /><meshStandardMaterial color="#eff6f8" roughness={.42} metalness={.12} /></mesh>
       <mesh position={[side * .035, -.2, 0]} castShadow><cylinderGeometry args={[.09, .11, .28, 20]} /><meshStandardMaterial color="#17577e" roughness={.48} metalness={.1} /></mesh>
       <mesh position={[side * .04, -.36, .012]}><sphereGeometry args={[.105, 20, 16]} /><meshStandardMaterial color="#102f47" roughness={.52} metalness={.16} /></mesh>
+      <mesh position={[side * .04, -.36, .012]} rotation={[Math.PI / 2, 0, 0]}><torusGeometry args={[.086, .018, 10, 24]} /><meshStandardMaterial color="#36b8be" emissive="#36b8be" emissiveIntensity={.12} roughness={.42} /></mesh>
       <mesh position={[side * .04, -.52, .03]} castShadow><cylinderGeometry args={[.075, .09, .24, 20]} /><meshStandardMaterial color="#edf5f8" roughness={.46} metalness={.1} /></mesh>
+      <mesh position={[side * .04, -.58, .082]} rotation={[0, 0, side * .08]}><boxGeometry args={[.11, .025, .02]} /><meshStandardMaterial color="#b8d5df" roughness={.48} /></mesh>
       <mesh position={[side * .04, -.42, .105]} scale={[.62, .48, .35]}><sphereGeometry args={[.06, 16, 12]} /><meshStandardMaterial color="#42c7c8" emissive="#42c7c8" emissiveIntensity={.24} roughness={.5} /></mesh>
       <Hand side={side} />
     </group>
@@ -107,7 +112,7 @@ function Character({ emotion, gazeRef }: { emotion: AssistantEmotion; gazeRef: M
   const look = useRef({ x: 0, y: 0 });
   const style = emotionStyle[emotion];
   const reducedMotion = useMemo(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches, []);
-  const showBrows = emotion === 'happy' || emotion === 'thinking' || emotion === 'warning' || emotion === 'uncertain';
+  const showBrows = emotion === 'greeting' || emotion === 'happy' || emotion === 'thinking' || emotion === 'warning' || emotion === 'uncertain';
 
   useFrame(({ clock }, delta) => {
     if (document.visibilityState !== 'visible') return;
@@ -135,7 +140,7 @@ function Character({ emotion, gazeRef }: { emotion: AssistantEmotion; gazeRef: M
     }
 
     if (head.current) {
-      const nod = !reducedMotion && (emotion === 'explaining' || emotion === 'handoff') ? Math.sin(t * 1.7) * .035 : 0;
+      const nod = !reducedMotion && (emotion === 'explaining' || emotion === 'handoff' || emotion === 'greeting') ? Math.sin(t * 1.7) * .035 : 0;
       const thinkTilt = !reducedMotion && emotion === 'thinking' ? Math.sin(t * .58) * .028 : 0;
       const happyWiggle = !reducedMotion && emotion === 'happy' ? Math.sin(t * 1.55) * .024 : 0;
       head.current.rotation.y = look.current.x * .18;
@@ -145,7 +150,7 @@ function Character({ emotion, gazeRef }: { emotion: AssistantEmotion; gazeRef: M
 
     if (group.current) {
       const idleFloat = Math.sin(t * 1.05) * .032 * style.energy;
-      const happyBounce = emotion === 'happy' ? Math.abs(Math.sin(t * 1.65)) * .05 : 0;
+      const happyBounce = emotion === 'happy' || emotion === 'greeting' ? Math.abs(Math.sin(t * 1.65)) * .05 : 0;
       group.current.position.y = reducedMotion ? 0 : idleFloat + happyBounce;
       group.current.rotation.x = emotion === 'listening' ? -.032 : emotion === 'warning' ? .016 : 0;
       group.current.rotation.y = look.current.x * .032 + (reducedMotion ? 0 : Math.sin(t * .35) * .016 * style.energy);
@@ -164,7 +169,10 @@ function Character({ emotion, gazeRef }: { emotion: AssistantEmotion; gazeRef: M
     const armDamping = 1 - Math.exp(-delta * 5.5);
     const leftTarget = { x: 0, z: .1 };
     const rightTarget = { x: 0, z: -.1 };
-    if (emotion === 'explaining') {
+    if (emotion === 'greeting') {
+      rightTarget.x = -.38;
+      rightTarget.z = -.92 + (reducedMotion ? 0 : Math.sin(t * 7.2) * .18);
+    } else if (emotion === 'explaining') {
       rightTarget.x = -.44;
       rightTarget.z = -.72 + (reducedMotion ? 0 : Math.sin(t * 1.45) * .12);
     } else if (emotion === 'handoff') {
@@ -257,7 +265,7 @@ function Character({ emotion, gazeRef }: { emotion: AssistantEmotion; gazeRef: M
       <Arm side={1} armRef={armRight} />
       <Leg side={-1} />
       <Leg side={1} />
-      <pointLight position={[0, 1.2, 2]} color={style.accent} intensity={emotion === 'warning' ? .55 : emotion === 'happy' ? .95 : .72} distance={3.5} />
+      <pointLight position={[0, 1.2, 2]} color={style.accent} intensity={emotion === 'warning' ? .55 : emotion === 'happy' || emotion === 'greeting' ? .95 : .72} distance={3.5} />
     </group>
   );
 }

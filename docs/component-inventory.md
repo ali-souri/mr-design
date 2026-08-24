@@ -21,7 +21,7 @@ This list reflects the exported React components in `mresalat/` for v0.4.
 ## AI
 
 - `AssistantShell` — hero, context and compact assistant density.
-- `SmartAssistant3D` — original humanoid android with independent `complete` / `portrait` framing, local gaze, a matching static fallback and eight explicit emotion states.
+- `SmartAssistant3D` — original humanoid android with independent `complete` / `portrait` framing, transparent composition, local gaze, a matching static fallback and nine explicit emotion states, including greeting.
 - `SmartAssistantAvatar` — optimized static portrait of the same character at 32, 40, 48, 64 and 96 pixels.
 - `SmartAssistantCanvas` — lazy React Three Fiber scene with adaptive cameras, emotional gestures, smooth constrained eye/head tracking, neutral reset and reduced-motion handling.
 - `Assistant3DDemo` — interactive mode, emotion, pointer-tracking and avatar-size documentation for the 3D assistant.
@@ -42,6 +42,8 @@ This list reflects the exported React components in `mresalat/` for v0.4.
 - `SegmentStatusPanel` — request facts, semantic vertical progress and next-action guidance across all three Phase 1 segments.
 - `SegmentSupportPanel` — calm individual, friendly youth and compact professional organization guidance.
 - `ChildInfoPanel`, `AddOwnerPanel` — route-level dialog/sheet patterns with initial focus, keyboard containment and Escape dismissal.
+- `SegmentAIEntry` — shared Persian AI-first query entry with deterministic typed answers, suggestions, source semantics, clarification and handoff states.
+- `ActiveJourneyCard` — reusable current-step, progress and next-action summary for personalized segment homes.
 
 ## Secure
 
@@ -50,6 +52,8 @@ This list reflects the exported React components in `mresalat/` for v0.4.
 ## Templates
 
 - `SegmentExperience` — config-driven home, services and journey pages for six composition modes.
+- `SegmentHomeShell` — Phase 2 composition shell for deliberately distinct individual, youth and organization dashboards.
+- `SegmentPhaseTwoPage` — route-level Phase 2 experience spanning individual services and journeys, youth goals and rewards, and organization programs, personnel and reports.
 
 ## Motion
 

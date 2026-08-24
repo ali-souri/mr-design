@@ -7,6 +7,25 @@ export const metadata: Metadata = { title: 'Route QA Index' };
 
 const canonical = [{ label: 'خانه عمومی', href: '/' }, { label: 'انتخاب سگمنت', href: '/segments' }, { label: 'شخص حقیقی · خانه', href: '/segments/individual' }, { label: 'شخص حقیقی · احراز هویت', href: '/segments/individual/identity' }, { label: 'شخص حقیقی · OTP', href: '/segments/individual/otp' }, { label: 'شخص حقیقی · وضعیت', href: '/segments/individual/status' }, { label: 'نوجوان · خانه', href: '/segments/under-18' }, { label: 'نوجوان · اطلاعات', href: '/segments/under-18/child-info' }, { label: 'نوجوان · وضعیت', href: '/segments/under-18/status' }, { label: 'سازمان · خانه', href: '/segments/organization' }, { label: 'سازمان · صاحبان امضاء', href: '/segments/organization/owners' }, { label: 'سازمان · وضعیت', href: '/segments/organization/status' }, { label: 'نمونه‌های اکوسیستم', href: '/examples' }, { label: 'سبد ام‌بازار', href: '/examples/mbazar/cart' }, { label: 'پرداخت ام‌بازار', href: '/examples/mbazar/checkout?step=delivery' }, { label: 'مرکز اقساط ام‌بازار', href: '/examples/mbazar/installments' }, { label: 'سفارش فعال', href: '/examples/mbazar/orders/order-2841' }, { label: 'سفارش تحویل‌شده', href: '/examples/mbazar/orders/order-2480' }, { label: 'سفارش لغوشده', href: '/examples/mbazar/orders/order-2319' }, { label: 'سفارش مشکل‌دار', href: '/examples/mbazar/orders/order-2264' }, { label: 'علاقه‌مندی با افت قیمت', href: '/examples/mbazar/favorites' }, { label: 'درخواست پشتیبانی', href: '/examples/mbazar/support/new?order=order-2264' }, { label: 'ام‌بازار من', href: '/examples/mbazar/profile' }, { label: 'وام ام‌مشاور', href: '/loan' }, { label: 'فروشنده فعال', href: '/seller' }, { label: 'پاسخ RAG', href: '/rag' }, { label: 'عملیات امن', href: '/secure' }, { label: 'Showcase', href: '/showcase' }];
 
+const phaseTwoQa = [
+  { label: 'Phase 2 · شخص حقیقی · AI و خانه', href: '/segments/individual/home' },
+  { label: 'Phase 2 · شخص حقیقی · خدمات', href: '/segments/individual/services' },
+  { label: 'Phase 2 · شخص حقیقی · مسیر فعال', href: '/segments/individual/journeys#membership' },
+  { label: 'Phase 2 · نوجوان · AI و ماسکات', href: '/segments/under-18/home' },
+  { label: 'Phase 2 · نوجوان · هدف', href: '/segments/under-18/goals#bike' },
+  { label: 'Phase 2 · نوجوان · پاداش', href: '/segments/under-18/rewards' },
+  { label: 'Phase 2 · نوجوان · فعالیت', href: '/segments/under-18/activity' },
+  { label: 'Phase 2 · نوجوان · یادگیری', href: '/segments/under-18/learning' },
+  { label: 'Phase 2 · سازمان · AI و خانه', href: '/segments/organization/home' },
+  { label: 'Phase 2 · سازمان · مزایا', href: '/segments/organization/benefits' },
+  { label: 'Phase 2 · سازمان · پرسنل', href: '/segments/organization/personnel' },
+  { label: 'Phase 2 · سازمان · گزارش‌ها', href: '/segments/organization/reports' },
+  { label: 'Phase 2 · سازمان · خدمات', href: '/segments/organization/services' },
+  { label: 'Phase 2 · سازمان · فرایندها', href: '/segments/organization/journeys' },
+];
+
+const mascotStates = ['idle', 'greeting', 'listening', 'thinking', 'explaining', 'happy', 'warning', 'uncertain', 'handoff'];
+
 export default function QaPage() {
-  return <AppShell active="system"><header className="qa-head"><span className="eyebrow">بازبینی مسیرها</span><h1>Route QA Index</h1><p>مسیرهای نمایشی هسته و ام‌بازار از یک صفحه قابل دسترسی‌اند.</p></header><section className="qa-canonical"><h2>نمونه‌های مرجع</h2><div>{canonical.map((route) => <a href={route.href} key={route.href}>{route.label}<MResalatIcon name="next" size={16} /></a>)}</div></section><div className="qa-route-table"><div className="qa-row qa-row-head"><span>سگمنت</span>{segmentViews.map((view) => <span key={view}>{view === 'home' ? 'خانه' : view === 'services' ? 'خدمات' : 'مسیر'}</span>)}</div>{segments.map((segment) => <div className="qa-row" key={segment.id}><strong><MResalatIcon name={segment.icon} size={16} />{segment.name}</strong>{segmentViews.map((view) => <a href={`/segments/${segment.slug}/${view}`} key={view}>{segment.pages[view].label}<MResalatIcon name="next" size={16} /></a>)}</div>)}</div></AppShell>;
+  return <AppShell active="system"><header className="qa-head"><span className="eyebrow">بازبینی مسیرها</span><h1>Route QA Index</h1><p>مسیرهای نمایشی هسته، سگمنت‌های پس از ثبت‌نام و ام‌بازار از یک صفحه قابل دسترسی‌اند.</p></header><section className="qa-canonical"><h2>نمونه‌های مرجع</h2><div>{[...phaseTwoQa, ...canonical].map((route) => <a href={route.href} key={`${route.href}-${route.label}`}>{route.label}<MResalatIcon name="next" size={16} /></a>)}</div></section><section className="qa-canonical"><h2>آزمایش سریع حالت‌های ماسکات</h2><div>{mascotStates.map((state) => <a href={`/qa/mascot/${state}`} key={state}>{state}<MResalatIcon name="assistant" size={16} /></a>)}</div></section><div className="qa-route-table"><div className="qa-row qa-row-head"><span>سگمنت</span>{segmentViews.map((view) => <span key={view}>{view === 'home' ? 'خانه' : view === 'services' ? 'خدمات' : 'مسیر'}</span>)}</div>{segments.map((segment) => <div className="qa-row" key={segment.id}><strong><MResalatIcon name={segment.icon} size={16} />{segment.name}</strong>{segmentViews.map((view) => <a href={`/segments/${segment.slug}/${view}`} key={view}>{segment.pages[view].label}<MResalatIcon name="next" size={16} /></a>)}</div>)}</div></AppShell>;
 }
