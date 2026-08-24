@@ -50,6 +50,16 @@ This list reflects the exported React components in `mresalat/` for v0.4.
 
 - `ParallaxLayer` — restrained pointer depth, enhanced for young mode and disabled by reduced motion.
 
+## Marketplace
+
+- `MarketplaceContext`, `MBazarSearch`, `MBazarCategoryCard` — shared M-Bazar discovery context and entry points.
+- `MBazarProductCard`, `MBazarProductQuickView`, `PriceDisplay`, `PurchaseModeBadge` — product discovery, pricing, eligibility wording and functional cart actions.
+- `QuantityControl`, `MBazarCartItemRow`, `MBazarCartSellerGroup`, `MBazarCartSummary` — accessible quantity, seller grouping, validation and deterministic totals.
+- `DeliveryAddressCard`, `DeliveryMethodCard`, `PaymentModeSelector` — guided delivery and first-class cash/installment payment choices.
+- `InstallmentEligibilityPanel`, `InstallmentPlanCard` — four deterministic eligibility states and card-based demo plan comparison.
+- `CheckoutConfirmation`, `CheckoutSuccess` — explicit review, mock step-up authentication and branch-specific results.
+- `InstallmentRequestCard` — request context, progress, latest update and next action.
+
 ## Documentation
 
 - `CodeExample` — expandable representative TSX with copy feedback.

@@ -36,6 +36,13 @@ export const componentInventory: ComponentInventoryItem[] = [
   { category: 'Marketplace', name: 'PurchaseModeBadge', purpose: 'نمایش برجسته امکان درخواست خرید اقساطی', variants: ['eligible'], states: ['visible', 'omitted'] },
   { category: 'Marketplace', name: 'MBazarFilterBar', purpose: 'فیلترهای سریع و ورودی فیلتر کامل', variants: ['inline', 'mobile scroll'], states: ['active filters', 'default'] },
   { category: 'Marketplace', name: 'MBazarProductQuickView', purpose: 'پیش‌نمایش پاسخ‌گو پیش از ورود به جزئیات', variants: ['desktop drawer', 'mobile bottom sheet'], states: ['open', 'closed', 'escape dismissal'] },
+  { category: 'Marketplace', name: 'QuantityControl', purpose: 'تغییر امن تعداد کالا با محدودیت موجودی', variants: ['cart', 'showcase'], states: ['minimum', 'maximum', 'editable'] },
+  { category: 'Marketplace', name: 'MBazarCartSummary', purpose: 'محاسبه و نمایش جمع، تخفیف، ارسال و مبلغ نهایی', variants: ['cart', 'checkout'], states: ['populated', 'empty'] },
+  { category: 'Marketplace', name: 'PaymentModeSelector', purpose: 'انتخاب برجسته پرداخت نقدی یا درخواست اقساط', variants: ['two-branch'], states: ['cash', 'installment', 'unselected'] },
+  { category: 'Marketplace', name: 'DeliveryAddressCard', purpose: 'انتخاب دسترس‌پذیر آدرس تحویل', variants: ['address'], states: ['selected', 'default'] },
+  { category: 'Marketplace', name: 'InstallmentEligibilityPanel', purpose: 'نمایش نتیجه قطعی سیستم جدا از توضیح هوش مصنوعی', variants: ['eligible', 'conditional', 'unknown', 'ineligible'], states: ['system result', 'AI explanation'] },
+  { category: 'Marketplace', name: 'InstallmentPlanCard', purpose: 'مقایسه کارت‌محور طرح‌های نمایشی اقساط', variants: ['6 months', '12 months', '18 months'], states: ['selected', 'default'] },
+  { category: 'Marketplace', name: 'InstallmentRequestCard', purpose: 'نمایش وضعیت، پیشرفت و اقدام بعدی درخواست', variants: ['action required', 'reviewing', 'ready', 'completed'], states: ['progress', 'next action'] },
   { category: 'Documentation', name: 'CodeExample', purpose: 'نمونه کد بازشونده و قابل کپی', variants: ['details panel'], states: ['collapsed', 'expanded', 'copied'] },
   { category: 'Documentation', name: 'GridLayoutDemo', purpose: 'نمایش تعاملی شبکه واقعی صفحه', variants: ['12-column', '4-column mobile'], states: ['overlay shown', 'overlay hidden'] },
 ];

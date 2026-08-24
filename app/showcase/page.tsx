@@ -73,7 +73,7 @@ export default function ShowcasePage() {
 
           <ShowcaseSection id="motion" eyebrow="عمق محدود" title="Motion"><ParallaxLayer className="motion-demo" strength={14}><div><span className="domain-icon"><MResalatIcon name="goal" size={24} /></span><h3>هدف پس‌انداز</h3><p>حرکت با transform، بدون جابه‌جایی چیدمان و غیرفعال در reduced-motion.</p></div><i /><i /></ParallaxLayer><CodeExample title="ParallaxLayer" code={showcaseSnippets.motion} /></ShowcaseSection>
 
-          <ShowcaseSection id="mbazar" eyebrow="Buyer discovery" title="M-Bazar / ام‌بازار" description="اجزای واقعی Batch A با قیمت تومان، زمینه خرید مشترک، چهار واریانت کارت و Quick View پاسخ‌گو."><MBazarShowcase /><CodeExample title="M-Bazar components" code={showcaseSnippets.mbazar} /></ShowcaseSection>
+          <ShowcaseSection id="mbazar" eyebrow="Buyer purchase journey" title="M-Bazar / ام‌بازار" description="اجزای واقعی کشف کالا، سبد، ارسال، انتخاب پرداخت، بررسی شرایط اقساط، طرح، بازبینی و نتیجه."><MBazarShowcase /><CodeExample title="M-Bazar components" code={showcaseSnippets.mbazar} /></ShowcaseSection>
 
           <ShowcaseSection id="templates" eyebrow="ترکیب پیکربندی‌محور" title="Templates"><div className="template-flow"><span>Segment config</span><MResalatIcon name="next" size={20} /><span>SegmentExperience</span><MResalatIcon name="next" size={20} /><span>Home / Services / Journey</span></div><CodeExample title="SegmentExperience" code={showcaseSnippets.segment} /></ShowcaseSection>
 
