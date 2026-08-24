@@ -18,13 +18,14 @@ import { CodeExample } from '@/mresalat/showcase/CodeExample';
 import { GridLayoutDemo } from '@/mresalat/showcase/GridLayoutDemo';
 import { showcaseSnippets } from '@/mresalat/showcase/snippets';
 import { SegmentComponentShowcase } from '@/mresalat/segments/SegmentPhaseOne';
+import { SegmentPhaseTwoShowcase } from '@/mresalat/segments/SegmentPhaseTwo';
 
 export const metadata: Metadata = { title: 'مرجع کدنویسی سیستم' };
 
 const sections = [
   ['brand', 'برند'], ['typography', 'تایپوگرافی'], ['color', 'رنگ'], ['foundations', 'پایه‌ها'], ['grid', 'شبکه و چیدمان'],
   ['icons', 'آیکون‌ها'], ['service-identities', 'هویت خدمات'], ['core', 'اجزای پایه'], ['navigation', 'ناوبری'], ['ai', 'دستیار و سه‌بعدی'], ['rag', 'اعتماد و RAG'],
-  ['journeys', 'مسیرها'], ['secure', 'اقدام امن'], ['motion', 'حرکت'], ['mbazar', 'ام‌بازار'], ['segment-phase-one', 'عضویت سگمنت‌محور'], ['templates', 'قالب‌ها'], ['inventory', 'موجودی'], ['segments', 'سگمنت‌ها'],
+  ['journeys', 'مسیرها'], ['secure', 'اقدام امن'], ['motion', 'حرکت'], ['mbazar', 'ام‌بازار'], ['segment-phase-one', 'عضویت سگمنت‌محور'], ['segment-phase-two', 'تجربه پس از ثبت‌نام'], ['templates', 'قالب‌ها'], ['inventory', 'موجودی'], ['segments', 'سگمنت‌ها'],
 ] as const;
 
 const palette = [
@@ -64,7 +65,7 @@ export default function ShowcasePage() {
 
           <ShowcaseSection id="navigation" eyebrow="ناوبری تطبیقی" title="Navigation"><div className="navigation-demo"><div className="desktop-nav-demo"><BrandLogo compact /><span className="active"><MResalatIcon name="home" size={16} />خانه</span><span><MResalatIcon name="examples" size={16} />نمونه‌ها</span><span><MResalatIcon name="assistant" size={16} />دستیار</span></div><div className="mobile-nav-demo"><span className="active"><MResalatIcon name="home" size={20} />خانه</span><span><MResalatIcon name="membership" size={20} />تجربه‌ها</span><span><MResalatIcon name="examples" size={20} />نمونه‌ها</span><span><MResalatIcon name="assistant" size={20} />دستیار</span></div></div><CodeExample title="AppShell" code={showcaseSnippets.navigation} /></ShowcaseSection>
 
-          <ShowcaseSection id="ai" eyebrow="تعامل هوشمند" title="AI & 3D Assistant" description="شخصیت نهایی ام‌رسالت با سر مکعبیِ نرم و بزرگ‌تر، نمایشگر آرام و مات، چشم و لبخند نورانی، ماژول‌های گوش، یک آنتن کوچک، انگشت‌های گرد و پوشش ایرانیِ معاصر در دو قاب مستقل و هشت حالت احساسی عرضه می‌شود؛ ردیابی نگاه در سراسر صفحه و استقلال اطلاعات اصلی از WebGL حفظ شده‌اند."><Assistant3DDemo /><CodeExample title="SmartAssistant3D" code={showcaseSnippets.assistant3d} /><div className="variant-stack"><div><Badge tone="info">Hero</Badge><AssistantShell variant="hero" /></div><div><Badge tone="success">Context</Badge><AssistantShell variant="context" /></div><div><Badge tone="neutral">Compact</Badge><AssistantShell variant="compact" /></div></div><CodeExample title="AssistantShell" code={showcaseSnippets.assistant} /></ShowcaseSection>
+          <ShowcaseSection id="ai" eyebrow="تعامل هوشمند" title="AI & 3D Assistant" description="شخصیت ام‌رسالت با پس‌زمینه شفاف، دست و مچ مفصل‌تر، سلام و دست‌تکان‌دادن و نه حالت رفتاری عرضه می‌شود؛ همه متن‌های مهم در DOM باقی می‌مانند و WebGL فقط رفتار بصری شخصیت را می‌سازد."><Assistant3DDemo /><CodeExample title="SmartAssistant3D" code={showcaseSnippets.assistant3d} /><div className="variant-stack"><div><Badge tone="info">Hero</Badge><AssistantShell variant="hero" /></div><div><Badge tone="success">Context</Badge><AssistantShell variant="context" /></div><div><Badge tone="neutral">Compact</Badge><AssistantShell variant="compact" /></div></div><CodeExample title="AssistantShell" code={showcaseSnippets.assistant} /></ShowcaseSection>
 
           <ShowcaseSection id="rag" eyebrow="منشأ و اطمینان" title="RAG / Trust"><TrustLegend /><SourceCitation source={loanSources[0]} /><UncertainAnswer /><HumanHandoff /><CodeExample title="Trust components" code={showcaseSnippets.trust} /></ShowcaseSection>
 
@@ -77,6 +78,8 @@ export default function ShowcasePage() {
           <ShowcaseSection id="mbazar" eyebrow="Buyer purchase journey" title="M-Bazar / ام‌بازار" description="اجزای واقعی کشف کالا، سبد، ارسال، انتخاب پرداخت، بررسی شرایط اقساط، طرح، بازبینی و نتیجه."><MBazarShowcase /><CodeExample title="M-Bazar components" code={showcaseSnippets.mbazar} /></ShowcaseSection>
 
           <ShowcaseSection id="segment-phase-one" eyebrow="Personalized registration" title="Segment Registration UX" description="سه لحن متمایز، کارت‌های اقدام و فرایند، OTP، وضعیت درخواست و شیت‌های نوجوان و سازمان روی یک معماری پیکربندی‌محور."><SegmentComponentShowcase /><CodeExample title="SegmentPhaseOnePage" code={`<SegmentPhaseOnePage segment="individual" />\n<SegmentPhaseOnePage segment="under-18" view="child-info" />\n<SegmentPhaseOnePage segment="organization" view="status" />`} /></ShowcaseSection>
+
+          <ShowcaseSection id="segment-phase-two" eyebrow="AI-first personalized home" title="Segment Post-Registration UX" description="ورودی هوشمند سگمنت‌محور، پرسش و پاسخ فارسی، مسیر فعال، هدف نوجوان، پاداش، برنامه سازمانی و خلاصه گزارش روی اجزای مشترک و داده‌های تایپ‌شده."><SegmentPhaseTwoShowcase /><CodeExample title="SegmentAIEntry & SegmentHomeShell" code={showcaseSnippets.segmentPhaseTwo} /></ShowcaseSection>
 
           <ShowcaseSection id="templates" eyebrow="ترکیب پیکربندی‌محور" title="Templates"><div className="template-flow"><span>Segment config</span><MResalatIcon name="next" size={20} /><span>SegmentExperience</span><MResalatIcon name="next" size={20} /><span>Home / Services / Journey</span></div><CodeExample title="SegmentExperience" code={showcaseSnippets.segment} /></ShowcaseSection>
 
