@@ -5,6 +5,7 @@ import {
   Code2, Copy, Grid3X3, HandCoins, HeartHandshake, HeartPulse, Home, Landmark, LifeBuoy, LockKeyhole, Menu, MessageCircleMore,
   MonitorCog, Moon, Package, PanelsTopLeft, Plus, Search, ShieldCheck, ShoppingBag, Sparkles,
   Settings, Stethoscope, Store, Sun, Target, TriangleAlert, UserPlus, UserRound, UsersRound, WalletCards,
+  MapPin, Mic, Heart, Share2, SlidersHorizontal, ArrowUpDown, ShoppingCart, X, Eye, Trash2,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -64,6 +65,16 @@ export const iconMap = {
   examples: PanelsTopLeft,
   insurance: ShieldCheck,
   advocacy: HeartHandshake,
+  location: MapPin,
+  voice: Mic,
+  favorite: Heart,
+  share: Share2,
+  filters: SlidersHorizontal,
+  sort: ArrowUpDown,
+  cart: ShoppingCart,
+  close: X,
+  view: Eye,
+  remove: Trash2,
 } satisfies Record<string, LucideIcon>;
 
 export type MResalatIconName = keyof typeof iconMap;

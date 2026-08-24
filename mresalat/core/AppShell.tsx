@@ -12,7 +12,7 @@ const navItems = [
   { key: 'system', label: 'MResalat System', href: '/showcase', icon: 'evidence' },
 ] satisfies { key: string; label: string; href: string; icon: MResalatIconName }[];
 
-export function AppShell({ children, active = 'home' }: { children: ReactNode; active?: string }) {
+export function AppShell({ children, active = 'home', hideMobileNav = false }: { children: ReactNode; active?: string; hideMobileNav?: boolean }) {
   return (
     <div className="app-shell">
       <header className="topbar">
@@ -29,9 +29,9 @@ export function AppShell({ children, active = 'home' }: { children: ReactNode; a
         </div>
       </header>
       <main className="page-container">{children}</main>
-      <nav className="mobile-nav" aria-label="ناوبری موبایل">
+      {!hideMobileNav && <nav className="mobile-nav" aria-label="ناوبری موبایل">
         {navItems.map((item) => <a key={item.key} className={active === item.key ? 'active' : ''} href={item.href}><MResalatIcon name={item.icon} size={20} />{item.label}</a>)}
-      </nav>
+      </nav>}
     </div>
   );
 }
