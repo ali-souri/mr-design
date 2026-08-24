@@ -3,12 +3,12 @@
 import { lazy, Suspense, useEffect, useRef, useSyncExternalStore, type CSSProperties } from 'react';
 import { MResalatIcon } from '@/mresalat/core/MResalatIcon';
 
-export type AssistantEmotion = 'idle' | 'listening' | 'thinking' | 'explaining' | 'happy' | 'warning' | 'uncertain' | 'handoff';
+export type AssistantEmotion = 'idle' | 'greeting' | 'listening' | 'thinking' | 'explaining' | 'happy' | 'warning' | 'uncertain' | 'handoff';
 export type AssistantCharacterMode = 'complete' | 'portrait';
 export type AssistantGaze = { x: number; y: number; strength: number; active: boolean };
 
 export const assistantEmotionLabels: Record<AssistantEmotion, string> = {
-  idle: 'آرام', listening: 'در حال شنیدن', thinking: 'در حال فکر', explaining: 'در حال توضیح',
+  idle: 'آرام', greeting: 'سلام و خوش‌آمد', listening: 'در حال شنیدن', thinking: 'در حال فکر', explaining: 'در حال توضیح',
   happy: 'خوشحال', warning: 'هشدار', uncertain: 'نامطمئن', handoff: 'ارجاع به کارشناس',
 };
 
