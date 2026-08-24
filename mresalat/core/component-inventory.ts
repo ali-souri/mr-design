@@ -1,5 +1,5 @@
 export type ComponentInventoryItem = {
-  category: 'Foundations' | 'Core' | 'Navigation' | 'AI' | 'RAG / Trust' | 'Journeys' | 'Secure' | 'Templates' | 'Motion' | 'Documentation';
+  category: 'Foundations' | 'Core' | 'Navigation' | 'AI' | 'RAG / Trust' | 'Journeys' | 'Secure' | 'Templates' | 'Motion' | 'Marketplace' | 'Documentation';
   name: string;
   purpose: string;
   variants: string[];
@@ -28,6 +28,14 @@ export const componentInventory: ComponentInventoryItem[] = [
   { category: 'Secure', name: 'SecureActionFlow', purpose: 'اقدام L3 با تأیید و احراز قوی', variants: ['success', 'failure'], states: ['explain', 'confirm', 'step-up', 'receipt'] },
   { category: 'Templates', name: 'SegmentExperience', purpose: 'ترکیب سه صفحه از تنظیم سگمنت', variants: ['home', 'services', 'journey'], states: ['discovery', 'guided', 'operational', 'family', 'young', 'care'] },
   { category: 'Motion', name: 'ParallaxLayer', purpose: 'عمق فضایی محدود و کم‌هزینه', variants: ['restrained', 'young enhanced'], states: ['pointer active', 'reduced motion disabled'] },
+  { category: 'Marketplace', name: 'MarketplaceContext', purpose: 'نمایش مقصد ارسال و فروشگاه انتخاب‌شده', variants: ['standard', 'compact'], states: ['shared mock context', 'light', 'dark'] },
+  { category: 'Marketplace', name: 'MBazarSearch', purpose: 'ورودی متنی، صوتی و نیازمحور کشف کالا', variants: ['default', 'hero'], states: ['empty', 'typing', 'results'] },
+  { category: 'Marketplace', name: 'MBazarCategoryCard', purpose: 'ورودی خوانا و واکنش‌گرا به دسته کالا', variants: ['four semantic tones'], states: ['default', 'hover', 'focus'] },
+  { category: 'Marketplace', name: 'MBazarProductCard', purpose: 'نمایش استاندارد هویت، قیمت و وضعیت خرید کالا', variants: ['carousel', 'grid', 'list', 'recommendation'], states: ['available', 'limited', 'installment eligible'] },
+  { category: 'Marketplace', name: 'PriceDisplay', purpose: 'قیمت فارسی یکسان بر پایه تومان', variants: ['default', 'compact'], states: ['regular', 'discounted'] },
+  { category: 'Marketplace', name: 'PurchaseModeBadge', purpose: 'نمایش برجسته امکان درخواست خرید اقساطی', variants: ['eligible'], states: ['visible', 'omitted'] },
+  { category: 'Marketplace', name: 'MBazarFilterBar', purpose: 'فیلترهای سریع و ورودی فیلتر کامل', variants: ['inline', 'mobile scroll'], states: ['active filters', 'default'] },
+  { category: 'Marketplace', name: 'MBazarProductQuickView', purpose: 'پیش‌نمایش پاسخ‌گو پیش از ورود به جزئیات', variants: ['desktop drawer', 'mobile bottom sheet'], states: ['open', 'closed', 'escape dismissal'] },
   { category: 'Documentation', name: 'CodeExample', purpose: 'نمونه کد بازشونده و قابل کپی', variants: ['details panel'], states: ['collapsed', 'expanded', 'copied'] },
   { category: 'Documentation', name: 'GridLayoutDemo', purpose: 'نمایش تعاملی شبکه واقعی صفحه', variants: ['12-column', '4-column mobile'], states: ['overlay shown', 'overlay hidden'] },
 ];

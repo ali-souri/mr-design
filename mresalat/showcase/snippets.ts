@@ -12,4 +12,5 @@ export const showcaseSnippets = {
   segment: `<SegmentExperience\n  segment={segmentBySlug['loan-applicant']}\n  view="journey"\n/>`,
   assistant3d: `<SmartAssistant3D mode="complete" emotion="thinking" />\n<SmartAssistant3D mode="portrait" emotion="listening" />\n<SmartAssistantAvatar size={48} emotion="happy" />\n\n// Canonical rounded-screen robot with ears, one antenna and fingers.\n// Mode and emotion remain independent.\n// Visible interactive characters track the pointer page-wide.\n// emotion: idle | listening | thinking | explaining\n// happy | warning | uncertain | handoff`,
   grid: `.page-container {\n  width: min(calc(100% - 48px), 1180px);\n}\n\n@media (max-width: 640px) {\n  .page-container { width: calc(100% - 28px); }\n}`,
+  mbazar: `<MarketplaceContext />\n<MBazarSearch variant="hero" />\n<MBazarProductCard product={product} variant="grid" />\n<PriceDisplay product={product} />\n<PurchaseModeBadge eligible />\n<MBazarProductQuickView product={product} onClose={close} />`,
 } as const;

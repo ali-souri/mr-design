@@ -12,6 +12,7 @@ import { ecosystemServices } from '@/mresalat/domains/ecosystem';
 import { loanJourney, loanSources } from '@/mresalat/domains/mock-data';
 import { segments } from '@/mresalat/domains/segments';
 import { ProcessReviewWizard } from '@/mresalat/journeys/ProcessReviewWizard';
+import { MBazarShowcase } from '@/mresalat/mbazar/MBazarShowcase';
 import { ParallaxLayer } from '@/mresalat/motion/ParallaxLayer';
 import { CodeExample } from '@/mresalat/showcase/CodeExample';
 import { GridLayoutDemo } from '@/mresalat/showcase/GridLayoutDemo';
@@ -22,7 +23,7 @@ export const metadata: Metadata = { title: 'مرجع کدنویسی سیستم' 
 const sections = [
   ['brand', 'برند'], ['typography', 'تایپوگرافی'], ['color', 'رنگ'], ['foundations', 'پایه‌ها'], ['grid', 'شبکه و چیدمان'],
   ['icons', 'آیکون‌ها'], ['service-identities', 'هویت خدمات'], ['core', 'اجزای پایه'], ['navigation', 'ناوبری'], ['ai', 'دستیار و سه‌بعدی'], ['rag', 'اعتماد و RAG'],
-  ['journeys', 'مسیرها'], ['secure', 'اقدام امن'], ['motion', 'حرکت'], ['templates', 'قالب‌ها'], ['inventory', 'موجودی'], ['segments', 'سگمنت‌ها'],
+  ['journeys', 'مسیرها'], ['secure', 'اقدام امن'], ['motion', 'حرکت'], ['mbazar', 'ام‌بازار'], ['templates', 'قالب‌ها'], ['inventory', 'موجودی'], ['segments', 'سگمنت‌ها'],
 ] as const;
 
 const palette = [
@@ -71,6 +72,8 @@ export default function ShowcasePage() {
           <ShowcaseSection id="secure" eyebrow="ریسک L3" title="Secure Actions"><div className="secure-demo-card"><span className="domain-icon"><MResalatIcon name="security" size={24} /></span><div><Badge tone="danger">تأیید صریح و احراز قوی</Badge><h3>مسدودسازی موقت کارت</h3><p>اثر اقدام، تأیید، احراز دومرحله‌ای و رسید قطعی از هم جدا می‌شوند.</p></div><a className="button button-secondary" href="/secure">اجرای نمونه</a></div><CodeExample title="SecureActionFlow" code={showcaseSnippets.secure} /></ShowcaseSection>
 
           <ShowcaseSection id="motion" eyebrow="عمق محدود" title="Motion"><ParallaxLayer className="motion-demo" strength={14}><div><span className="domain-icon"><MResalatIcon name="goal" size={24} /></span><h3>هدف پس‌انداز</h3><p>حرکت با transform، بدون جابه‌جایی چیدمان و غیرفعال در reduced-motion.</p></div><i /><i /></ParallaxLayer><CodeExample title="ParallaxLayer" code={showcaseSnippets.motion} /></ShowcaseSection>
+
+          <ShowcaseSection id="mbazar" eyebrow="Buyer discovery" title="M-Bazar / ام‌بازار" description="اجزای واقعی Batch A با قیمت تومان، زمینه خرید مشترک، چهار واریانت کارت و Quick View پاسخ‌گو."><MBazarShowcase /><CodeExample title="M-Bazar components" code={showcaseSnippets.mbazar} /></ShowcaseSection>
 
           <ShowcaseSection id="templates" eyebrow="ترکیب پیکربندی‌محور" title="Templates"><div className="template-flow"><span>Segment config</span><MResalatIcon name="next" size={20} /><span>SegmentExperience</span><MResalatIcon name="next" size={20} /><span>Home / Services / Journey</span></div><CodeExample title="SegmentExperience" code={showcaseSnippets.segment} /></ShowcaseSection>
 
