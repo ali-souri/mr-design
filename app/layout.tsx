@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { MBazarCartProvider } from '@/mresalat/mbazar/cart-state';
 
 export const metadata: Metadata = {
   title: {
@@ -16,7 +17,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="fa" dir="rtl" suppressHydrationWarning>
       <head><script dangerouslySetInnerHTML={{ __html: themeScript }} /></head>
-      <body>{children}</body>
+      <body><MBazarCartProvider>{children}</MBazarCartProvider></body>
     </html>
   );
 }
