@@ -59,6 +59,13 @@ This list reflects the exported React components in `mresalat/` for v0.4.
 - `InstallmentEligibilityPanel`, `InstallmentPlanCard` — four deterministic eligibility states and card-based demo plan comparison.
 - `CheckoutConfirmation`, `CheckoutSuccess` — explicit review, mock step-up authentication and branch-specific results.
 - `InstallmentRequestCard` — request context, progress, latest update and next action.
+- `MBazarOrderCard`, `MBazarOrderStatus`, `MBazarOrderProgress` — customer-readable status, next action and semantic fulfillment milestones.
+- `MBazarFulfillmentGroup` — independent seller parcel state inside one logical order.
+- `MBazarFavoriteCard` — saved-price snapshot compared with current price, availability and installment state.
+- `MBazarAddressCard`, `MBazarReviewCard`, `MBazarRatingInput` — shared checkout address management and accessible delivered-purchase review flow.
+- `MBazarSupportCaseCard` — order-linked issue status and next action.
+- `MBazarProfileGroup`, `MBazarAccountNav` — task-oriented buyer account navigation.
+- `MBazarSellerHeader` — buyer-facing seller identity, marketplace-source facts and separate seller reputation semantics.
 
 ## Documentation
 

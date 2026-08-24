@@ -4,6 +4,11 @@ export type MBazarProductVariant = 'carousel' | 'grid' | 'list' | 'recommendatio
 export type MBazarSeller = {
   id: string;
   name: string;
+  status?: 'marketplace-provider' | 'unavailable';
+  rating?: number;
+  reviewCount?: number;
+  region?: string;
+  description?: string;
 };
 
 export type MBazarProduct = {
@@ -71,6 +76,9 @@ export type MBazarAddress = {
   address: string;
   postalCode: string;
   phone: string;
+  province?: string;
+  city?: string;
+  isDefault?: boolean;
 };
 
 export type InstallmentPlan = {
@@ -104,4 +112,67 @@ export type InstallmentRequest = {
   nextAction: string;
   progress: number;
   planId?: string;
+};
+
+export type MBazarOrderStatus = 'placed' | 'seller-confirmed' | 'preparing' | 'shipped' | 'delivered' | 'cancelled' | 'issue';
+export type MBazarFulfillmentStatus = 'pending' | 'preparing' | 'ready' | 'in-transit' | 'delivered' | 'failed';
+export type MBazarOrderAction = { label: string; href: string; kind: 'track' | 'review' | 'support' | 'buy-again' };
+export type MBazarTrackingMilestone = { id: string; title: string; detail?: string; status: 'completed' | 'current' | 'upcoming' };
+export type MBazarOrderItem = {
+  id: string;
+  productId: string;
+  sellerId: string;
+  title: string;
+  image: string;
+  imageAlt: string;
+  unitPrice: number;
+  quantity: number;
+};
+export type MBazarOrderSellerGroup = {
+  id: string;
+  seller: MBazarSeller;
+  status: MBazarFulfillmentStatus;
+  statusLabel: string;
+  nextStep: string;
+  itemIds: string[];
+  milestones: MBazarTrackingMilestone[];
+};
+export type MBazarOrder = {
+  id: string;
+  reference: string;
+  createdAt: string;
+  paymentMode: MBazarPaymentMode;
+  status: MBazarOrderStatus;
+  items: MBazarOrderItem[];
+  sellerGroups: MBazarOrderSellerGroup[];
+  totals: { subtotal: number; discount: number; delivery: number; total: number };
+  deliveryAddress: MBazarAddress;
+  deliveryMethod: string;
+  nextAction?: MBazarOrderAction;
+  cancellationReason?: string;
+  issueSummary?: string;
+  reviewedProductIds?: string[];
+  isNew?: boolean;
+};
+
+export type MBazarFavorite = { productId: string; savedPrice: number; savedAt: string; savedInstallmentEligible?: boolean };
+export type MBazarReview = { id: string; orderId: string; productId: string; rating: number; text: string; createdAt: string; pros?: string; cons?: string };
+export type MBazarSupportIssueType = 'delivery-delay' | 'wrong-item' | 'damaged-item' | 'missing-item' | 'payment-question' | 'other';
+export type MBazarSupportCase = {
+  id: string;
+  orderId: string;
+  type: MBazarSupportIssueType;
+  status: 'created' | 'in-review' | 'waiting-for-user' | 'resolved';
+  createdAt: string;
+  summary: string;
+  sellerId?: string;
+  nextAction?: string;
+};
+
+export type MBazarDomainSnapshot = {
+  favorites: MBazarFavorite[];
+  addresses: MBazarAddress[];
+  orders: MBazarOrder[];
+  reviews: MBazarReview[];
+  supportCases: MBazarSupportCase[];
 };

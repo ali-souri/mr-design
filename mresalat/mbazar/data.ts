@@ -1,4 +1,4 @@
-import type { CartValidationIssue, InstallmentEligibility, InstallmentEligibilityStatus, InstallmentPlan, InstallmentRequest, MBazarAddress, MBazarCart, MBazarCategory, MBazarProduct, MarketplaceContextState } from './types';
+import type { CartValidationIssue, InstallmentEligibility, InstallmentEligibilityStatus, InstallmentPlan, InstallmentRequest, MBazarAddress, MBazarCart, MBazarCategory, MBazarDomainSnapshot, MBazarFulfillmentStatus, MBazarOrder, MBazarOrderItem, MBazarProduct, MBazarSeller, MBazarTrackingMilestone, MarketplaceContextState } from './types';
 
 export const marketplaceContext: MarketplaceContextState = {
   destination: 'تهران، سعادت‌آباد',
@@ -16,9 +16,12 @@ export const mbazarCategories: MBazarCategory[] = [
   { id: 'other', slug: 'other', title: 'سایر کالاها', description: 'مشاهده همه گروه‌های کالا', icon: 'grid', tone: 'cyan' },
 ];
 
-const sellerA = { id: 'resalat-market', name: 'فروشگاه ام‌بازار' };
-const sellerB = { id: 'digital-house', name: 'خانه دیجیتال' };
-const sellerC = { id: 'green-life', name: 'زندگی سبز' };
+export const mbazarSellers: MBazarSeller[] = [
+  { id: 'resalat-market', name: 'فروشگاه ام‌بازار', status: 'marketplace-provider', rating: 4.6, reviewCount: 284, region: 'تهران', description: 'عرضه‌کننده کالاهای روزمره و دیجیتال در بستر ام‌بازار.' },
+  { id: 'digital-house', name: 'خانه دیجیتال', status: 'marketplace-provider', rating: 4.4, reviewCount: 96, region: 'تهران و البرز', description: 'کالاهای دیجیتال منتخب با اطلاعات محصول ثبت‌شده در ام‌بازار.' },
+  { id: 'green-life', name: 'زندگی سبز', status: 'marketplace-provider', reviewCount: 0, region: 'ارسال سراسری', description: 'محصولات خانه و خوراکی با ارسال مستقل فروشنده.' },
+];
+const [sellerA, sellerB, sellerC] = mbazarSellers;
 
 export const mbazarProducts: MBazarProduct[] = [
   { id: 'laptop-aria-14', slug: 'laptop-aria-14', title: 'لپ‌تاپ ۱۴ اینچی آریا، مناسب کار روزمره', image: '/m-bazar/laptop.png', imageAlt: 'لپ‌تاپ نقره‌ای روی میز', seller: sellerB, price: { current: 46800000, previous: 49900000, currency: 'IRT' }, discountPercent: 6, availability: 'limited', installmentEligible: true, categoryId: 'digital', rating: 4.4, description: 'یک لپ‌تاپ سبک برای کارهای اداری، مطالعه و استفاده روزمره.', specifications: [{ label: 'نمایشگر', value: '۱۴ اینچ Full HD' }, { label: 'حافظه', value: '۵۱۲ گیگابایت SSD' }, { label: 'رم', value: '۱۶ گیگابایت' }, { label: 'وزن', value: '۱٫۴ کیلوگرم' }], colors: ['نقره‌ای', 'خاکستری'] },
@@ -61,8 +64,8 @@ export const cartValidationRules: Partial<Record<string, CartValidationIssue[]>>
 };
 
 export const mbazarAddresses: MBazarAddress[] = [
-  { id: 'home', title: 'خانه', recipient: 'حسین محمدی', address: 'تهران، سعادت‌آباد، بلوار دریا، پلاک ۲۴', postalCode: '۱۹۹۸۷۶۵۴۳۲', phone: '۰۹۱۲•••۳۴۱۲' },
-  { id: 'work', title: 'محل کار', recipient: 'حسین محمدی', address: 'تهران، میدان ونک، خیابان ملاصدرا، پلاک ۸', postalCode: '۱۹۶۷۸۴۵۲۱۰', phone: '۰۹۱۲•••۳۴۱۲' },
+  { id: 'home', title: 'خانه', recipient: 'مهدی رضایی', province: 'تهران', city: 'تهران', address: 'سعادت‌آباد، بلوار دریا، پلاک نمایشی ۲۴', postalCode: '۱۹۹۸۷۶۵۴۳۲', phone: '۰۹۱۲•••۳۴۱۲', isDefault: true },
+  { id: 'work', title: 'محل کار', recipient: 'مهدی رضایی', province: 'تهران', city: 'تهران', address: 'میدان ونک، خیابان ملاصدرا، پلاک نمایشی ۸', postalCode: '۱۹۶۷۸۴۵۲۱۰', phone: '۰۹۱۲•••۳۴۱۲', isDefault: false },
 ];
 
 export const installmentPlans: InstallmentPlan[] = [
@@ -96,3 +99,38 @@ export function calculateCart(cart: MBazarCart) {
 }
 
 export function installmentRequestById(id: string) { return installmentRequests.find((request) => request.id === id) ?? installmentRequests[0]; }
+
+const trackingTitles = ['ثبت سفارش', 'تأیید فروشنده', 'آماده‌سازی', 'تحویل به ارسال', 'در مسیر', 'تحویل شده'];
+function milestones(current: number): MBazarTrackingMilestone[] {
+  return trackingTitles.map((title, index) => ({ id: `step-${index}`, title, status: index < current ? 'completed' : index === current ? 'current' : 'upcoming' }));
+}
+function orderItem(productId: string, quantity = 1, unitPrice?: number): MBazarOrderItem {
+  const product = productById(productId);
+  return { id: `${productId}-${quantity}`, productId, sellerId: product.seller.id, title: product.title, image: product.image, imageAlt: product.imageAlt, unitPrice: unitPrice ?? product.price.current, quantity };
+}
+function group(id: string, status: MBazarFulfillmentStatus, statusLabel: string, nextStep: string, itemIds: string[], current: number) {
+  return { id: `group-${id}`, seller: mbazarSellers.find((seller) => seller.id === id)!, status, statusLabel, nextStep, itemIds, milestones: milestones(current) };
+}
+const homeAddress = mbazarAddresses[0];
+export const initialMBazarOrders: MBazarOrder[] = [
+  { id: 'order-2841', reference: 'MBO-1405-2841', createdAt: '۲۴ مرداد ۱۴۰۵', paymentMode: 'cash', status: 'preparing', items: [orderItem('phone-nova-12', 1, 28900000), orderItem('coffee-maker', 1, 6990000)], sellerGroups: [group('resalat-market', 'preparing', 'در حال آماده‌سازی', 'تحویل به سرویس ارسال', ['phone-nova-12-1'], 2), group('green-life', 'in-transit', 'ارسال شده', 'تحویل مرسوله', ['coffee-maker-1'], 4)], totals: { subtotal: 35890000, discount: 0, delivery: 145000, total: 36035000 }, deliveryAddress: homeAddress, deliveryMethod: 'ارسال عادی', nextAction: { label: 'مشاهده پیشرفت', href: '/examples/mbazar/orders/order-2841', kind: 'track' }, isNew: true },
+  { id: 'order-2716', reference: 'MBO-1405-2716', createdAt: '۱۸ مرداد ۱۴۰۵', paymentMode: 'cash', status: 'shipped', items: [orderItem('laptop-aria-14', 1, 46800000)], sellerGroups: [group('digital-house', 'in-transit', 'در مسیر تحویل', 'دریافت مرسوله', ['laptop-aria-14-1'], 4)], totals: { subtotal: 49900000, discount: 3100000, delivery: 145000, total: 46945000 }, deliveryAddress: homeAddress, deliveryMethod: 'ارسال عادی', nextAction: { label: 'پیگیری مرسوله', href: '/examples/mbazar/orders/order-2716', kind: 'track' } },
+  { id: 'order-2480', reference: 'MBO-1405-2480', createdAt: '۳ مرداد ۱۴۰۵', paymentMode: 'installment', status: 'delivered', items: [orderItem('phone-nova-12', 1, 27900000), orderItem('headphone-wave', 1, 3750000)], sellerGroups: [group('resalat-market', 'delivered', 'تحویل شده', 'اقدامی لازم نیست', ['phone-nova-12-1'], 5), group('digital-house', 'delivered', 'تحویل شده', 'اقدامی لازم نیست', ['headphone-wave-1'], 5)], totals: { subtotal: 31650000, discount: 0, delivery: 145000, total: 31795000 }, deliveryAddress: homeAddress, deliveryMethod: 'ارسال عادی', nextAction: { label: 'ثبت نظر', href: '/examples/mbazar/reviews/new?order=order-2480&product=phone-nova-12', kind: 'review' }, reviewedProductIds: ['headphone-wave'] },
+  { id: 'order-2319', reference: 'MBO-1405-2319', createdAt: '۲۰ تیر ۱۴۰۵', paymentMode: 'cash', status: 'cancelled', items: [orderItem('school-pack', 1, 890000)], sellerGroups: [group('resalat-market', 'failed', 'لغو شده', 'در صورت نیاز با پشتیبانی گفت‌وگو کنید', ['school-pack-1'], 1)], totals: { subtotal: 890000, discount: 0, delivery: 0, total: 890000 }, deliveryAddress: homeAddress, deliveryMethod: 'ارسال عادی', cancellationReason: 'عدم تأیید موجودی توسط فروشنده', nextAction: { label: 'پشتیبانی سفارش', href: '/examples/mbazar/support/new?order=order-2319', kind: 'support' } },
+  { id: 'order-2264', reference: 'MBO-1405-2264', createdAt: '۱۲ تیر ۱۴۰۵', paymentMode: 'cash', status: 'issue', items: [orderItem('coffee-maker', 1, 7290000)], sellerGroups: [group('green-life', 'failed', 'نیازمند بررسی تحویل', 'ثبت جزئیات برای پشتیبانی', ['coffee-maker-1'], 4)], totals: { subtotal: 7290000, discount: 0, delivery: 145000, total: 7435000 }, deliveryAddress: homeAddress, deliveryMethod: 'ارسال فروشنده', issueSummary: 'تحویل مرسوله در بازه اعلام‌شده تأیید نشده است.', nextAction: { label: 'پیگیری با پشتیبانی', href: '/examples/mbazar/support/new?order=order-2264', kind: 'support' }, isNew: true },
+];
+
+export const initialMBazarDomain: MBazarDomainSnapshot = {
+  favorites: [
+    { productId: 'laptop-aria-14', savedPrice: 49900000, savedAt: '۲۰ مرداد ۱۴۰۵', savedInstallmentEligible: true },
+    { productId: 'coffee-maker', savedPrice: 6990000, savedAt: '۱۹ مرداد ۱۴۰۵', savedInstallmentEligible: true },
+    { productId: 'nuts-box', savedPrice: 1180000, savedAt: '۱۷ مرداد ۱۴۰۵', savedInstallmentEligible: true },
+  ],
+  addresses: mbazarAddresses,
+  orders: initialMBazarOrders,
+  reviews: [{ id: 'review-1', orderId: 'order-2480', productId: 'headphone-wave', rating: 4, text: 'کیفیت صدا مناسب است و اتصال پایداری دارد.', createdAt: '۸ مرداد ۱۴۰۵', pros: 'اتصال پایدار', cons: 'کیف کمی کوچک است' }],
+  supportCases: [{ id: 'MBS-1405-0412', orderId: 'order-2264', type: 'delivery-delay', status: 'in-review', createdAt: '۱۳ تیر ۱۴۰۵', summary: 'پیگیری تأخیر تحویل مرسوله فروشگاه زندگی سبز', sellerId: 'green-life', nextAction: 'پاسخ کارشناس را در همین صفحه دنبال کنید' }],
+};
+
+export function orderById(id: string) { return initialMBazarOrders.find((order) => order.id === id || order.reference === id) ?? initialMBazarOrders[0]; }
+export function sellerById(id: string) { return mbazarSellers.find((seller) => seller.id === id) ?? mbazarSellers[0]; }

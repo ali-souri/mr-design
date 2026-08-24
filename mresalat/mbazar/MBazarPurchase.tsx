@@ -90,6 +90,7 @@ function CheckoutWizard({ step, installment }: { step: CheckoutStep; installment
 }
 
 function CheckoutReview({ mode, planId, addressId, cart }: { mode: MBazarPaymentMode; planId?: string; addressId: string; cart: MBazarCart }) {
+  const { addresses: mbazarAddresses } = useMBazarCart();
   const address = mbazarAddresses.find((item) => item.id === addressId)!;
   const plan = installmentPlans.find((item) => item.id === planId);
   return <section className="mbazar-checkout-review"><h2>بازبینی نهایی خرید</h2><div><h3>کالاها و فروشنده‌ها</h3>{cart.items.filter((item) => item.selected).map((item) => { const product = productById(item.productId); return <p key={item.productId}><span>{product.title} × {item.quantity.toLocaleString('fa-IR')}</span><strong>{product.seller.name}</strong></p>; })}</div><div><h3>ارسال</h3><p><span>{address.title} · {address.address}</span><strong>ارسال عادی</strong></p></div><div><h3>روش پرداخت</h3><p><span>{mode === 'cash' ? 'پرداخت نقدی نمایشی' : 'ثبت درخواست اقساطی'}</span><strong>{mode === 'installment' && plan ? `${plan.months.toLocaleString('fa-IR')} ماهه · ماهانه حدود ${formatMBazarPrice(plan.monthlyPayment)} تومان` : 'بدون اتصال به درگاه'}</strong></p></div><MBazarCartSummary cart={cart} checkout /></section>;
@@ -101,7 +102,7 @@ export function CheckoutConfirmation({ mode, checked, onChecked, onConfirm }: { 
 }
 
 export function MBazarCheckoutPage({ initialStep = 'delivery', initialMode }: { initialStep?: CheckoutStep; initialMode?: MBazarPaymentMode }) {
-  const { cart, draft, updateDraft } = useMBazarCart();
+  const { cart, draft, updateDraft, addresses: mbazarAddresses } = useMBazarCart();
   const [step, setStep] = useState<CheckoutStep>(initialStep);
   const [addressOpen, setAddressOpen] = useState(false);
   const mode = initialMode ?? draft.paymentMode;
@@ -118,7 +119,7 @@ export function CheckoutSuccess({ mode, reference }: { mode: MBazarPaymentMode; 
   const { cart, resetDemo } = useMBazarCart();
   const total = calculateCart(cart).total;
   const installment = mode === 'installment';
-  return <MBazarShell active={installment ? 'profile' : 'cart'}><main className="mbazar-purchase-page"><section className="mbazar-success" role="status" aria-live="polite"><span><MResalatIcon name="success" size={32} /></span><small>{installment ? 'درخواست اقساطی ثبت شد' : 'سفارش نمایشی ثبت شد'}</small><h1>{installment ? 'درخواست شما در انتظار بررسی است' : 'سفارش نمایشی با موفقیت ثبت شد'}</h1><p>{installment ? 'نتیجه نهایی هنوز مشخص نشده است. وضعیت و اقدام بعدی را از مرکز درخواست‌های اقساطی دنبال کنید.' : 'هیچ پرداخت یا ارسال واقعی انجام نشده است؛ این صفحه فقط پایان مسیر نمونه را نشان می‌دهد.'}</p><div className="mbazar-success-receipt"><div><span>{installment ? 'شماره درخواست' : 'شماره سفارش'}</span><strong dir="ltr">{reference}</strong></div><div><span>مبلغ خرید</span><strong>{formatMBazarPrice(total)} تومان</strong></div><div><span>وضعیت</span><strong>{installment ? 'در انتظار بررسی' : 'ثبت نمایشی'}</strong></div><div><span>گام بعدی</span><strong>{installment ? 'مشاهده وضعیت درخواست' : 'بازگشت به ام‌بازار'}</strong></div></div><div>{installment ? <a className="button button-primary" href={`/examples/mbazar/installments/${reference}`}>مشاهده درخواست</a> : <a className="button button-primary" href="/examples/mbazar">بازگشت به ام‌بازار</a>}<button className="button button-secondary" type="button" onClick={() => { resetDemo(); location.assign('/examples/mbazar/cart'); }}>شروع دوباره دمو</button></div></section></main></MBazarShell>;
+  return <MBazarShell active={installment ? 'profile' : 'cart'}><main className="mbazar-purchase-page"><section className="mbazar-success" role="status" aria-live="polite"><span><MResalatIcon name="success" size={32} /></span><small>{installment ? 'درخواست اقساطی ثبت شد' : 'سفارش ثبت شد'}</small><h1>{installment ? 'درخواست شما در انتظار بررسی است' : 'سفارش با موفقیت ثبت شد'}</h1><p>{installment ? 'درخواست هنوز به سفارش نهایی تبدیل نشده است؛ وضعیت و اقدام بعدی را از مرکز درخواست‌های اقساطی دنبال کنید.' : 'وضعیت آماده‌سازی و مرسوله‌های هر فروشگاه را از جزئیات سفارش دنبال کنید.'}</p><div className="mbazar-success-receipt"><div><span>{installment ? 'شماره درخواست' : 'شماره سفارش'}</span><strong dir="ltr">{reference}</strong></div><div><span>مبلغ خرید</span><strong>{formatMBazarPrice(total)} تومان</strong></div><div><span>وضعیت</span><strong>{installment ? 'در انتظار بررسی' : 'سفارش ثبت شده'}</strong></div><div><span>گام بعدی</span><strong>{installment ? 'مشاهده وضعیت درخواست' : 'مشاهده وضعیت و مرسوله‌ها'}</strong></div></div><div>{installment ? <a className="button button-primary" href={`/examples/mbazar/installments/${reference}`}>مشاهده درخواست</a> : <a className="button button-primary" href="/examples/mbazar/orders/order-2841">مشاهده سفارش</a>}<button className="button button-secondary" type="button" onClick={() => { resetDemo(); location.assign('/examples/mbazar/cart'); }}>شروع دوباره دمو</button></div></section></main></MBazarShell>;
 }
 
 export function InstallmentRequestCard({ request }: { request: InstallmentRequest }) {
