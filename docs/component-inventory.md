@@ -37,6 +37,11 @@ This list reflects the exported React components in `mresalat/` for v0.4.
 
 - `ProcessReviewWizard` — compact, standard and featured horizontal process review.
 - `ServicePageTemplate` — typed service/advisor page composition.
+- `SegmentHero`, `SegmentActionCard`, `SegmentProcedureCard` — formal, youth and organizational entry patterns driven by one typed experience configuration.
+- `OtpInput` — five-digit, mobile-friendly one-time-code input with auto-advance, backspace and localized paste handling.
+- `SegmentStatusPanel` — request facts, semantic vertical progress and next-action guidance across all three Phase 1 segments.
+- `SegmentSupportPanel` — calm individual, friendly youth and compact professional organization guidance.
+- `ChildInfoPanel`, `AddOwnerPanel` — route-level dialog/sheet patterns with initial focus, keyboard containment and Escape dismissal.
 
 ## Secure
 

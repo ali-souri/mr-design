@@ -2,13 +2,22 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { segmentBySlug, segments, segmentViews, type SegmentView } from '@/mresalat/domains/segments';
 import { SegmentExperience } from '@/mresalat/templates/SegmentExperience';
+import { isPhaseOneView, isSegmentSlug, phaseOneViews, segmentExperiences } from '@/mresalat/segments/experience-data';
+import { SegmentPhaseOnePage } from '@/mresalat/segments/SegmentPhaseOne';
 
 export function generateStaticParams() {
-  return segments.flatMap((segment) => segmentViews.map((view) => ({ segment: segment.slug, view })));
+  return [
+    ...segments.flatMap((segment) => segmentViews.map((view) => ({ segment: segment.slug, view }))),
+    ...Object.entries(phaseOneViews).flatMap(([segment, views]) => views.map((view) => ({ segment, view }))),
+  ];
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ segment: string; view: string }> }): Promise<Metadata> {
   const values = await params;
+  if (isSegmentSlug(values.segment) && isPhaseOneView(values.segment, values.view)) {
+    const labels: Record<string, string> = { membership: 'شروع عضویت', identity: 'احراز هویت', otp: 'کد تأیید', status: 'وضعیت درخواست', request: 'شروع فرایند', 'child-info': 'اطلاعات نوجوان', 'account-request': 'درخواست حساب', owners: 'صاحبان امضاء', 'add-owner': 'افزودن صاحب امضاء' };
+    return { title: `${labels[values.view]} · ${segmentExperiences[values.segment].titleFa}`, description: segmentExperiences[values.segment].shortDescriptionFa };
+  }
   const segment = segmentBySlug[values.segment];
   const view = values.view as SegmentView;
   if (!segment || !segmentViews.includes(view)) return {};
@@ -17,6 +26,9 @@ export async function generateMetadata({ params }: { params: Promise<{ segment: 
 
 export default async function SegmentPage({ params }: { params: Promise<{ segment: string; view: string }> }) {
   const values = await params;
+  if (isSegmentSlug(values.segment) && isPhaseOneView(values.segment, values.view)) {
+    return <SegmentPhaseOnePage segment={values.segment} view={values.view} />;
+  }
   const segment = segmentBySlug[values.segment];
   const view = values.view as SegmentView;
   if (!segment || !segmentViews.includes(view)) notFound();

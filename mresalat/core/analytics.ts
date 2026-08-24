@@ -7,11 +7,14 @@ export type AnalyticsEventName =
   | 'mbazar_favorite_added' | 'mbazar_favorite_removed'
   | 'mbazar_address_added' | 'mbazar_address_updated'
   | 'mbazar_review_started' | 'mbazar_review_submitted'
-  | 'mbazar_seller_opened' | 'mbazar_support_case_created';
+  | 'mbazar_seller_opened' | 'mbazar_support_case_created'
+  | 'segment_selected' | 'segment_landing_opened' | 'segment_procedure_started'
+  | 'identity_verification_started' | 'otp_submitted' | 'youth_child_lookup_started'
+  | 'organization_owner_add_started' | 'request_status_opened';
 
 export type AnalyticsPayload = {
   event: AnalyticsEventName;
-  surface: 'home' | 'service' | 'seller' | 'rag' | 'secure' | 'showcase' | 'marketplace';
+  surface: 'home' | 'service' | 'seller' | 'rag' | 'secure' | 'showcase' | 'marketplace' | 'segment';
   entityId?: string;
   riskLevel?: 0 | 1 | 2 | 3;
   metadata?: Record<string, string | number | boolean>;

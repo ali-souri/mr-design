@@ -17,13 +17,14 @@ import { ParallaxLayer } from '@/mresalat/motion/ParallaxLayer';
 import { CodeExample } from '@/mresalat/showcase/CodeExample';
 import { GridLayoutDemo } from '@/mresalat/showcase/GridLayoutDemo';
 import { showcaseSnippets } from '@/mresalat/showcase/snippets';
+import { SegmentComponentShowcase } from '@/mresalat/segments/SegmentPhaseOne';
 
 export const metadata: Metadata = { title: 'مرجع کدنویسی سیستم' };
 
 const sections = [
   ['brand', 'برند'], ['typography', 'تایپوگرافی'], ['color', 'رنگ'], ['foundations', 'پایه‌ها'], ['grid', 'شبکه و چیدمان'],
   ['icons', 'آیکون‌ها'], ['service-identities', 'هویت خدمات'], ['core', 'اجزای پایه'], ['navigation', 'ناوبری'], ['ai', 'دستیار و سه‌بعدی'], ['rag', 'اعتماد و RAG'],
-  ['journeys', 'مسیرها'], ['secure', 'اقدام امن'], ['motion', 'حرکت'], ['mbazar', 'ام‌بازار'], ['templates', 'قالب‌ها'], ['inventory', 'موجودی'], ['segments', 'سگمنت‌ها'],
+  ['journeys', 'مسیرها'], ['secure', 'اقدام امن'], ['motion', 'حرکت'], ['mbazar', 'ام‌بازار'], ['segment-phase-one', 'عضویت سگمنت‌محور'], ['templates', 'قالب‌ها'], ['inventory', 'موجودی'], ['segments', 'سگمنت‌ها'],
 ] as const;
 
 const palette = [
@@ -74,6 +75,8 @@ export default function ShowcasePage() {
           <ShowcaseSection id="motion" eyebrow="عمق محدود" title="Motion"><ParallaxLayer className="motion-demo" strength={14}><div><span className="domain-icon"><MResalatIcon name="goal" size={24} /></span><h3>هدف پس‌انداز</h3><p>حرکت با transform، بدون جابه‌جایی چیدمان و غیرفعال در reduced-motion.</p></div><i /><i /></ParallaxLayer><CodeExample title="ParallaxLayer" code={showcaseSnippets.motion} /></ShowcaseSection>
 
           <ShowcaseSection id="mbazar" eyebrow="Buyer purchase journey" title="M-Bazar / ام‌بازار" description="اجزای واقعی کشف کالا، سبد، ارسال، انتخاب پرداخت، بررسی شرایط اقساط، طرح، بازبینی و نتیجه."><MBazarShowcase /><CodeExample title="M-Bazar components" code={showcaseSnippets.mbazar} /></ShowcaseSection>
+
+          <ShowcaseSection id="segment-phase-one" eyebrow="Personalized registration" title="Segment Registration UX" description="سه لحن متمایز، کارت‌های اقدام و فرایند، OTP، وضعیت درخواست و شیت‌های نوجوان و سازمان روی یک معماری پیکربندی‌محور."><SegmentComponentShowcase /><CodeExample title="SegmentPhaseOnePage" code={`<SegmentPhaseOnePage segment="individual" />\n<SegmentPhaseOnePage segment="under-18" view="child-info" />\n<SegmentPhaseOnePage segment="organization" view="status" />`} /></ShowcaseSection>
 
           <ShowcaseSection id="templates" eyebrow="ترکیب پیکربندی‌محور" title="Templates"><div className="template-flow"><span>Segment config</span><MResalatIcon name="next" size={20} /><span>SegmentExperience</span><MResalatIcon name="next" size={20} /><span>Home / Services / Journey</span></div><CodeExample title="SegmentExperience" code={showcaseSnippets.segment} /></ShowcaseSection>
 
