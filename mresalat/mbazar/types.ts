@@ -44,3 +44,64 @@ export type MBazarFilterState = {
   seller?: string;
   maxPrice?: number;
 };
+
+export type MBazarCart = {
+  id: string;
+  items: MBazarCartItem[];
+  currency: 'IRT';
+};
+
+export type MBazarCartItem = {
+  productId: string;
+  sellerId: string;
+  quantity: number;
+  selected: boolean;
+};
+
+export type CartValidationIssue = 'out-of-stock' | 'limited-stock' | 'price-changed' | 'installment-unavailable';
+export type InstallmentEligibilityStatus = 'eligible' | 'conditional' | 'unknown' | 'ineligible';
+export type InstallmentEligibility = { status: InstallmentEligibilityStatus; reasonCodes: string[]; nextAction?: string };
+export type MBazarPaymentMode = 'cash' | 'installment';
+export type CheckoutStep = 'delivery' | 'payment' | 'eligibility' | 'plan' | 'review' | 'confirm';
+
+export type MBazarAddress = {
+  id: string;
+  title: string;
+  recipient: string;
+  address: string;
+  postalCode: string;
+  phone: string;
+};
+
+export type InstallmentPlan = {
+  id: string;
+  label: string;
+  months: number;
+  downPayment: number;
+  monthlyPayment: number;
+  totalPayment: number;
+  fee: number;
+};
+
+export type MBazarCheckoutDraft = {
+  step: CheckoutStep;
+  addressId: string;
+  deliveryMethod: 'standard' | 'scheduled';
+  paymentMode?: MBazarPaymentMode;
+  eligibilityScenario: InstallmentEligibilityStatus;
+  planId?: string;
+  acknowledgement: boolean;
+};
+
+export type InstallmentRequestStatus = 'action-required' | 'reviewing' | 'ready' | 'completed';
+export type InstallmentRequest = {
+  id: string;
+  reference: string;
+  productId: string;
+  status: InstallmentRequestStatus;
+  statusLabel: string;
+  lastUpdate: string;
+  nextAction: string;
+  progress: number;
+  planId?: string;
+};
