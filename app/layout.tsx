@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import './batch-c.css';
 import { MBazarCartProvider } from '@/mresalat/mbazar/cart-state';
 
 export const metadata: Metadata = {

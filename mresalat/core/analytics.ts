@@ -2,11 +2,16 @@ export type AnalyticsEventName =
   | 'assistant_opened' | 'prompt_submitted' | 'quick_action_selected' | 'source_opened'
   | 'service_cta_clicked' | 'clarification_requested' | 'handoff_started'
   | 'action_previewed' | 'action_confirmed' | 'step_up_started' | 'journey_completed'
-  | 'answer_positive_feedback' | 'answer_negative_feedback';
+  | 'answer_positive_feedback' | 'answer_negative_feedback'
+  | 'mbazar_order_opened' | 'mbazar_order_support_started'
+  | 'mbazar_favorite_added' | 'mbazar_favorite_removed'
+  | 'mbazar_address_added' | 'mbazar_address_updated'
+  | 'mbazar_review_started' | 'mbazar_review_submitted'
+  | 'mbazar_seller_opened' | 'mbazar_support_case_created';
 
 export type AnalyticsPayload = {
   event: AnalyticsEventName;
-  surface: 'home' | 'service' | 'seller' | 'rag' | 'secure' | 'showcase';
+  surface: 'home' | 'service' | 'seller' | 'rag' | 'secure' | 'showcase' | 'marketplace';
   entityId?: string;
   riskLevel?: 0 | 1 | 2 | 3;
   metadata?: Record<string, string | number | boolean>;

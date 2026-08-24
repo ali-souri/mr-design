@@ -1,0 +1,7 @@
+.mbazar-batch-c-showcase { display: grid; gap: 16px; padding-top: 22px; margin-top: 22px; border-top: 1px solid var(--border-subtle); }
+.mbazar-batch-c-showcase > header h3 { margin: 3px 0; font-size: 20px; }
+.mbazar-batch-c-showcase > header span, .mbazar-batch-c-showcase section > small { color: var(--text-muted); font-size: 9px; }
+.mbazar-showcase-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.mbazar-showcase-grid > section { padding: 14px; border: 1px solid var(--border-subtle); border-radius: 16px; background: var(--surface-elevated); }
+.mbazar-favorite-remove { position: relative; z-index: 3; }
+@media (max-width: 780px) { .mbazar-showcase-grid { grid-template-columns: 1fr; } }
