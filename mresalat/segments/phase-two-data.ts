@@ -21,7 +21,8 @@ export type SegmentAIResult =
   | { type: 'journey'; journeyId: string; title: string; href: string }
   | { type: 'status'; title: string; href: string }
   | { type: 'clarify'; question: string }
-  | { type: 'handoff'; title: string; href: string };
+  | { type: 'handoff'; title: string; href: string }
+  | { type: 'context-switch'; contextType: import('@/mresalat/contexts/types').UserContextType; title: string };
 
 export type SegmentAssistantResponse = {
   answer: string;

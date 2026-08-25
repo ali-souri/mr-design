@@ -8,6 +8,17 @@ export const metadata: Metadata = { title: 'Route QA Index' };
 const canonical = [{ label: 'خانه عمومی', href: '/' }, { label: 'انتخاب سگمنت', href: '/segments' }, { label: 'شخص حقیقی · خانه', href: '/segments/individual' }, { label: 'شخص حقیقی · احراز هویت', href: '/segments/individual/identity' }, { label: 'شخص حقیقی · OTP', href: '/segments/individual/otp' }, { label: 'شخص حقیقی · وضعیت', href: '/segments/individual/status' }, { label: 'نوجوان · خانه', href: '/segments/under-18' }, { label: 'نوجوان · اطلاعات', href: '/segments/under-18/child-info' }, { label: 'نوجوان · وضعیت', href: '/segments/under-18/status' }, { label: 'سازمان · خانه', href: '/segments/organization' }, { label: 'سازمان · صاحبان امضاء', href: '/segments/organization/owners' }, { label: 'سازمان · وضعیت', href: '/segments/organization/status' }, { label: 'نمونه‌های اکوسیستم', href: '/examples' }, { label: 'سبد ام‌بازار', href: '/examples/mbazar/cart' }, { label: 'پرداخت ام‌بازار', href: '/examples/mbazar/checkout?step=delivery' }, { label: 'مرکز اقساط ام‌بازار', href: '/examples/mbazar/installments' }, { label: 'سفارش فعال', href: '/examples/mbazar/orders/order-2841' }, { label: 'سفارش تحویل‌شده', href: '/examples/mbazar/orders/order-2480' }, { label: 'سفارش لغوشده', href: '/examples/mbazar/orders/order-2319' }, { label: 'سفارش مشکل‌دار', href: '/examples/mbazar/orders/order-2264' }, { label: 'علاقه‌مندی با افت قیمت', href: '/examples/mbazar/favorites' }, { label: 'درخواست پشتیبانی', href: '/examples/mbazar/support/new?order=order-2264' }, { label: 'ام‌بازار من', href: '/examples/mbazar/profile' }, { label: 'وام ام‌مشاور', href: '/loan' }, { label: 'فروشنده فعال', href: '/seller' }, { label: 'پاسخ RAG', href: '/rag' }, { label: 'عملیات امن', href: '/secure' }, { label: 'Showcase', href: '/showcase' }];
 
 const phaseTwoQa = [
+  { label: 'Phase 3 · کنترل همه زمینه‌ها و QA reset', href: '/qa/contexts' },
+  { label: 'Phase 3 · والد · خانه با تأیید', href: '/segments/parent/home?pending=1' },
+  { label: 'Phase 3 · والد · خانه بدون تأیید', href: '/segments/parent/home?pending=0' },
+  { label: 'Phase 3 · والد · نمای آریا', href: '/segments/parent/child/arya' },
+  { label: 'Phase 3 · والد · حریم خصوصی فعالیت', href: '/segments/parent/child/arya/activity' },
+  { label: 'Phase 3 · نوجوان · پول توجیبی', href: '/segments/under-18/allowance' },
+  { label: 'Phase 3 · پرسنل · خانه', href: '/segments/organization-employee/home' },
+  { label: 'Phase 3 · مدیر · جزئیات پرسنل', href: '/segments/organization/personnel/p-01' },
+  { label: 'Phase 3 · مدیر · تخصیص اعتبار', href: '/segments/organization/credit/allocate' },
+  { label: 'Phase 3 · هدف نوجوان → ام‌بازار', href: '/examples/mbazar/search?q=دوچرخه&source=youth-goal&goal=bike&child=arya' },
+  { label: 'Phase 3 · اعتبار سازمانی → ام‌بازار', href: '/examples/mbazar/search?source=organization-credit&program=benefit-demo' },
   { label: 'Phase 2 · شخص حقیقی · AI و خانه', href: '/segments/individual/home' },
   { label: 'Phase 2 · شخص حقیقی · خدمات', href: '/segments/individual/services' },
   { label: 'Phase 2 · شخص حقیقی · مسیر فعال', href: '/segments/individual/journeys#membership' },

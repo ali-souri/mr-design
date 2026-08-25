@@ -11,6 +11,7 @@ import { ecosystemServices } from '@/mresalat/domains/ecosystem';
 import { discoveryPrompts, formatMBazarPrice, marketplaceContext, mbazarCategories, mbazarProducts, recentSearches } from './data';
 import { useMBazarCart } from './cart-state';
 import type { MBazarCategory, MBazarProduct, MBazarProductVariant, MarketplaceContextState } from './types';
+import { CrossServiceContextMarker } from '@/mresalat/contexts/RelationshipComponents';
 
 const mbazarService = ecosystemServices.find((service) => service.id === 'mbazar')!;
 
@@ -41,7 +42,15 @@ function MBazarShellFrame({ children, active }: { children: React.ReactNode; act
 }
 
 export function MarketplaceContext({ value = marketplaceContext, compact = false }: { value?: MarketplaceContextState; compact?: boolean }) {
-  return <section className={`marketplace-context ${compact ? 'is-compact' : ''}`} aria-label="زمینه خرید فعلی"><div className="marketplace-context-label"><span><MResalatIcon name="location" size={20} /></span><div><small>ارسال به</small><strong>{value.destination}</strong></div></div><button type="button">تغییر</button><span className="marketplace-context-divider" /><div className="marketplace-context-label"><span><MResalatIcon name="seller" size={20} /></span><div><small>فروشگاه</small><strong>{value.store}</strong></div></div><button type="button">تغییر</button></section>;
+  const [journey, setJourney] = useState<'youth-goal' | 'organization-credit' | null>(null);
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      const source = new URLSearchParams(window.location.search).get('source');
+      setJourney(source === 'youth-goal' || source === 'organization-credit' ? source : null);
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, []);
+  return <><section className={`marketplace-context ${compact ? 'is-compact' : ''}`} aria-label="زمینه خرید فعلی"><div className="marketplace-context-label"><span><MResalatIcon name="location" size={20} /></span><div><small>ارسال به</small><strong>{value.destination}</strong></div></div><button type="button">تغییر</button><span className="marketplace-context-divider" /><div className="marketplace-context-label"><span><MResalatIcon name="seller" size={20} /></span><div><small>فروشگاه</small><strong>{value.store}</strong></div></div><button type="button">تغییر</button></section>{journey === 'youth-goal' && <div className="marketplace-journey marketplace-journey-youth-goal"><CrossServiceContextMarker text="در حال جستجو برای هدف پس‌انداز: دوچرخه" source="از هدف آریا" /><div><button type="button">گزینه‌های ارزان‌تر</button><button type="button">مناسب بودجه من</button><button type="button">مقایسه قیمت</button></div></div>}{journey === 'organization-credit' && <div className="marketplace-journey marketplace-journey-organization-credit"><CrossServiceContextMarker text="اعتبار سازمانی قابل استفاده · شرکت نمونه" source="از برنامه مزایای من" /><div><span><MResalatIcon name="success" size={16} />۴ کالای واجد شرایط</span><span><MResalatIcon name="warning" size={16} />خارج از برنامه با برچسب جدا</span></div></div>}</>;
 }
 
 export function MBazarSearch({ initialQuery = '', variant = 'default', onSubmit }: { initialQuery?: string; variant?: 'default' | 'hero'; onSubmit?: (query: string) => void }) {

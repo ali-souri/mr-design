@@ -6,6 +6,9 @@ import { trackEvent } from '@/mresalat/core/analytics';
 import { MResalatIcon } from '@/mresalat/core/MResalatIcon';
 import type { SegmentSlug } from './experience-data';
 import { answerSegmentQuestion, segmentPrompts, type SegmentAssistantResponse, type SegmentPrompt } from './phase-two-data';
+import { useMResalatContext } from '@/mresalat/contexts/context-state';
+import { answerContextQuestion } from '@/mresalat/contexts/context-ai';
+import { children } from '@/mresalat/contexts/fixtures';
 
 export type SegmentAIEntryProps = {
   segment: SegmentSlug;
@@ -15,6 +18,7 @@ export type SegmentAIEntryProps = {
   title?: string;
   placeholder?: string;
   greeting?: boolean;
+  contextAware?: boolean;
 };
 
 const sourceLabels: Record<SegmentAssistantResponse['sourceType'], string> = {
@@ -38,7 +42,9 @@ export function SegmentAIEntry({
   title,
   placeholder,
   greeting = false,
+  contextAware = true,
 }: SegmentAIEntryProps) {
+  const { activeContext, user, selectedChildId, setActiveContext } = useMResalatContext();
   const [query, setQuery] = useState('');
   const [answer, setAnswer] = useState<SegmentAssistantResponse | null>(null);
   const [emotion, setEmotion] = useState<AssistantEmotion>(greeting ? 'greeting' : 'idle');
@@ -70,7 +76,10 @@ export function SegmentAIEntry({
     setEmotion('thinking');
     trackEvent({ event: 'segment_ai_query_submitted', surface: 'segment', entityId: segment, metadata: { queryLength: clean.length } });
     timer.current = window.setTimeout(() => {
-      const next = answerSegmentQuestion(segment, clean);
+      const selectedChild = children.find((item) => item.id === selectedChildId);
+      const effectiveContext = segment === 'under-18' && activeContext.type === 'personal' ? 'youth' : activeContext.type;
+      const contextual = contextAware ? answerContextQuestion({ contextType: effectiveContext, question: clean, permissions: activeContext.permissions, selectedChildName: selectedChild?.nameFa, availableContextTypes: user.contexts.map((item) => item.type) }) : null;
+      const next = contextual ?? answerSegmentQuestion(segment, clean);
       setAnswer(next);
       setThinking(false);
       setEmotion(next.emotion === 'uncertain' || next.emotion === 'warning' || next.emotion === 'handoff' ? next.emotion : 'explaining');
@@ -112,6 +121,7 @@ export function SegmentAIEntry({
       <div className="segment-ai-content">
         <header>
           <span className="segment-ai-kicker"><MResalatIcon name="assistant" size={16} />دستیار راه‌یاب ام‌رسالت</span>
+          {contextAware && <span className="segment-ai-context"><MResalatIcon name={activeContext.icon} size={16} />زمینه: {segment === 'under-18' && activeContext.type === 'personal' ? 'فضای نوجوان' : `${activeContext.titleFa}${activeContext.subtitleFa ? ` · ${activeContext.subtitleFa}` : ''}`}</span>}
           <h1 id={`segment-ai-${segment}`}>{title ?? defaultTitle}</h1>
           <p>سؤال را به فارسی بنویسید؛ پاسخ این نسخه محدود، شفاف و کاملاً نمایشی است.</p>
         </header>
@@ -149,6 +159,10 @@ export function SegmentAIEntry({
               {answer.results.map((result, index) => {
                 if (result.type === 'answer') return <span className="segment-ai-note" key={`${result.type}-${index}`}><MResalatIcon name="security" size={16} />{result.text}</span>;
                 if (result.type === 'clarify') return <button className="segment-ai-clarify" type="button" onClick={() => { setQuery(result.question); inputRef.current?.focus(); setEmotion('listening'); }} key={`${result.type}-${index}`}><MResalatIcon name="help" size={16} />{result.question}</button>;
+                if (result.type === 'context-switch') {
+                  const context = user.contexts.find((item) => item.type === result.contextType);
+                  return <button className="segment-ai-clarify" type="button" onClick={() => { if (context) setActiveContext(context.id); }} key={`${result.type}-${index}`}><MResalatIcon name="assessment" size={16} />{result.title}</button>;
+                }
                 return <a href={result.href} onClick={() => openResult(result.type, result.href)} key={`${result.type}-${index}`}><small>{resultLabels[result.type]}</small><strong>{result.title}</strong><MResalatIcon name="next" size={16} /></a>;
               })}
             </div>

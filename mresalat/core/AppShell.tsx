@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { BrandLogo } from './BrandLogo';
 import { MResalatIcon, type MResalatIconName } from './MResalatIcon';
 import { ThemeToggle } from './ThemeController';
+import { UserContextSwitcher } from '@/mresalat/contexts/UserContextSwitcher';
 
 const navItems = [
   { key: 'home', label: 'خانه', href: '/', icon: 'home' },
@@ -23,9 +24,9 @@ export function AppShell({ children, active = 'home', hideMobileNav = false }: {
           {navItems.map((item) => <a key={item.key} className={active === item.key ? 'active' : ''} href={item.href}>{item.label}</a>)}
         </nav>
         <div className="header-actions">
+          <UserContextSwitcher />
           <ThemeToggle />
           <button className="icon-button" type="button" aria-label="اعلان‌ها"><MResalatIcon name="alerts" size={20} /><span className="notification-dot" /></button>
-          <button className="profile-button" type="button" aria-label="حساب کاربری"><span>ح</span><b>حسین محمدی</b><MResalatIcon name="down" size={16} /></button>
         </div>
       </header>
       <main className="page-container">{children}</main>
