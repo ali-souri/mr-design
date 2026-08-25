@@ -63,6 +63,12 @@ export const componentInventory: ComponentInventoryItem[] = [
   { category: 'Marketplace', name: 'MBazarSupportCaseCard', purpose: 'وضعیت و اقدام بعدی درخواست پشتیبانی', variants: ['order linked'], states: ['created', 'in review', 'waiting', 'resolved'] },
   { category: 'Marketplace', name: 'MBazarProfileGroup', purpose: 'گروه‌بندی وظیفه‌محور حساب خریدار', variants: ['purchase', 'account', 'support'], states: ['with count', 'without count'] },
   { category: 'Marketplace', name: 'MBazarSellerHeader', purpose: 'هویت و حقایق اعتماد عرضه‌کننده برای خریدار', variants: ['rated', 'unrated'], states: ['marketplace provider', 'unavailable'] },
+  { category: 'Navigation', name: 'UserContextSwitcher', purpose: 'تغییر زمینه نقش در یک هویت مشترک', variants: ['desktop dropdown', 'mobile sheet'], states: ['open', 'selected', 'escape', 'restored'] },
+  { category: 'Secure', name: 'PermissionState', purpose: 'نمایش قابل فهم امکان مشاهده یا اقدام پیش از تعامل', variants: ['seven semantic states'], states: ['allowed', 'view only', 'approval', 'step up', 'unavailable'] },
+  { category: 'Journeys', name: 'ApprovalRequestCard', purpose: 'مرور منبع و اثر درخواست پیش از تصمیم', variants: ['parent', 'organization'], states: ['pending', 'approved', 'rejected'] },
+  { category: 'Journeys', name: 'NextBestAction', purpose: 'نمایش اقدام اولویت‌دار متناسب با زمینه', variants: ['info', 'warning', 'success'], states: ['approval', 'expiry', 'journey'] },
+  { category: 'Navigation', name: 'ChildSelector', purpose: 'انتخاب زیرزمینه فرزند در نقش والد', variants: ['buttons', 'route links'], states: ['Arya', 'Sara', 'selected'] },
+  { category: 'Journeys', name: 'CrossServiceContextMarker', purpose: 'حفظ نشان زمینه میان خدمات اکوسیستم', variants: ['youth goal', 'organization credit'], states: ['active'] },
   { category: 'Documentation', name: 'CodeExample', purpose: 'نمونه کد بازشونده و قابل کپی', variants: ['details panel'], states: ['collapsed', 'expanded', 'copied'] },
   { category: 'Documentation', name: 'GridLayoutDemo', purpose: 'نمایش تعاملی شبکه واقعی صفحه', variants: ['12-column', '4-column mobile'], states: ['overlay shown', 'overlay hidden'] },
 ];

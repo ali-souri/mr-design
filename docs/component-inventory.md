@@ -54,6 +54,13 @@ This list reflects the exported React components in `mresalat/` for v0.4.
 - `SegmentExperience` — config-driven home, services and journey pages for six composition modes.
 - `SegmentHomeShell` — Phase 2 composition shell for deliberately distinct individual, youth and organization dashboards.
 - `SegmentPhaseTwoPage` — route-level Phase 2 experience spanning individual services and journeys, youth goals and rewards, and organization programs, personnel and reports.
+- `UserContextSwitcher` — accessible desktop dropdown/mobile sheet for changing role context inside one identity, with focus restoration and live announcement.
+- `PermissionState` / `PermissionAction` — user-readable allowed, view-only, approval, step-up and unavailable treatments.
+- `ApprovalRequestCard` — reusable pending/approved/rejected review pattern with request source and decision impact.
+- `NextBestAction` — deterministic priority surface for approvals, expiry warnings and active journeys.
+- `ChildSelector` — parent sub-context selection for fictional children without changing the parent context.
+- `CrossServiceContextMarker` — compact continuity marker for youth-goal and organization-credit journeys into another service.
+- `PhaseThreeExperience` — relationship-aware parent/youth, manager/employee, personnel and allocation demo surfaces.
 
 ## Motion
 

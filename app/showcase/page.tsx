@@ -19,13 +19,14 @@ import { GridLayoutDemo } from '@/mresalat/showcase/GridLayoutDemo';
 import { showcaseSnippets } from '@/mresalat/showcase/snippets';
 import { SegmentComponentShowcase } from '@/mresalat/segments/SegmentPhaseOne';
 import { SegmentPhaseTwoShowcase } from '@/mresalat/segments/SegmentPhaseTwo';
+import { PhaseThreeShowcase } from '@/mresalat/contexts/PhaseThreeShowcase';
 
 export const metadata: Metadata = { title: 'مرجع کدنویسی سیستم' };
 
 const sections = [
   ['brand', 'برند'], ['typography', 'تایپوگرافی'], ['color', 'رنگ'], ['foundations', 'پایه‌ها'], ['grid', 'شبکه و چیدمان'],
   ['icons', 'آیکون‌ها'], ['service-identities', 'هویت خدمات'], ['core', 'اجزای پایه'], ['navigation', 'ناوبری'], ['ai', 'دستیار و سه‌بعدی'], ['rag', 'اعتماد و RAG'],
-  ['journeys', 'مسیرها'], ['secure', 'اقدام امن'], ['motion', 'حرکت'], ['mbazar', 'ام‌بازار'], ['segment-phase-one', 'عضویت سگمنت‌محور'], ['segment-phase-two', 'تجربه پس از ثبت‌نام'], ['templates', 'قالب‌ها'], ['inventory', 'موجودی'], ['segments', 'سگمنت‌ها'],
+  ['journeys', 'مسیرها'], ['secure', 'اقدام امن'], ['motion', 'حرکت'], ['mbazar', 'ام‌بازار'], ['segment-phase-one', 'عضویت سگمنت‌محور'], ['segment-phase-two', 'تجربه پس از ثبت‌نام'], ['segment-phase-three', 'زمینه و رابطه'], ['templates', 'قالب‌ها'], ['inventory', 'موجودی'], ['segments', 'سگمنت‌ها'],
 ] as const;
 
 const palette = [
@@ -80,6 +81,7 @@ export default function ShowcasePage() {
           <ShowcaseSection id="segment-phase-one" eyebrow="Personalized registration" title="Segment Registration UX" description="سه لحن متمایز، کارت‌های اقدام و فرایند، OTP، وضعیت درخواست و شیت‌های نوجوان و سازمان روی یک معماری پیکربندی‌محور."><SegmentComponentShowcase /><CodeExample title="SegmentPhaseOnePage" code={`<SegmentPhaseOnePage segment="individual" />\n<SegmentPhaseOnePage segment="under-18" view="child-info" />\n<SegmentPhaseOnePage segment="organization" view="status" />`} /></ShowcaseSection>
 
           <ShowcaseSection id="segment-phase-two" eyebrow="AI-first personalized home" title="Segment Post-Registration UX" description="ورودی هوشمند سگمنت‌محور، پرسش و پاسخ فارسی، مسیر فعال، هدف نوجوان، پاداش، برنامه سازمانی و خلاصه گزارش روی اجزای مشترک و داده‌های تایپ‌شده."><SegmentPhaseTwoShowcase /><CodeExample title="SegmentAIEntry & SegmentHomeShell" code={showcaseSnippets.segmentPhaseTwo} /></ShowcaseSection>
+          <ShowcaseSection id="segment-phase-three" eyebrow="relationship-aware personalization" title="Active Context, Permission & Cross-Service UX" description="تغییر نقش در یک هویت، دسترسی قابل فهم، رابطه والد و نوجوان، برنامه مشترک مدیر و پرسنل و تداوم زمینه میان خدمات."><PhaseThreeShowcase /></ShowcaseSection>
 
           <ShowcaseSection id="templates" eyebrow="ترکیب پیکربندی‌محور" title="Templates"><div className="template-flow"><span>Segment config</span><MResalatIcon name="next" size={20} /><span>SegmentExperience</span><MResalatIcon name="next" size={20} /><span>Home / Services / Journey</span></div><CodeExample title="SegmentExperience" code={showcaseSnippets.segment} /></ShowcaseSection>
 
