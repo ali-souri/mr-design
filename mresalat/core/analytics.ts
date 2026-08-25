@@ -14,7 +14,12 @@ export type AnalyticsEventName =
   | 'segment_ai_query_submitted' | 'segment_ai_result_opened'
   | 'individual_journey_opened' | 'youth_goal_opened' | 'youth_reward_opened'
   | 'organization_program_opened' | 'organization_personnel_opened' | 'organization_report_opened'
-  | 'mascot_greeting_shown' | 'mascot_assistant_answered';
+  | 'mascot_greeting_shown' | 'mascot_assistant_answered'
+  | 'context_switch_opened' | 'context_switched' | 'child_context_selected'
+  | 'approval_request_opened' | 'approval_request_approved' | 'approval_request_rejected'
+  | 'permission_blocked_action' | 'cross_service_journey_opened'
+  | 'organization_credit_allocation_started' | 'organization_employee_opened'
+  | 'parent_child_opened' | 'context_ai_clarification_requested';
 
 export type AnalyticsPayload = {
   event: AnalyticsEventName;

@@ -3,7 +3,9 @@ import './globals.css';
 import './batch-c.css';
 import './segmentation.css';
 import './segmentation-phase-two.css';
+import './segmentation-phase-three.css';
 import { MBazarCartProvider } from '@/mresalat/mbazar/cart-state';
+import { MResalatContextProvider } from '@/mresalat/contexts/context-state';
 
 export const metadata: Metadata = {
   title: {
@@ -20,7 +22,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="fa" dir="rtl" suppressHydrationWarning>
       <head><script dangerouslySetInnerHTML={{ __html: themeScript }} /></head>
-      <body><MBazarCartProvider>{children}</MBazarCartProvider></body>
+      <body><MResalatContextProvider><MBazarCartProvider>{children}</MBazarCartProvider></MResalatContextProvider></body>
     </html>
   );
 }

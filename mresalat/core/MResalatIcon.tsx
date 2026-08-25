@@ -15,6 +15,7 @@ export const iconMap = {
   membership: UserPlus,
   loan: Landmark,
   finance: WalletCards,
+  wallet: WalletCards,
   seller: Store,
   product: Package,
   orders: ShoppingBag,
