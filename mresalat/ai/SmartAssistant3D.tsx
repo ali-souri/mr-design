@@ -13,6 +13,7 @@ import {
   type AssistantMotionIntensity,
   type AssistantView,
 } from './mascot';
+import { detectWebGLSupport } from './webgl-capability';
 
 export {
   assistantEmotionLabels,
@@ -39,15 +40,6 @@ function subscribeReducedMotion(callback: () => void) {
 
 function getReducedMotion() {
   return window.matchMedia(reducedMotionQuery).matches;
-}
-
-function hasWebGL() {
-  try {
-    const canvas = document.createElement('canvas');
-    return Boolean(canvas.getContext('webgl2') || canvas.getContext('webgl'));
-  } catch {
-    return false;
-  }
 }
 
 function StaticAssistant({ emotion, mode, compact = false }: { emotion: AssistantEmotion; mode: AssistantCharacterMode; compact?: boolean }) {
@@ -81,15 +73,14 @@ export type SmartAssistant3DProps = {
   view?: AssistantView;
   debugView?: AssistantDebugView;
   animationKey?: number;
+  staticOnly?: boolean;
   className?: string;
 };
 
 export function SmartAssistantAvatar({ size = 48, emotion = 'idle', className = '' }: { size?: 32 | 40 | 48 | 64 | 96; emotion?: AssistantEmotion; className?: string }) {
   return (
     <span className={`smart-assistant-avatar ${className}`} style={{ '--assistant-avatar-size': `${size}px` } as CSSProperties} aria-label={`دستیار ام‌رسالت، ${assistantEmotionLabels[emotion]}`}>
-      {size >= 96
-        ? <SmartAssistant3D emotion={emotion} mode="portrait" motionIntensity="restrained" gaze="none" transparent />
-        : <StaticAssistant emotion={emotion} mode="portrait" compact />}
+      <StaticAssistant emotion={emotion} mode="portrait" compact />
     </span>
   );
 }
@@ -104,11 +95,12 @@ export function SmartAssistant3D({
   view = 'front',
   debugView = 'standard',
   animationKey = 0,
+  staticOnly = false,
   className = '',
 }: SmartAssistant3DProps) {
   const hydrated = useSyncExternalStore(subscribeHydration, () => true, () => false);
   const reducedMotion = useSyncExternalStore(subscribeReducedMotion, getReducedMotion, () => false);
-  const supportsWebGL = hydrated && hasWebGL();
+  const supportsWebGL = hydrated && !staticOnly && detectWebGLSupport();
   const rootRef = useRef<HTMLDivElement>(null);
   const visibleRef = useRef(true);
   const gazeRef = useRef<AssistantGaze>({ x: 0, y: 0, strength: 0, active: false });
@@ -123,11 +115,14 @@ export function SmartAssistant3D({
       root.style.setProperty('--assistant-gaze-x', '0');
       root.style.setProperty('--assistant-gaze-y', '0');
     };
-    const setGaze = (event: globalThis.PointerEvent) => {
-      if (event.pointerType !== 'mouse' || reducedMotion || !visibleRef.current || gaze === 'none' || view !== 'front') return;
+    let pointerFrame = 0;
+    let pendingPointer: { clientX: number; clientY: number } | undefined;
+    const applyGaze = () => {
+      pointerFrame = 0;
+      if (!pendingPointer || reducedMotion || !visibleRef.current || gaze === 'none' || view !== 'front') return;
       const bounds = root.getBoundingClientRect();
-      const dx = event.clientX - (bounds.left + bounds.width / 2);
-      const dy = bounds.top + bounds.height * .38 - event.clientY;
+      const dx = pendingPointer.clientX - (bounds.left + bounds.width / 2);
+      const dy = bounds.top + bounds.height * .38 - pendingPointer.clientY;
       const x = clamp(dx / Math.max((gaze === 'page' ? window.innerWidth : bounds.width) * .48, bounds.width * 1.1));
       const y = clamp(dy / Math.max((gaze === 'page' ? window.innerHeight : bounds.height) * .46, bounds.height * 1.1));
       const distance = Math.hypot(dx, dy);
@@ -138,6 +133,11 @@ export function SmartAssistant3D({
       root.dataset.gazeActive = 'true';
       root.style.setProperty('--assistant-gaze-x', x.toFixed(3));
       root.style.setProperty('--assistant-gaze-y', y.toFixed(3));
+    };
+    const setGaze = (event: globalThis.PointerEvent) => {
+      if (event.pointerType !== 'mouse') return;
+      pendingPointer = { clientX: event.clientX, clientY: event.clientY };
+      if (!pointerFrame) pointerFrame = window.requestAnimationFrame(applyGaze);
     };
     const handlePageLeave = (event: MouseEvent) => {
       if (!event.relatedTarget) resetGaze();
@@ -155,6 +155,7 @@ export function SmartAssistant3D({
     document.addEventListener('visibilitychange', resetGaze);
     return () => {
       observer.disconnect();
+      if (pointerFrame) window.cancelAnimationFrame(pointerFrame);
       pointerTarget.removeEventListener('pointermove', setGaze as EventListener);
       document.documentElement.removeEventListener('mouseleave', handlePageLeave);
       window.removeEventListener('blur', resetGaze);
@@ -186,6 +187,7 @@ export function SmartAssistant3D({
             debugView={debugView}
             animationKey={animationKey}
             reducedMotion={reducedMotion}
+            visibleRef={visibleRef}
           />
         </Suspense>
       ) : <StaticAssistant emotion={emotion} mode={mode} />}

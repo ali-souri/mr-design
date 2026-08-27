@@ -821,17 +821,19 @@ body { font-size: var(--type-body); line-height: 1.9; }
 .smart-assistant-avatar .static-pattern, .smart-assistant-avatar .static-shoulder { display: none; }
 
 .assistant-3d-reference { display: grid; gap: 18px; }
-.assistant-main-preview { min-width: 0; grid-row: span 4; }
-.assistant-main-preview .smart-assistant-3d { height: 440px; }
+.assistant-main-preview { position: relative; min-width: 0; grid-row: span 4; overflow: hidden; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); }
+.assistant-main-preview .smart-assistant-3d { height: 440px; border-radius: 0; }
+.assistant-lab-status { position: absolute; z-index: 3; top: 12px; right: 12px; display: flex; flex-direction: column; gap: 1px; padding: 7px 10px; border: 1px solid color-mix(in srgb, var(--border-subtle) 76%, transparent); border-radius: 11px; background: color-mix(in srgb, var(--surface-default) 86%, transparent); backdrop-filter: blur(8px); }
+.assistant-lab-status span { color: var(--text-muted); font-size: 10px; }.assistant-lab-status strong { font-size: 12px; }
 .mascot-replay { width: 100%; margin-top: 10px; }
 .assistant-demo-controls { align-content: start; }
 .mascot-control-group { min-width: 0; margin: 0; padding: 11px; border: 1px solid var(--border-subtle); border-radius: 14px; }
 .mascot-control-group legend { padding: 0 6px; color: var(--text-muted); font-size: 12px; font-weight: 600; }
-.mascot-control-group > div > div, .motion-controls, .gaze-controls { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
+.mascot-control-group > div > div, .motion-controls, .gaze-controls, .surface-controls { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
 .mascot-control-group .mode-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .mascot-control-group .emotion-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.mascot-control-group button, .hand-pose-controls button, .face-state-controls button, .turnaround-controls button { min-height: 38px; padding: 6px 9px; border: 1px solid var(--border-subtle); border-radius: 10px; color: var(--text-secondary); background: var(--surface-canvas); font: inherit; font-size: 12px; cursor: pointer; }
-.mascot-control-group button.active, .hand-pose-controls button.active, .face-state-controls button.active, .turnaround-controls button.active { color: var(--action-primary); border-color: var(--brand-300); background: var(--action-secondary); font-weight: 700; }
+.mascot-control-group button, .hand-pose-controls button, .face-state-controls button, .turnaround-controls button, .surface-controls button { min-height: 38px; padding: 6px 9px; border: 1px solid var(--border-subtle); border-radius: 10px; color: var(--text-secondary); background: var(--surface-canvas); font: inherit; font-size: 12px; cursor: pointer; }
+.mascot-control-group button.active, .hand-pose-controls button.active, .face-state-controls button.active, .turnaround-controls button.active, .surface-controls button.active { color: var(--action-primary); border-color: var(--brand-300); background: var(--action-secondary); font-weight: 700; }
 .mascot-debug-section { display: grid; grid-template-columns: minmax(230px,.72fr) 1.28fr; gap: 16px; align-items: center; padding: 17px; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); background: var(--surface-default); }
 .mascot-debug-section h3 { margin: 4px 0; }.mascot-debug-section p { margin: 0; color: var(--text-secondary); font-size: 13px; line-height: 1.8; }
 .hand-pose-controls { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
