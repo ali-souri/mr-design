@@ -2,18 +2,44 @@
 
 import { lazy, Suspense, useEffect, useRef, useSyncExternalStore, type CSSProperties } from 'react';
 import { MResalatIcon } from '@/mresalat/core/MResalatIcon';
+import {
+  assistantEmotionLabels,
+  type AssistantCharacterMode,
+  type AssistantDebugView,
+  type AssistantEmotion,
+  type AssistantGaze,
+  type AssistantGazeMode,
+  type AssistantHandPose,
+  type AssistantMotionIntensity,
+  type AssistantView,
+} from './mascot';
 
-export type AssistantEmotion = 'idle' | 'greeting' | 'listening' | 'thinking' | 'explaining' | 'happy' | 'warning' | 'uncertain' | 'handoff';
-export type AssistantCharacterMode = 'complete' | 'portrait';
-export type AssistantGaze = { x: number; y: number; strength: number; active: boolean };
-
-export const assistantEmotionLabels: Record<AssistantEmotion, string> = {
-  idle: 'آرام', greeting: 'سلام و خوش‌آمد', listening: 'در حال شنیدن', thinking: 'در حال فکر', explaining: 'در حال توضیح',
-  happy: 'خوشحال', warning: 'هشدار', uncertain: 'نامطمئن', handoff: 'ارجاع به کارشناس',
-};
+export {
+  assistantEmotionLabels,
+  assistantHandPoseLabels,
+  type AssistantCharacterMode,
+  type AssistantDebugView,
+  type AssistantEmotion,
+  type AssistantGaze,
+  type AssistantGazeMode,
+  type AssistantHandPose,
+  type AssistantMotionIntensity,
+  type AssistantView,
+} from './mascot';
 
 const SmartAssistantCanvas = lazy(() => import('./SmartAssistantCanvas'));
-const subscribe = () => () => undefined;
+const subscribeHydration = () => () => undefined;
+const reducedMotionQuery = '(prefers-reduced-motion: reduce)';
+
+function subscribeReducedMotion(callback: () => void) {
+  const query = window.matchMedia(reducedMotionQuery);
+  query.addEventListener('change', callback);
+  return () => query.removeEventListener('change', callback);
+}
+
+function getReducedMotion() {
+  return window.matchMedia(reducedMotionQuery).matches;
+}
 
 function hasWebGL() {
   try {
@@ -26,16 +52,18 @@ function hasWebGL() {
 
 function StaticAssistant({ emotion, mode, compact = false }: { emotion: AssistantEmotion; mode: AssistantCharacterMode; compact?: boolean }) {
   return (
-    <div className={`assistant-static assistant-static-${emotion} assistant-static-${mode}${compact ? ' assistant-static-compact' : ''}`} role="img" aria-label={`دستیار هوشمند، حالت ${assistantEmotionLabels[emotion]}`}>
+    <div className={`assistant-static assistant-static-${emotion} assistant-static-${mode}${compact ? ' assistant-static-compact' : ''}`} aria-hidden="true">
       <span className="static-android-head">
-        <span className="static-antenna" /><span className="static-ear static-ear-right" /><span className="static-ear static-ear-left" />
+        <span className="static-head-accent"><i /></span><span className="static-antenna" />
+        <span className="static-ear static-ear-right"><i /></span><span className="static-ear static-ear-left"><i /></span>
         <span className="static-face"><i className="static-eye static-eye-right" /><i className="static-eye static-eye-left" /><b className="static-smile" /><span className="static-brows"><i /><i /></span></span>
       </span>
       <span className="static-neck" />
       <span className="static-android-body">
-        <span className="static-collar" /><span className="static-chest-panel" /><span className="static-vest-trim" /><span className="static-sash" />
+        <span className="static-collar" /><span className="static-chest-panel" /><span className="static-vest-trim" /><span className="static-pattern" /><span className="static-sash" />
         <span className="static-vest-mark"><MResalatIcon name={emotion === 'warning' ? 'warning' : emotion === 'handoff' ? 'support' : 'assistant'} size={compact ? 16 : 20} /></span>
-        <i className="static-arm static-arm-right" /><i className="static-arm static-arm-left" />
+        <i className="static-shoulder static-shoulder-right" /><i className="static-shoulder static-shoulder-left" />
+        <i className="static-arm static-arm-right"><b /></i><i className="static-arm static-arm-left"><b /></i>
       </span>
       <span className="static-hips" />
       <span className="static-leg static-leg-right"><i /></span><span className="static-leg static-leg-left"><i /></span>
@@ -43,16 +71,43 @@ function StaticAssistant({ emotion, mode, compact = false }: { emotion: Assistan
   );
 }
 
+export type SmartAssistant3DProps = {
+  emotion?: AssistantEmotion;
+  mode?: AssistantCharacterMode;
+  motionIntensity?: AssistantMotionIntensity;
+  gaze?: AssistantGazeMode;
+  transparent?: boolean;
+  handPose?: AssistantHandPose;
+  view?: AssistantView;
+  debugView?: AssistantDebugView;
+  animationKey?: number;
+  className?: string;
+};
+
 export function SmartAssistantAvatar({ size = 48, emotion = 'idle', className = '' }: { size?: 32 | 40 | 48 | 64 | 96; emotion?: AssistantEmotion; className?: string }) {
   return (
-    <span className={`smart-assistant-avatar ${className}`} style={{ '--assistant-avatar-size': `${size}px` } as CSSProperties}>
-      <StaticAssistant emotion={emotion} mode="portrait" compact />
+    <span className={`smart-assistant-avatar ${className}`} style={{ '--assistant-avatar-size': `${size}px` } as CSSProperties} aria-label={`دستیار ام‌رسالت، ${assistantEmotionLabels[emotion]}`}>
+      {size >= 96
+        ? <SmartAssistant3D emotion={emotion} mode="portrait" motionIntensity="restrained" gaze="none" transparent />
+        : <StaticAssistant emotion={emotion} mode="portrait" compact />}
     </span>
   );
 }
 
-export function SmartAssistant3D({ emotion = 'idle', mode = 'complete', className = '' }: { emotion?: AssistantEmotion; mode?: AssistantCharacterMode; className?: string }) {
-  const hydrated = useSyncExternalStore(subscribe, () => true, () => false);
+export function SmartAssistant3D({
+  emotion = 'idle',
+  mode = 'complete',
+  motionIntensity = 'normal',
+  gaze = 'page',
+  transparent = false,
+  handPose,
+  view = 'front',
+  debugView = 'standard',
+  animationKey = 0,
+  className = '',
+}: SmartAssistant3DProps) {
+  const hydrated = useSyncExternalStore(subscribeHydration, () => true, () => false);
+  const reducedMotion = useSyncExternalStore(subscribeReducedMotion, getReducedMotion, () => false);
   const supportsWebGL = hydrated && hasWebGL();
   const rootRef = useRef<HTMLDivElement>(null);
   const visibleRef = useRef(true);
@@ -61,7 +116,6 @@ export function SmartAssistant3D({ emotion = 'idle', mode = 'complete', classNam
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const clamp = (value: number) => Math.max(-1, Math.min(1, value));
     const resetGaze = () => {
       gazeRef.current = { x: 0, y: 0, strength: 0, active: false };
@@ -70,16 +124,16 @@ export function SmartAssistant3D({ emotion = 'idle', mode = 'complete', classNam
       root.style.setProperty('--assistant-gaze-y', '0');
     };
     const setGaze = (event: globalThis.PointerEvent) => {
-      if (event.pointerType !== 'mouse' || reducedMotion.matches || !visibleRef.current) return;
+      if (event.pointerType !== 'mouse' || reducedMotion || !visibleRef.current || gaze === 'none' || view !== 'front') return;
       const bounds = root.getBoundingClientRect();
       const dx = event.clientX - (bounds.left + bounds.width / 2);
       const dy = bounds.top + bounds.height * .38 - event.clientY;
-      const x = clamp(dx / Math.max(window.innerWidth * .48, bounds.width * 1.5));
-      const y = clamp(dy / Math.max(window.innerHeight * .46, bounds.height * 1.5));
+      const x = clamp(dx / Math.max((gaze === 'page' ? window.innerWidth : bounds.width) * .48, bounds.width * 1.1));
+      const y = clamp(dy / Math.max((gaze === 'page' ? window.innerHeight : bounds.height) * .46, bounds.height * 1.1));
       const distance = Math.hypot(dx, dy);
-      const pageDiagonal = Math.hypot(window.innerWidth, window.innerHeight);
-      const proximity = 1 - Math.min(1, distance / (pageDiagonal * .72));
-      const strength = .46 + proximity * .54;
+      const reach = gaze === 'page' ? Math.hypot(window.innerWidth, window.innerHeight) * .72 : Math.hypot(bounds.width, bounds.height);
+      const proximity = 1 - Math.min(1, distance / reach);
+      const strength = .42 + proximity * .58;
       gazeRef.current = { x, y, strength, active: true };
       root.dataset.gazeActive = 'true';
       root.style.setProperty('--assistant-gaze-x', x.toFixed(3));
@@ -94,22 +148,47 @@ export function SmartAssistant3D({ emotion = 'idle', mode = 'complete', classNam
     }, { threshold: .05 });
 
     observer.observe(root);
-    window.addEventListener('pointermove', setGaze, { passive: true });
+    const pointerTarget: Window | HTMLDivElement = gaze === 'local' ? root : window;
+    if (gaze !== 'none' && !reducedMotion && view === 'front') pointerTarget.addEventListener('pointermove', setGaze as EventListener, { passive: true });
     document.documentElement.addEventListener('mouseleave', handlePageLeave);
     window.addEventListener('blur', resetGaze);
     document.addEventListener('visibilitychange', resetGaze);
     return () => {
       observer.disconnect();
-      window.removeEventListener('pointermove', setGaze);
+      pointerTarget.removeEventListener('pointermove', setGaze as EventListener);
       document.documentElement.removeEventListener('mouseleave', handlePageLeave);
       window.removeEventListener('blur', resetGaze);
       document.removeEventListener('visibilitychange', resetGaze);
     };
-  }, []);
+  }, [gaze, reducedMotion, view]);
 
   return (
-    <div ref={rootRef} className={`smart-assistant-3d smart-assistant-mode-${mode} ${className}`} data-emotion={emotion} data-mode={mode} data-gaze-active="false" aria-label={`نمای سه‌بعدی دستیار: ${assistantEmotionLabels[emotion]}`}>
-      {supportsWebGL ? <Suspense fallback={<StaticAssistant emotion={emotion} mode={mode} />}><SmartAssistantCanvas emotion={emotion} mode={mode} gazeRef={gazeRef} /></Suspense> : <StaticAssistant emotion={emotion} mode={mode} />}
+    <div
+      ref={rootRef}
+      className={`smart-assistant-3d smart-assistant-mode-${mode}${transparent ? ' smart-assistant-transparent' : ''} ${className}`}
+      data-emotion={emotion}
+      data-mode={mode}
+      data-gaze-active="false"
+      data-hand-pose={handPose ?? ''}
+      data-view={view}
+      role="img"
+      aria-label={`نمای سه‌بعدی دستیار ام‌رسالت: ${assistantEmotionLabels[emotion]}`}
+    >
+      {supportsWebGL ? (
+        <Suspense fallback={<StaticAssistant emotion={emotion} mode={mode} />}>
+          <SmartAssistantCanvas
+            emotion={emotion}
+            mode={mode}
+            motionIntensity={motionIntensity}
+            gazeRef={gazeRef}
+            handPose={handPose}
+            view={view}
+            debugView={debugView}
+            animationKey={animationKey}
+            reducedMotion={reducedMotion}
+          />
+        </Suspense>
+      ) : <StaticAssistant emotion={emotion} mode={mode} />}
       <span className="assistant-emotion-label"><MResalatIcon name="assistant" size={16} />{assistantEmotionLabels[emotion]}</span>
     </div>
   );
