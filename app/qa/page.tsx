@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { AppShell } from '@/mresalat/core/AppShell';
 import { MResalatIcon } from '@/mresalat/core/MResalatIcon';
 import { segments, segmentViews } from '@/mresalat/domains/segments';
+import { serviceCatalog, serviceCatalogChapters } from '@/mresalat/domains/service-catalog';
 
 export const metadata: Metadata = { title: 'Route QA Index' };
 
@@ -37,7 +39,11 @@ const phaseTwoQa = [
 
 const mascotStates = ['greeting', 'idle', 'calm', 'listening', 'thinking', 'explaining', 'happy', 'warning', 'uncertain', 'handoff', 'portrait'];
 const mascotHands = ['relaxed', 'open', 'wave', 'point', 'explain', 'caution', 'thinking', 'support', 'fist'];
+const catalogQa = serviceCatalogChapters.map((chapter) => {
+  const representative = serviceCatalog.find((service) => service.chapter === chapter.id)!;
+  return { label: `فصل ${String(chapter.id).padStart(2, '0')} · ${chapter.titleFa}`, href: `/catalog/${representative.id}`, count: serviceCatalog.filter((service) => service.chapter === chapter.id).length };
+});
 
 export default function QaPage() {
-  return <AppShell active="system"><header className="qa-head"><span className="eyebrow">بازبینی مسیرها</span><h1>Route QA Index</h1><p>مسیرهای نمایشی هسته، سگمنت‌های پس از ثبت‌نام و ام‌بازار از یک صفحه قابل دسترسی‌اند.</p></header><section className="qa-canonical"><h2>نمونه‌های مرجع</h2><div>{[...phaseTwoQa, ...canonical].map((route) => <a href={route.href} key={`${route.href}-${route.label}`}>{route.label}<MResalatIcon name="next" size={16} /></a>)}</div></section><section className="qa-canonical"><h2>آزمایش سریع حالت‌های ماسکات</h2><div>{mascotStates.map((state) => <a href={`/qa/mascot/${state}`} key={state}>{state}<MResalatIcon name="assistant" size={16} /></a>)}</div></section><section className="qa-canonical"><h2>آزمایش rig و ژست دست</h2><div>{mascotHands.map((pose) => <a href={`/qa/mascot/hand/${pose}`} key={pose}>{pose}<MResalatIcon name="assistant" size={16} /></a>)}</div></section><div className="qa-route-table"><div className="qa-row qa-row-head"><span>سگمنت</span>{segmentViews.map((view) => <span key={view}>{view === 'home' ? 'خانه' : view === 'services' ? 'خدمات' : 'مسیر'}</span>)}</div>{segments.map((segment) => <div className="qa-row" key={segment.id}><strong><MResalatIcon name={segment.icon} size={16} />{segment.name}</strong>{segmentViews.map((view) => <a href={`/segments/${segment.slug}/${view}`} key={view}>{segment.pages[view].label}<MResalatIcon name="next" size={16} /></a>)}</div>)}</div></AppShell>;
+  return <AppShell active="system"><header className="qa-head"><span className="eyebrow">بازبینی مسیرها</span><h1>Route QA Index</h1><p>مسیرهای نمایشی هسته، سگمنت‌های پس از ثبت‌نام، ام‌بازار و پوشش ۶۹ مسیر ممیزی‌شده از یک صفحه قابل دسترسی‌اند.</p></header><section className="qa-canonical" id="catalog-coverage"><h2>پوشش کاتالوگ · ۶۹ / ۶۹</h2><div><Link href="/catalog">همه مسیرها و فیلترها<MResalatIcon name="grid" size={16} /></Link>{catalogQa.map((route) => <a href={route.href} key={route.href}>{route.label}<span>{route.count}</span><MResalatIcon name="next" size={16} /></a>)}</div></section><section className="qa-canonical"><h2>نمونه‌های مرجع</h2><div>{[...phaseTwoQa, ...canonical].map((route) => <a href={route.href} key={`${route.href}-${route.label}`}>{route.label}<MResalatIcon name="next" size={16} /></a>)}</div></section><section className="qa-canonical"><h2>آزمایش سریع حالت‌های ماسکات</h2><div>{mascotStates.map((state) => <a href={`/qa/mascot/${state}`} key={state}>{state}<MResalatIcon name="assistant" size={16} /></a>)}</div></section><section className="qa-canonical"><h2>آزمایش rig و ژست دست</h2><div>{mascotHands.map((pose) => <a href={`/qa/mascot/hand/${pose}`} key={pose}>{pose}<MResalatIcon name="assistant" size={16} /></a>)}</div></section><div className="qa-route-table"><div className="qa-row qa-row-head"><span>سگمنت</span>{segmentViews.map((view) => <span key={view}>{view === 'home' ? 'خانه' : view === 'services' ? 'خدمات' : 'مسیر'}</span>)}</div>{segments.map((segment) => <div className="qa-row" key={segment.id}><strong><MResalatIcon name={segment.icon} size={16} />{segment.name}</strong>{segmentViews.map((view) => <a href={`/segments/${segment.slug}/${view}`} key={view}>{segment.pages[view].label}<MResalatIcon name="next" size={16} /></a>)}</div>)}</div></AppShell>;
 }

@@ -87,3 +87,17 @@ This list reflects the exported React components in `mresalat/` for v0.4.
 
 - `CodeExample` — expandable representative TSX with copy feedback.
 - `GridLayoutDemo` — toggleable 12-column desktop / 4-column mobile grid overlay.
+
+## Audited service catalog
+
+- `ServiceSurface`, `ServiceHeader`, `ServiceStatusBadge` — canonical compact/detail composition with bilingual titles, chapter/domain traceability, evidence status and L0–L3 risk.
+- `SafeStopNotice`, `ServiceActionSummary` — explicit bilingual stop boundary plus impact/confirmation review for controlled and sensitive paths.
+- `ExternalLoginGate`, `UnavailableServiceState` — first-class gated, observed-unavailable and audited-not-visible evidence without invented behavior.
+- `SensitiveDataPlaceholder` — synthetic/redacted placeholder for personal, financial, message, location and health data.
+- `ServiceFilterBar`, `EmptyServiceState` — chapter, domain, audit-status and risk filtering with a recoverable empty result.
+- `ServiceFormShell` — labeled mock controls with help, safe validation, disabled real action and explicit no-submit feedback.
+- `CatalogDomainSurface` — config-driven domain composition spanning membership, support, existing M-Bazar, learning, finance, contributions, health, insurance, auxiliary systems, Rahyar, banking and communication.
+- `CatalogExplorer` — all 69 audited paths grouped into the exact 12 catalog chapters.
+- `CatalogStateGallery` — loading, empty, gated and unavailable reference states.
+
+The typed catalog source lives in `mresalat/domains/service-catalog.ts`; every `componentKey` resolves through `mresalat/domains/service-component-registry.ts`.

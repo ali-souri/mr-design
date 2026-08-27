@@ -1,5 +1,5 @@
 export type ComponentInventoryItem = {
-  category: 'Foundations' | 'Core' | 'Navigation' | 'AI' | 'RAG / Trust' | 'Journeys' | 'Secure' | 'Templates' | 'Motion' | 'Marketplace' | 'Documentation';
+  category: 'Foundations' | 'Core' | 'Navigation' | 'AI' | 'RAG / Trust' | 'Journeys' | 'Secure' | 'Templates' | 'Motion' | 'Marketplace' | 'Catalog' | 'Documentation';
   name: string;
   purpose: string;
   variants: string[];
@@ -69,6 +69,20 @@ export const componentInventory: ComponentInventoryItem[] = [
   { category: 'Journeys', name: 'NextBestAction', purpose: 'نمایش اقدام اولویت‌دار متناسب با زمینه', variants: ['info', 'warning', 'success'], states: ['approval', 'expiry', 'journey'] },
   { category: 'Navigation', name: 'ChildSelector', purpose: 'انتخاب زیرزمینه فرزند در نقش والد', variants: ['buttons', 'route links'], states: ['Arya', 'Sara', 'selected'] },
   { category: 'Journeys', name: 'CrossServiceContextMarker', purpose: 'حفظ نشان زمینه میان خدمات اکوسیستم', variants: ['youth goal', 'organization credit'], states: ['active'] },
+  { category: 'Catalog', name: 'ServiceSurface', purpose: 'قاب canonical برای کارت و صفحه جزئیات مسیر ممیزی‌شده', variants: ['compact', 'detail'], states: ['light', 'dark', 'L0–L3'] },
+  { category: 'Catalog', name: 'ServiceHeader', purpose: 'عنوان دوزبانه، فصل، دامنه و سطح ریسک', variants: ['compact', 'detail'], states: ['FA primary', 'RTL/LTR mixed'] },
+  { category: 'Catalog', name: 'ServiceStatusBadge', purpose: 'نمایش متنی وضعیت شواهد مستقل از مجوز اقدام', variants: ['compact', 'descriptive'], states: ['authenticated', 'public', 'safe stop', 'gated', 'unavailable', 'not visible'] },
+  { category: 'Catalog', name: 'SafeStopNotice', purpose: 'شرح فارسی و انگلیسی مرز توقف هر دمو', variants: ['L0–L3'], states: ['informational', 'controlled', 'sensitive'] },
+  { category: 'Catalog', name: 'ExternalLoginGate', purpose: 'معرفی ورود مستقل بدون دریافت اطلاعات ورود', variants: ['service', 'medical record'], states: ['gated', 'disabled'] },
+  { category: 'Catalog', name: 'UnavailableServiceState', purpose: 'بازنمایی شواهد خطا یا عدم مشاهده بدون جعل گردش‌کار', variants: ['unavailable', 'not visible'], states: ['404 evidence', 'audited absence'] },
+  { category: 'Catalog', name: 'SensitiveDataPlaceholder', purpose: 'جانگهدار پوشانده برای داده شخصی، مالی و سلامت', variants: ['two to three lines'], states: ['redacted', 'synthetic', 'loading'] },
+  { category: 'Catalog', name: 'ServiceFilterBar', purpose: 'فیلتر پوشش فصل، دامنه، وضعیت و ریسک', variants: ['desktop sticky', 'mobile stacked'], states: ['default', 'filtered', 'empty'] },
+  { category: 'Catalog', name: 'EmptyServiceState', purpose: 'حالت خالی بازیابی‌پذیر برای فهرست و جستجو', variants: ['catalog', 'domain list'], states: ['empty', 'no results'] },
+  { category: 'Catalog', name: 'ServiceFormShell', purpose: 'فرم نمایشی با برچسب، کمک، خطا و توقف امن', variants: ['membership', 'finance', 'insurance', 'banking', 'auxiliary'], states: ['idle', 'error', 'reviewed', 'blocked submit'] },
+  { category: 'Catalog', name: 'ServiceActionSummary', purpose: 'مرور اثر، ریسک و مرز تأیید برای L2 و L3', variants: ['controlled', 'sensitive'], states: ['read only', 'confirmation disabled'] },
+  { category: 'Catalog', name: 'CatalogDomainSurface', purpose: 'ترکیب پیکربندی‌محور خانواده‌های ۱۲ فصل', variants: ['membership', 'support', 'marketplace', 'learning', 'finance', 'contribution', 'health', 'insurance', 'auxiliary', 'rahyar', 'banking', 'communication'], states: ['all audited evidence states'] },
+  { category: 'Catalog', name: 'CatalogExplorer', purpose: 'نمایش و ردیابی همه ۶۹ مسیر در فصل‌های ممیزی', variants: ['all chapters', 'filtered'], states: ['69/69', 'empty result'] },
+  { category: 'Catalog', name: 'CatalogStateGallery', purpose: 'مرجع حالت‌های بارگذاری، خالی، درگاه و خطا', variants: ['state matrix'], states: ['loading', 'empty', 'gated', 'unavailable'] },
   { category: 'Documentation', name: 'CodeExample', purpose: 'نمونه کد بازشونده و قابل کپی', variants: ['details panel'], states: ['collapsed', 'expanded', 'copied'] },
   { category: 'Documentation', name: 'GridLayoutDemo', purpose: 'نمایش تعاملی شبکه واقعی صفحه', variants: ['12-column', '4-column mobile'], states: ['overlay shown', 'overlay hidden'] },
 ];

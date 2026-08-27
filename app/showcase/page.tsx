@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { Assistant3DDemo } from '@/mresalat/ai/Assistant3DDemo';
 import { AssistantShell } from '@/mresalat/ai/AssistantShell';
 import { HumanHandoff, SourceCitation, TrustLegend, UncertainAnswer } from '@/mresalat/ai/StructuredAnswer';
@@ -20,13 +21,14 @@ import { showcaseSnippets } from '@/mresalat/showcase/snippets';
 import { SegmentComponentShowcase } from '@/mresalat/segments/SegmentPhaseOne';
 import { SegmentPhaseTwoShowcase } from '@/mresalat/segments/SegmentPhaseTwo';
 import { PhaseThreeShowcase } from '@/mresalat/contexts/PhaseThreeShowcase';
+import { serviceCatalog, serviceCatalogChapters } from '@/mresalat/domains/service-catalog';
 
 export const metadata: Metadata = { title: 'مرجع کدنویسی سیستم' };
 
 const sections = [
   ['brand', 'برند'], ['typography', 'تایپوگرافی'], ['color', 'رنگ'], ['foundations', 'پایه‌ها'], ['grid', 'شبکه و چیدمان'],
   ['icons', 'آیکون‌ها'], ['service-identities', 'هویت خدمات'], ['core', 'اجزای پایه'], ['navigation', 'ناوبری'], ['ai', 'دستیار و سه‌بعدی'], ['rag', 'اعتماد و RAG'],
-  ['journeys', 'مسیرها'], ['secure', 'اقدام امن'], ['motion', 'حرکت'], ['mbazar', 'ام‌بازار'], ['segment-phase-one', 'عضویت سگمنت‌محور'], ['segment-phase-two', 'تجربه پس از ثبت‌نام'], ['segment-phase-three', 'زمینه و رابطه'], ['templates', 'قالب‌ها'], ['inventory', 'موجودی'], ['segments', 'سگمنت‌ها'],
+  ['journeys', 'مسیرها'], ['secure', 'اقدام امن'], ['motion', 'حرکت'], ['mbazar', 'ام‌بازار'], ['segment-phase-one', 'عضویت سگمنت‌محور'], ['segment-phase-two', 'تجربه پس از ثبت‌نام'], ['segment-phase-three', 'زمینه و رابطه'], ['templates', 'قالب‌ها'], ['catalog', 'کاتالوگ ۶۹ مسیر'], ['inventory', 'موجودی'], ['segments', 'سگمنت‌ها'],
 ] as const;
 
 const palette = [
@@ -84,6 +86,8 @@ export default function ShowcasePage() {
           <ShowcaseSection id="segment-phase-three" eyebrow="relationship-aware personalization" title="Active Context, Permission & Cross-Service UX" description="تغییر نقش در یک هویت، دسترسی قابل فهم، رابطه والد و نوجوان، برنامه مشترک مدیر و پرسنل و تداوم زمینه میان خدمات."><PhaseThreeShowcase /></ShowcaseSection>
 
           <ShowcaseSection id="templates" eyebrow="ترکیب پیکربندی‌محور" title="Templates"><div className="template-flow"><span>Segment config</span><MResalatIcon name="next" size={20} /><span>SegmentExperience</span><MResalatIcon name="next" size={20} /><span>Home / Services / Journey</span></div><CodeExample title="SegmentExperience" code={showcaseSnippets.segment} /></ShowcaseSection>
+
+          <ShowcaseSection id="catalog" eyebrow="پوشش ممیزی ۲۰۲۶-۰۸-۲۸" title="Audited Service Catalog" description="۶۹ مسیر در ۱۲ فصل، با وضعیت شواهد، ریسک، مرز توقف دوزبانه و نگاشت به اجزای ثبت‌شده."><div className="ecosystem-link-strip"><div><strong>{serviceCatalog.length} مسیر · {serviceCatalogChapters.length} فصل</strong><span>همه مسیرها canonical demo و ردیابی componentKey دارند.</span></div><Link className="button button-primary" href="/catalog">باز کردن کاتالوگ<MResalatIcon name="next" size={16} /></Link></div></ShowcaseSection>
 
           <ShowcaseSection id="inventory" eyebrow="منبع قطعی" title="Component Inventory"><div className="inventory-groups">{Array.from(new Set(componentInventory.map((item) => item.category))).map((category) => <section key={category}><h3>{category}</h3><div>{componentInventory.filter((item) => item.category === category).map((item) => <article key={item.name}><code>{item.name}</code><small>{item.variants.join(' · ')}</small><p>{item.purpose}</p><span>{item.states.join(' / ')}</span></article>)}</div></section>)}</div></ShowcaseSection>
 
