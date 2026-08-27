@@ -21,7 +21,7 @@ const modes: { value: AssistantCharacterMode; label: string }[] = [{ value: 'com
 const debugViews: { value: AssistantDebugView; label: string }[] = [{ value: 'standard', label: 'بدن کامل' }, { value: 'face', label: 'نمای نزدیک صورت' }];
 const gazeModes: { value: AssistantGazeMode; label: string }[] = [{ value: 'page', label: 'کل صفحه' }, { value: 'local', label: 'داخل قاب' }, { value: 'none', label: 'خاموش' }];
 const motionLevels: { value: AssistantMotionIntensity; label: string }[] = [{ value: 'restrained', label: 'کنترل‌شده' }, { value: 'normal', label: 'عادی' }, { value: 'expressive', label: 'پرانرژی' }];
-const views: { value: AssistantView; label: string }[] = [{ value: 'front', label: 'روبه‌رو' }, { value: 'three-quarter', label: 'سه‌رخ' }, { value: 'side', label: 'کنار' }, { value: 'back', label: 'پشت' }];
+const views: { value: AssistantView; label: string }[] = [{ value: 'front', label: 'روبه‌رو' }, { value: 'three-quarter', label: 'سه‌رخ' }, { value: 'side', label: 'کنار چپ' }, { value: 'opposite-side', label: 'کنار راست' }, { value: 'back', label: 'پشت' }];
 const surfaces = [{ value: 'light', label: 'روشن' }, { value: 'gradient', label: 'گرادیانی' }, { value: 'dark', label: 'تیره' }] as const;
 const avatarSizes = [32, 40, 48, 64, 96] as const;
 

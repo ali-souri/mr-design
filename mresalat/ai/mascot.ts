@@ -13,7 +13,7 @@ export type AssistantEmotion =
 export type AssistantCharacterMode = 'complete' | 'portrait';
 export type AssistantMotionIntensity = 'restrained' | 'normal' | 'expressive';
 export type AssistantGazeMode = 'none' | 'local' | 'page';
-export type AssistantView = 'front' | 'three-quarter' | 'side' | 'back';
+export type AssistantView = 'front' | 'three-quarter' | 'side' | 'opposite-side' | 'back';
 export type AssistantDebugView = 'standard' | 'face';
 export type AssistantHandPose =
   | 'relaxed'
@@ -90,7 +90,7 @@ export const emotionProfiles: Record<AssistantEmotion, EmotionProfile> = {
   thinking: { eyeShape: 'asymmetric', mouthShape: 'soft-smile', browShape: 'thinking', eyeScale: .91, eyeBrightness: .9, headTilt: .105, headPitch: .025, energy: .3, primaryHand: 'relaxed', secondaryHand: 'thinking' },
   explaining: { eyeShape: 'open', mouthShape: 'smile', browShape: 'hidden', eyeScale: 1.02, eyeBrightness: 1.02, headTilt: -.025, headPitch: -.02, energy: .7, primaryHand: 'explain', secondaryHand: 'support' },
   happy: { eyeShape: 'crescent', mouthShape: 'open-smile', browShape: 'raised', eyeScale: 1, eyeBrightness: 1.14, headTilt: 0, headPitch: -.015, energy: 1, primaryHand: 'open', secondaryHand: 'open' },
-  warning: { eyeShape: 'narrow', mouthShape: 'neutral', browShape: 'warning', eyeScale: .92, eyeBrightness: .92, headTilt: 0, headPitch: .025, energy: .12, primaryHand: 'caution', secondaryHand: 'relaxed' },
+  warning: { eyeShape: 'narrow', mouthShape: 'neutral', browShape: 'warning', eyeScale: .92, eyeBrightness: .92, headTilt: 0, headPitch: .025, energy: .08, primaryHand: 'caution', secondaryHand: 'relaxed' },
   uncertain: { eyeShape: 'asymmetric', mouthShape: 'worried', browShape: 'worried', eyeScale: .9, eyeBrightness: .86, headTilt: .13, headPitch: .02, energy: .24, primaryHand: 'support', secondaryHand: 'support' },
   handoff: { eyeShape: 'soft', mouthShape: 'smile', browShape: 'hidden', eyeScale: 1, eyeBrightness: .96, headTilt: -.05, headPitch: -.025, energy: .46, primaryHand: 'support', secondaryHand: 'relaxed' },
 };
@@ -205,31 +205,31 @@ export const emotionPoseProfiles: Record<AssistantEmotion, MascotPoseFrame> = {
   calm: neutralPose(),
   listening: {
     primaryArm: arm(-1),
-    secondaryArm: arm(1, 'relaxed', [-.1, 0, 1.6], [-.46, 0, 2.08], [-.12, -.72, -.08]),
+    secondaryArm: arm(1, 'relaxed', [-.1, 0, 1.55], [-.34, 0, 1.16], [-.08, .06, -.04]),
   },
   thinking: {
     primaryArm: arm(-1),
-    secondaryArm: arm(1, 'thinking', [.3, 0, -.35], [.55, 0, -2.75], [-.24, .16, .12]),
+    secondaryArm: arm(1, 'thinking', [.24, 0, -.24], [.46, 0, -2.96], [-.18, .1, .08]),
   },
   explaining: {
-    primaryArm: arm(-1, 'explain', [-.28, 0, -.55], [-.3, 0, -1.25], [-.92, .24, -.1]),
-    secondaryArm: arm(1, 'support', [-.14, 0, .46], [-.26, 0, 1.64], [-.7, -.12, .08]),
+    primaryArm: arm(-1, 'explain', [-.24, 0, -.72], [-.22, 0, -1.18], [0, -1.2, .48]),
+    secondaryArm: arm(1, 'support', [-.04, 0, .18], [-.12, 0, .72], [0, 1.05, -.35]),
   },
   happy: {
-    primaryArm: arm(-1, 'open', [-.08, 0, -.86], [-.26, 0, -1.54], [-.18, .16, -.08]),
-    secondaryArm: arm(1, 'open', [-.08, 0, .86], [-.26, 0, 1.54], [-.18, -.16, .08]),
+    primaryArm: arm(-1, 'open', [-.08, 0, -.86], [-.26, 0, -1.54], [0, -1.45, 0]),
+    secondaryArm: arm(1, 'open', [-.08, 0, .86], [-.26, 0, 1.54], [0, 1.45, 0]),
   },
   warning: {
-    primaryArm: arm(-1, 'caution', [-.14, 0, -.65], [-.2, 0, -1.95], [0, .12, 0]),
+    primaryArm: arm(-1, 'caution', [-.1, 0, -.48], [-.14, 0, -1.58], [0, -1.52, 0]),
     secondaryArm: arm(1),
   },
   uncertain: {
-    primaryArm: arm(-1, 'support', [-.3, 0, -.48], [-.28, 0, -1.12], [-.9, .2, -.1]),
-    secondaryArm: arm(1, 'support', [-.14, 0, .65], [-.22, 0, 1.75], [-.66, -.08, .18]),
+    primaryArm: arm(-1, 'support', [-.3, 0, -.48], [-.28, 0, -1.12], [0, -1.18, .45]),
+    secondaryArm: arm(1, 'support', [-.14, 0, .65], [-.22, 0, 1.75], [0, 1.1, -.36]),
   },
   handoff: {
-    primaryArm: arm(-1, 'support', [-.28, 0, -.55], [-.26, 0, -1.15], [-1, .28, -.06]),
-    secondaryArm: arm(1, 'relaxed', [-.08, 0, .18], [-.16, 0, 0], [-.08, 0, 0]),
+    primaryArm: arm(-1, 'support', [-.28, 0, -.55], [-.26, 0, -1.15], [0, -1.12, .5]),
+    secondaryArm: arm(1, 'relaxed', [-.08, 0, .18], [-.16, 0, 0], [0, 0, 0]),
   },
 };
 
@@ -252,10 +252,10 @@ export function resolveMascotPose(
 ): MascotPoseFrame {
   if (debugHandPose) {
     const palmUp = debugHandPose === 'explain' || debugHandPose === 'support';
-    const wrist: JointRotation = palmUp ? [-.76, .2, 0] : debugHandPose === 'thinking' ? [-.28, .2, .08] : [0, .12, 0];
+    const wrist: JointRotation = palmUp ? [0, -1.2, .48] : debugHandPose === 'thinking' ? [-.12, -.45, .08] : [0, -1.5, 0];
     return {
       primaryArm: arm(-1, debugHandPose, [-.18, 0, -1], [-.24, 0, -1.62], wrist),
-      secondaryArm: arm(1, 'relaxed', [-.08, 0, .45], [-.28, 0, 0], [-.12, 0, 0]),
+      secondaryArm: arm(1, 'relaxed', [-.08, 0, .45], [-.28, 0, 0], [0, 0, 0]),
     };
   }
 
@@ -265,9 +265,9 @@ export function resolveMascotPose(
 
   if (emotion === 'greeting') {
     if (reducedMotion) {
-      primaryArm.shoulder = [-.04, 0, -.92];
-      primaryArm.elbow = [-.34, 0, 0];
-      primaryArm.wrist = [0, .12, 0];
+      primaryArm.shoulder = [-.04, 0, -1.02];
+      primaryArm.elbow = [-.28, 0, -.28];
+      primaryArm.wrist = [0, -1.5, 0];
       primaryArm.hand = 'wave';
       return { primaryArm, secondaryArm };
     }
@@ -276,9 +276,9 @@ export function resolveMascotPose(
     const raised = smoothstep(.06, .3, progress) * (1 - smoothstep(.72, .96, progress));
     const waveWindow = smoothstep(.27, .36, progress) * (1 - smoothstep(.65, .76, progress));
     const wave = Math.sin(((progress - .3) / .42) * Math.PI * 5) * waveWindow;
-    primaryArm.shoulder = [.1 * raised, 0, lerp(-.12, -2.4, raised)];
-    primaryArm.elbow = [-.28 * raised, 0, .1 * raised];
-    primaryArm.wrist = [0, .2 * raised, wave * .34 * intensity];
+    primaryArm.shoulder = [.12 * raised, 0, lerp(-.12, -2.18, raised)];
+    primaryArm.elbow = [-.34 * raised, 0, -.36 * raised];
+    primaryArm.wrist = [0, lerp(0, -1.5, raised), wave * .34 * intensity];
     primaryArm.hand = raised > .08 ? 'wave' : 'relaxed';
     primaryArm.waveCurl = (.04 + Math.max(0, wave) * .08) * waveWindow;
   } else if (emotion === 'explaining' && !reducedMotion) {
