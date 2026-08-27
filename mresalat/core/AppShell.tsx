@@ -9,9 +9,12 @@ const navItems = [
   { key: 'home', label: 'خانه', href: '/', icon: 'home' },
   { key: 'segments', label: 'تجربه‌ها', href: '/segments', icon: 'membership' },
   { key: 'examples', label: 'نمونه‌ها', href: '/examples', icon: 'examples' },
+  { key: 'catalog', label: 'کاتالوگ خدمات', href: '/catalog', icon: 'grid' },
   { key: 'assistant', label: 'دستیار هوشمند', href: '/rag', icon: 'assistant' },
   { key: 'system', label: 'MResalat System', href: '/showcase', icon: 'evidence' },
 ] satisfies { key: string; label: string; href: string; icon: MResalatIconName }[];
+
+const mobileNavItems = navItems.filter((item) => item.key !== 'catalog');
 
 export function AppShell({ children, active = 'home', hideMobileNav = false }: { children: ReactNode; active?: string; hideMobileNav?: boolean }) {
   return (
@@ -31,7 +34,7 @@ export function AppShell({ children, active = 'home', hideMobileNav = false }: {
       </header>
       <main className="page-container">{children}</main>
       {!hideMobileNav && <nav className="mobile-nav" aria-label="ناوبری موبایل">
-        {navItems.map((item) => <a key={item.key} className={active === item.key ? 'active' : ''} href={item.href}><MResalatIcon name={item.icon} size={20} />{item.label}</a>)}
+        {mobileNavItems.map((item) => <a key={item.key} className={active === item.key ? 'active' : ''} href={item.href}><MResalatIcon name={item.icon} size={20} />{item.label}</a>)}
       </nav>}
     </div>
   );
