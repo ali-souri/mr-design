@@ -19,6 +19,7 @@ export type SegmentAIEntryProps = {
   placeholder?: string;
   greeting?: boolean;
   contextAware?: boolean;
+  staticMascot?: boolean;
 };
 
 const sourceLabels: Record<SegmentAssistantResponse['sourceType'], string> = {
@@ -43,6 +44,7 @@ export function SegmentAIEntry({
   placeholder,
   greeting = false,
   contextAware = true,
+  staticMascot = false,
 }: SegmentAIEntryProps) {
   const { activeContext, user, selectedChildId, setActiveContext } = useMResalatContext();
   const [query, setQuery] = useState('');
@@ -115,7 +117,7 @@ export function SegmentAIEntry({
     <section className={`segment-ai-entry ai-entry-${assistantMode} ai-entry-${segment}`} aria-labelledby={`segment-ai-${segment}`}>
       {mascotMode !== 'none' && (
         <div className="segment-ai-mascot" aria-hidden="true">
-          <SmartAssistant3D emotion={emotion} mode={mascotMode} />
+          <SmartAssistant3D emotion={emotion} mode={mascotMode} staticOnly={staticMascot} />
         </div>
       )}
       <div className="segment-ai-content">

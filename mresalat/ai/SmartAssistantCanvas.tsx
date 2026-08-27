@@ -1,11 +1,14 @@
 'use client';
 
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { useEffect, useMemo, useRef, type MutableRefObject } from 'react';
+import { useEffect, useId, useMemo, useRef, type MutableRefObject } from 'react';
 import {
   MeshBasicMaterial,
   MeshPhysicalMaterial,
   MeshStandardMaterial,
+  Euler,
+  PerspectiveCamera,
+  Quaternion,
   Shape,
   ShapeGeometry,
   type Group,
@@ -17,6 +20,8 @@ import {
   emotionProfiles,
   mascotPalette,
   motionIntensityScale,
+  resolveMascotPose,
+  type ArmPoseProfile,
   type AssistantCharacterMode,
   type AssistantDebugView,
   type AssistantEmotion,
@@ -41,25 +46,24 @@ type ArmRig = {
   wrist: Group | null;
 };
 
-type ArmTarget = {
-  shoulderX: number;
-  shoulderY: number;
-  shoulderZ: number;
-  elbowX: number;
-  elbowZ: number;
-  wristX: number;
-  wristY: number;
-  wristZ: number;
-  pose: AssistantHandPose;
-  waveCurl?: number;
-};
+type MascotRendererStats = { geometries: number; textures: number; programs: number };
+
+declare global {
+  interface Window {
+    __MRESALAT_MASCOT_QA__?: { liveCanvases: number; renderers: Record<string, MascotRendererStats> };
+  }
+}
+
+const canvasGlOptions = { alpha: true, antialias: true, powerPreference: 'high-performance', preserveDrawingBuffer: false } as const;
+const initialCamera = { position: [0, .48, 6.35] as [number, number, number], fov: 33 };
 
 function SharedMaterial({ material }: { material: Material }) {
   return <primitive object={material} attach="material" />;
 }
 
 function RoundedBox({ size, radius, smoothness = 5 }: { size: [number, number, number]; radius: number; smoothness?: number }) {
-  const geometry = useMemo(() => new RoundedBoxGeometry(size[0], size[1], size[2], smoothness, radius), [radius, size, smoothness]);
+  const [width, height, depth] = size;
+  const geometry = useMemo(() => new RoundedBoxGeometry(width, height, depth, smoothness, radius), [depth, height, radius, smoothness, width]);
   useEffect(() => () => geometry.dispose(), [geometry]);
   return <primitive object={geometry} attach="geometry" />;
 }
@@ -97,6 +101,61 @@ function StarMark({ size, material, position = [0, 0, 0], rotation = [0, 0, 0] }
   }, [size]);
   useEffect(() => () => geometry.dispose(), [geometry]);
   return <mesh geometry={geometry} position={position} rotation={rotation}><SharedMaterial material={material} /></mesh>;
+}
+
+function ForeheadAccent({ materials }: { materials: MascotMaterials }) {
+  const geometry = useMemo(() => {
+    const shape = new Shape();
+    shape.moveTo(-.34, .66);
+    shape.bezierCurveTo(-.2, .72, .2, .72, .34, .66);
+    shape.lineTo(.25, .49);
+    shape.quadraticCurveTo(.18, .38, 0, .34);
+    shape.quadraticCurveTo(-.18, .38, -.25, .49);
+    shape.closePath();
+    return new ShapeGeometry(shape, 8);
+  }, []);
+  useEffect(() => () => geometry.dispose(), [geometry]);
+  return (
+    <group>
+      <mesh geometry={geometry} position={[0, 0, .574]}><SharedMaterial material={materials.teal} /></mesh>
+      <StarMark size={.075} material={materials.gold} position={[0, .51, .584]} />
+    </group>
+  );
+}
+
+function VestPanel({ side, material }: { side: -1 | 1; material: Material }) {
+  const geometry = useMemo(() => {
+    const points: [number, number][] = [
+      [.025, .56], [.21, .45], [.43, .43], [.47, .26], [.43, -.05], [.09, -.08], [.025, .31],
+    ];
+    const oriented = side === 1 ? points : points.map(([x, y]) => [-x, y] as [number, number]).reverse();
+    const shape = new Shape();
+    oriented.forEach(([x, y], index) => index === 0 ? shape.moveTo(x, y) : shape.lineTo(x, y));
+    shape.closePath();
+    return new ShapeGeometry(shape, 8);
+  }, [side]);
+  useEffect(() => () => geometry.dispose(), [geometry]);
+  return <mesh geometry={geometry} position={[0, 0, .345]}><SharedMaterial material={material} /></mesh>;
+}
+
+function SuperellipsePanel({ width, height, exponent = 4, z, material }: { width: number; height: number; exponent?: number; z: number; material: Material }) {
+  const geometry = useMemo(() => {
+    const shape = new Shape();
+    const a = width / 2;
+    const b = height / 2;
+    for (let index = 0; index <= 64; index += 1) {
+      const angle = index / 64 * Math.PI * 2;
+      const cosine = Math.cos(angle);
+      const sine = Math.sin(angle);
+      const x = a * Math.sign(cosine) * Math.pow(Math.abs(cosine), 2 / exponent);
+      const y = b * Math.sign(sine) * Math.pow(Math.abs(sine), 2 / exponent);
+      if (index === 0) shape.moveTo(x, y); else shape.lineTo(x, y);
+    }
+    shape.closePath();
+    return new ShapeGeometry(shape, 12);
+  }, [exponent, height, width]);
+  useEffect(() => () => geometry.dispose(), [geometry]);
+  return <mesh geometry={geometry} position={[0, -.035, z]}><SharedMaterial material={material} /></mesh>;
 }
 
 function useMascotMaterials() {
@@ -159,8 +218,8 @@ function FaceMouth({ profile, materials }: { profile: EmotionProfile; materials:
 }
 
 function FaceBrows({ profile, materials }: { profile: EmotionProfile; materials: MascotMaterials }) {
-  if (profile.browShape === 'hidden') return null;
-  const rotations: Record<Exclude<EmotionProfile['browShape'], 'hidden'>, [number, number]> = {
+  const rotations: Record<EmotionProfile['browShape'], [number, number]> = {
+    hidden: [0, 0],
     raised: [-.08, .08],
     thinking: [-.13, -.02],
     warning: [.18, -.18],
@@ -168,7 +227,7 @@ function FaceBrows({ profile, materials }: { profile: EmotionProfile; materials:
   };
   const [left, right] = rotations[profile.browShape];
   return <>{([-1, 1] as const).map((side) => (
-    <mesh key={side} position={[side * .3, .29 + (profile.browShape === 'worried' && side === -1 ? .035 : 0), .62]} rotation={[0, 0, Math.PI / 2 + (side === -1 ? left : right)]}>
+    <mesh key={side} visible={profile.browShape !== 'hidden'} position={[side * .3, .29 + (profile.browShape === 'worried' && side === -1 ? .035 : 0), .62]} rotation={[0, 0, Math.PI / 2 + (side === -1 ? left : right)]}>
       <capsuleGeometry args={[.012, .15, 4, 10]} /><SharedMaterial material={materials.faceGlow} />
     </mesh>
   ))}</>;
@@ -209,10 +268,10 @@ function Head({
 }) {
   return (
     <group ref={headRef} position={[0, 1.31, 0]}>
-      <RoundedMesh size={[1.72, 1.24, 1]} radius={.28} material={materials.white} />
-      <RoundedMesh size={[1.43, .91, .18]} radius={.23} material={materials.face} position={[0, -.035, .49]} />
-      <RoundedMesh size={[.54, .23, .07]} radius={.085} material={materials.teal} position={[0, .5, .52]} />
-      <StarMark size={.07} material={materials.gold} position={[0, .47, .566]} />
+      <RoundedMesh size={[1.88, 1.42, 1.08]} radius={.46} material={materials.white} />
+      <SuperellipsePanel width={1.63} height={1.06} exponent={4} z={.548} material={materials.whiteShade} />
+      <SuperellipsePanel width={1.5} height={.93} exponent={4} z={.559} material={materials.face} />
+      <ForeheadAccent materials={materials} />
       <EyeMark side={-1} eyeRef={eyeLeft} profile={profile} materials={materials} />
       <EyeMark side={1} eyeRef={eyeRight} profile={profile} materials={materials} />
       <FaceBrows profile={profile} materials={materials} />
@@ -243,17 +302,18 @@ function Torso({ materials, torsoRef }: { materials: MascotMaterials; torsoRef: 
     <group ref={torsoRef}>
       <mesh position={[0, .69, 0]}><cylinderGeometry args={[.115, .145, .16, 24]} /><SharedMaterial material={materials.darkJoint} /></mesh>
       <mesh position={[0, .67, 0]} rotation={[Math.PI / 2, 0, 0]}><torusGeometry args={[.125, .022, 8, 24]} /><SharedMaterial material={materials.teal} /></mesh>
-      <RoundedMesh size={[.94, .82, .6]} radius={.2} material={materials.white} position={[0, .27, 0]} />
-      <RoundedMesh size={[.78, .68, .095]} radius={.15} material={materials.navy} position={[0, .29, .31]} />
-      <mesh position={[-.17, .55, .37]} rotation={[0, 0, -.66]}><capsuleGeometry args={[.018, .31, 4, 12]} /><SharedMaterial material={materials.white} /></mesh>
-      <mesh position={[.17, .55, .37]} rotation={[0, 0, .66]}><capsuleGeometry args={[.018, .31, 4, 12]} /><SharedMaterial material={materials.white} /></mesh>
-      <mesh position={[-.13, .54, .385]} rotation={[0, 0, -.66]}><capsuleGeometry args={[.012, .27, 4, 12]} /><SharedMaterial material={materials.teal} /></mesh>
-      <mesh position={[.13, .54, .385]} rotation={[0, 0, .66]}><capsuleGeometry args={[.012, .27, 4, 12]} /><SharedMaterial material={materials.teal} /></mesh>
-      <RoundedMesh size={[.12, .47, .035]} radius={.025} material={materials.white} position={[0, .25, .375]} />
+      <RoundedMesh size={[1.12, .86, .66]} radius={.3} material={materials.white} position={[0, .25, 0]} />
+      <VestPanel side={-1} material={materials.navy} />
+      <VestPanel side={1} material={materials.navy} />
+      <mesh position={[-.17, .51, .37]} rotation={[0, 0, -.72]}><capsuleGeometry args={[.022, .25, 5, 14]} /><SharedMaterial material={materials.white} /></mesh>
+      <mesh position={[.17, .51, .37]} rotation={[0, 0, .72]}><capsuleGeometry args={[.022, .25, 5, 14]} /><SharedMaterial material={materials.white} /></mesh>
+      <mesh position={[-.14, .49, .388]} rotation={[0, 0, -.72]}><capsuleGeometry args={[.013, .22, 5, 14]} /><SharedMaterial material={materials.teal} /></mesh>
+      <mesh position={[.14, .49, .388]} rotation={[0, 0, .72]}><capsuleGeometry args={[.013, .22, 5, 14]} /><SharedMaterial material={materials.teal} /></mesh>
+      <RoundedMesh size={[.13, .48, .035]} radius={.025} material={materials.white} position={[0, .22, .382]} />
       {[.41, .28, .15].map((y, index) => <mesh key={y} position={[0, y, .4]} rotation={[0, 0, Math.PI / 4]} scale={index === 1 ? [1, 1, 1] : [.72, .72, .72]}><boxGeometry args={[.072, .072, .02]} /><SharedMaterial material={index === 1 ? materials.teal : materials.gold} /></mesh>)}
-      <RoundedMesh size={[.84, .07, .055]} radius={.025} material={materials.gold} position={[0, -.1, .335]} />
+      <RoundedMesh size={[1.01, .065, .055]} radius={.025} material={materials.gold} position={[0, -.1, .345]} />
       <BeltEmblem materials={materials} />
-      <RoundedMesh size={[.65, .25, .44]} radius={.11} material={materials.navy} position={[0, -.23, 0]} />
+      <RoundedMesh size={[.72, .27, .46]} radius={.12} material={materials.navy} position={[0, -.23, 0]} />
       <mesh position={[0, -.21, .24]} rotation={[Math.PI / 2, 0, 0]}><torusGeometry args={[.22, .018, 8, 28, Math.PI]} /><SharedMaterial material={materials.teal} /></mesh>
     </group>
   );
@@ -265,19 +325,20 @@ function createArmRig(): ArmRig {
 
 function Arm({ side, materials, rigRef, handRigRef }: { side: -1 | 1; materials: MascotMaterials; rigRef: MutableRefObject<ArmRig>; handRigRef: MutableRefObject<HandRig> }) {
   return (
-    <group position={[side * .57, .48, 0]}>
-      <mesh scale={[.96, 1, .82]}><sphereGeometry args={[.17, 22, 16]} /><SharedMaterial material={materials.white} /></mesh>
-      <mesh position={[0, 0, .03]} scale={[.68, .72, .66]}><sphereGeometry args={[.16, 20, 14]} /><SharedMaterial material={materials.darkJoint} /></mesh>
+    <group position={[side * .68, .48, 0]}>
+      <mesh scale={[1.04, 1, .88]}><sphereGeometry args={[.205, 24, 18]} /><SharedMaterial material={materials.white} /></mesh>
+      <mesh position={[0, -.012, .028]} scale={[.68, .7, .64]}><sphereGeometry args={[.19, 20, 14]} /><SharedMaterial material={materials.darkJoint} /></mesh>
       <group ref={(node) => { rigRef.current.shoulder = node; }}>
-        <mesh position={[0, -.2, 0]}><capsuleGeometry args={[.095, .21, 6, 16]} /><SharedMaterial material={materials.navy} /></mesh>
-        <RoundedMesh size={[.22, .25, .2]} radius={.075} material={materials.white} position={[0, -.18, .01]} />
+        <mesh position={[0, -.19, 0]}><capsuleGeometry args={[.105, .18, 6, 18]} /><SharedMaterial material={materials.navy} /></mesh>
+        <RoundedMesh size={[.24, .23, .22]} radius={.085} material={materials.white} position={[0, -.18, .01]} />
         <group ref={(node) => { rigRef.current.elbow = node; }} position={[0, -.4, 0]}>
-          <mesh><sphereGeometry args={[.105, 18, 14]} /><SharedMaterial material={materials.darkJoint} /></mesh>
-          <mesh rotation={[Math.PI / 2, 0, 0]}><torusGeometry args={[.088, .014, 8, 20]} /><SharedMaterial material={materials.teal} /></mesh>
-          <mesh position={[0, -.19, 0]}><capsuleGeometry args={[.088, .23, 6, 16]} /><SharedMaterial material={materials.white} /></mesh>
-          <RoundedMesh size={[.23, .28, .2]} radius={.07} material={materials.whiteShade} position={[0, -.18, .015]} />
+          <mesh><sphereGeometry args={[.115, 20, 16]} /><SharedMaterial material={materials.darkJoint} /></mesh>
+          <mesh rotation={[Math.PI / 2, 0, 0]}><torusGeometry args={[.096, .015, 8, 22]} /><SharedMaterial material={materials.teal} /></mesh>
+          <mesh position={[0, -.19, 0]}><capsuleGeometry args={[.1, .24, 6, 18]} /><SharedMaterial material={materials.white} /></mesh>
+          <RoundedMesh size={[.27, .31, .235]} radius={.095} material={materials.whiteShade} position={[0, -.18, .015]} />
           <StarMark size={.033} material={materials.gold} position={[0, -.17, .12]} />
-          <group ref={(node) => { rigRef.current.wrist = node; }} position={[0, -.4, 0]}>
+          <mesh position={[0, -.37, 0]} rotation={[Math.PI / 2, 0, 0]}><torusGeometry args={[.095, .02, 8, 24]} /><SharedMaterial material={materials.darkJoint} /></mesh>
+          <group ref={(node) => { rigRef.current.wrist = node; }} position={[0, -.41, 0]}>
             <MascotHand side={side} rigRef={handRigRef} materials={materials} />
           </group>
         </group>
@@ -288,21 +349,21 @@ function Arm({ side, materials, rigRef, handRigRef }: { side: -1 | 1; materials:
 
 function Leg({ side, materials }: { side: -1 | 1; materials: MascotMaterials }) {
   return (
-    <group position={[side * .2, -.28, 0]}>
+    <group position={[side * .22, -.28, 0]}>
       <group>
-        <mesh position={[0, -.16, 0]}><capsuleGeometry args={[.13, .2, 6, 18]} /><SharedMaterial material={materials.white} /></mesh>
-        <mesh position={[0, -.1, .08]} scale={[.72, 1, .42]}><sphereGeometry args={[.11, 16, 12]} /><SharedMaterial material={materials.navy} /></mesh>
+        <mesh position={[0, -.16, 0]}><capsuleGeometry args={[.145, .22, 6, 18]} /><SharedMaterial material={materials.white} /></mesh>
+        <mesh position={[0, -.1, .085]} scale={[.76, 1, .44]}><sphereGeometry args={[.125, 18, 14]} /><SharedMaterial material={materials.navy} /></mesh>
         <group position={[0, -.36, 0]}>
-          <mesh><sphereGeometry args={[.14, 20, 14]} /><SharedMaterial material={materials.darkJoint} /></mesh>
+          <mesh><sphereGeometry args={[.15, 20, 14]} /><SharedMaterial material={materials.darkJoint} /></mesh>
           <mesh position={[side * .11, 0, 0]} rotation={[0, Math.PI / 2, 0]}><cylinderGeometry args={[.055, .055, .035, 18]} /><SharedMaterial material={materials.teal} /></mesh>
           <group position={[0, -.16, 0]}>
-            <RoundedMesh size={[.27, .34, .24]} radius={.085} material={materials.white} position={[0, -.12, 0]} />
+            <RoundedMesh size={[.3, .36, .27]} radius={.095} material={materials.white} position={[0, -.12, 0]} />
             <StarMark size={.04} material={materials.gold} position={[0, -.1, .135]} />
             <group position={[0, -.31, .04]}>
               <mesh><sphereGeometry args={[.09, 16, 12]} /><SharedMaterial material={materials.darkJoint} /></mesh>
-              <RoundedMesh size={[.38, .22, .52]} radius={.105} material={materials.white} position={[0, -.09, .1]} />
-              <RoundedMesh size={[.34, .13, .42]} radius={.075} material={materials.navy} position={[0, -.055, .18]} />
-              <RoundedMesh size={[.4, .045, .54]} radius={.018} material={materials.teal} position={[0, -.205, .1]} />
+              <RoundedMesh size={[.42, .24, .56]} radius={.115} material={materials.white} position={[0, -.09, .1]} />
+              <RoundedMesh size={[.37, .14, .45]} radius={.08} material={materials.navy} position={[0, -.052, .19]} />
+              <RoundedMesh size={[.44, .045, .58]} radius={.018} material={materials.teal} position={[0, -.215, .1]} />
               <StarMark size={.032} material={materials.gold} position={[0, -.04, .405]} />
             </group>
           </group>
@@ -312,118 +373,22 @@ function Leg({ side, materials }: { side: -1 | 1; materials: MascotMaterials }) 
   );
 }
 
-function smoothstep(edge0: number, edge1: number, value: number) {
-  const x = Math.max(0, Math.min(1, (value - edge0) / (edge1 - edge0)));
-  return x * x * (3 - 2 * x);
+const jointEuler = new Euler();
+const jointQuaternion = new Quaternion();
+
+function convergeRotation(group: Group | null, target: readonly [number, number, number], damping: number) {
+  if (!group) return;
+  jointEuler.set(target[0], target[1], target[2], 'XYZ');
+  jointQuaternion.setFromEuler(jointEuler);
+  group.quaternion.slerp(jointQuaternion, damping);
 }
 
-function baseArm(side: -1 | 1, pose: AssistantHandPose = 'relaxed'): ArmTarget {
-  return { shoulderX: 0, shoulderY: 0, shoulderZ: side * .12, elbowX: 0, elbowZ: 0, wristX: 0, wristY: 0, wristZ: 0, pose };
-}
-
-function armTargets(emotion: AssistantEmotion, t: number, intensity: number, reducedMotion: boolean, handPose?: AssistantHandPose) {
-  const primary = baseArm(-1, handPose ?? emotionProfiles[emotion].primaryHand);
-  const secondary = baseArm(1, handPose ?? emotionProfiles[emotion].secondaryHand);
-  const gesture = reducedMotion ? 0 : 1;
-
-  if (handPose) {
-    primary.shoulderX = -.2;
-    primary.shoulderZ = -2.15;
-    primary.elbowX = -.88;
-    primary.wristX = -.34;
-    primary.wristY = .18;
-    primary.wristZ = 0;
-    secondary.shoulderX = -.14;
-    secondary.shoulderZ = .72;
-    secondary.elbowX = -.5;
-    secondary.wristX = -.26;
-    secondary.wristZ = 0;
-    return { primary, secondary };
-  }
-
-  if (emotion === 'greeting') {
-    const cycle = reducedMotion ? .42 : (t % 4.8) / 4.8;
-    const raised = reducedMotion ? 1 : smoothstep(.06, .25, cycle) * (1 - smoothstep(.78, .96, cycle));
-    const wave = gesture * Math.sin((cycle - .25) * Math.PI * 8) * raised;
-    primary.shoulderX = .16 * raised;
-    primary.shoulderZ = -.12 + (-2.36 + .12) * raised;
-    primary.elbowX = -.58 * raised;
-    primary.wristY = .18 * raised;
-    primary.wristZ = wave * .32 * intensity;
-    primary.waveCurl = Math.max(0, wave) * .12;
-  } else if (emotion === 'listening') {
-    secondary.shoulderX = -.1;
-    secondary.shoulderZ = 2.03;
-    secondary.elbowX = -1.08;
-    secondary.wristY = -.28;
-    secondary.wristZ = -.12;
-  } else if (emotion === 'thinking') {
-    secondary.shoulderX = -.16;
-    secondary.shoulderZ = 1.75;
-    secondary.elbowX = -1.28;
-    secondary.wristY = -.35;
-    secondary.wristZ = .12;
-  } else if (emotion === 'explaining') {
-    const talk = gesture * Math.sin(t * 1.55) * .1 * intensity;
-    primary.shoulderX = -.32;
-    primary.shoulderZ = -1.05 + talk;
-    primary.elbowX = -.82;
-    primary.wristX = -.3;
-    primary.wristY = .28;
-    primary.wristZ = -.08 - talk;
-    secondary.shoulderX = -.18;
-    secondary.shoulderZ = .58 - talk * .5;
-    secondary.elbowX = -.48;
-    secondary.wristX = -.22;
-    secondary.wristZ = .08;
-  } else if (emotion === 'happy') {
-    primary.shoulderZ = -1.02;
-    secondary.shoulderZ = 1.02;
-    primary.elbowX = secondary.elbowX = -.48;
-    primary.wristZ = -.08;
-    secondary.wristZ = .08;
-  } else if (emotion === 'warning') {
-    primary.shoulderX = -.28;
-    primary.shoulderZ = -1.58;
-    primary.elbowX = -.82;
-    primary.wristX = -.35;
-    primary.wristZ = 0;
-  } else if (emotion === 'uncertain') {
-    primary.shoulderX = secondary.shoulderX = -.28;
-    primary.shoulderZ = -.84;
-    secondary.shoulderZ = .84;
-    primary.elbowX = secondary.elbowX = -.56;
-    primary.wristX = secondary.wristX = -.48;
-    primary.wristZ = -.06;
-    secondary.wristZ = .06;
-  } else if (emotion === 'handoff') {
-    primary.shoulderX = -.32;
-    primary.shoulderZ = -1.18;
-    primary.elbowX = -.76;
-    primary.wristX = -.36;
-    primary.wristY = .22;
-    primary.wristZ = -.06;
-  }
-  return { primary, secondary };
-}
-
-function animateArm(rig: ArmRig, handRig: HandRig, target: ArmTarget, delta: number, side: -1 | 1, snap = false) {
+function animateArm(rig: ArmRig, handRig: HandRig, target: ArmPoseProfile, delta: number, side: -1 | 1, snap = false) {
   const damping = snap ? 1 : 1 - Math.exp(-delta * 7.5);
-  if (rig.shoulder) {
-    rig.shoulder.rotation.x += (target.shoulderX - rig.shoulder.rotation.x) * damping;
-    rig.shoulder.rotation.y += (target.shoulderY - rig.shoulder.rotation.y) * damping;
-    rig.shoulder.rotation.z += (target.shoulderZ - rig.shoulder.rotation.z) * damping;
-  }
-  if (rig.elbow) {
-    rig.elbow.rotation.x += (target.elbowX - rig.elbow.rotation.x) * damping;
-    rig.elbow.rotation.z += (target.elbowZ - rig.elbow.rotation.z) * damping;
-  }
-  if (rig.wrist) {
-    rig.wrist.rotation.x += (target.wristX - rig.wrist.rotation.x) * damping;
-    rig.wrist.rotation.y += (target.wristY - rig.wrist.rotation.y) * damping;
-    rig.wrist.rotation.z += (target.wristZ - rig.wrist.rotation.z) * damping;
-  }
-  animateHandPose(handRig, target.pose, delta, side, target.waveCurl ?? 0, snap);
+  convergeRotation(rig.shoulder, target.shoulder, damping);
+  convergeRotation(rig.elbow, target.elbow, damping);
+  convergeRotation(rig.wrist, target.wrist, damping);
+  animateHandPose(handRig, target.hand, delta, side, target.waveCurl ?? 0, snap);
 }
 
 function Character({
@@ -433,6 +398,7 @@ function Character({
   handPose,
   animationKey,
   reducedMotion,
+  visibleRef,
 }: {
   emotion: AssistantEmotion;
   gazeRef: MutableRefObject<AssistantGaze>;
@@ -440,6 +406,7 @@ function Character({
   handPose?: AssistantHandPose;
   animationKey: number;
   reducedMotion: boolean;
+  visibleRef: MutableRefObject<boolean>;
 }) {
   const materials = useMascotMaterials();
   const root = useRef<Group>(null);
@@ -457,14 +424,16 @@ function Character({
   const look = useRef({ x: 0, y: 0 });
   const animationStart = useRef(0);
   const lastAnimationKey = useRef(animationKey);
+  const lastEmotion = useRef(emotion);
   const profile = emotionProfiles[emotion];
   const intensity = motionIntensityScale[motionIntensity];
 
   useFrame(({ clock }, delta) => {
-    if (document.visibilityState !== 'visible') return;
+    if (document.visibilityState !== 'visible' || !visibleRef.current) return;
     const elapsed = clock.getElapsedTime();
-    if (lastAnimationKey.current !== animationKey) {
+    if (lastAnimationKey.current !== animationKey || lastEmotion.current !== emotion) {
       lastAnimationKey.current = animationKey;
+      lastEmotion.current = emotion;
       animationStart.current = elapsed;
     }
     const t = elapsed - animationStart.current;
@@ -484,23 +453,33 @@ function Character({
     const eyeY = look.current.y * .05;
     if (eyeLeft.current && eyeRight.current) {
       const asymmetry = emotion === 'uncertain' ? .02 : 0;
-      eyeLeft.current.position.set(-.3 + eyeX - asymmetry, .07 + eyeY + asymmetry, .61);
-      eyeRight.current.position.set(.3 + eyeX + asymmetry, .07 + eyeY - asymmetry, .61);
-      eyeLeft.current.scale.set(profile.eyeScale, profile.eyeScale * blink, profile.eyeBrightness);
-      eyeRight.current.scale.set(profile.eyeScale, profile.eyeScale * blink, profile.eyeBrightness);
+      const faceDamping = reducedMotion ? 1 : 1 - Math.exp(-delta * 11);
+      eyeLeft.current.position.x += (-.3 + eyeX - asymmetry - eyeLeft.current.position.x) * faceDamping;
+      eyeLeft.current.position.y += (.07 + eyeY + asymmetry - eyeLeft.current.position.y) * faceDamping;
+      eyeRight.current.position.x += (.3 + eyeX + asymmetry - eyeRight.current.position.x) * faceDamping;
+      eyeRight.current.position.y += (.07 + eyeY - asymmetry - eyeRight.current.position.y) * faceDamping;
+      eyeLeft.current.scale.x += (profile.eyeScale - eyeLeft.current.scale.x) * faceDamping;
+      eyeLeft.current.scale.y += (profile.eyeScale * blink - eyeLeft.current.scale.y) * faceDamping;
+      eyeLeft.current.scale.z += (profile.eyeBrightness - eyeLeft.current.scale.z) * faceDamping;
+      eyeRight.current.scale.x += (profile.eyeScale - eyeRight.current.scale.x) * faceDamping;
+      eyeRight.current.scale.y += (profile.eyeScale * blink - eyeRight.current.scale.y) * faceDamping;
+      eyeRight.current.scale.z += (profile.eyeBrightness - eyeRight.current.scale.z) * faceDamping;
     }
 
     if (head.current) {
       const nod = !reducedMotion && (emotion === 'explaining' || emotion === 'handoff') ? Math.sin(t * 1.55) * .03 * intensity : 0;
       const thinkTilt = !reducedMotion && emotion === 'thinking' ? Math.sin(t * .55) * .025 * intensity : 0;
-      head.current.rotation.y = look.current.x * .19;
-      head.current.rotation.x = -look.current.y * .13 + profile.headPitch + nod;
-      head.current.rotation.z = profile.headTilt + thinkTilt;
+      const greetingTilt = !reducedMotion && emotion === 'greeting' && t < 2.7 ? Math.sin(Math.min(1, t / 2.7) * Math.PI) * -.055 : 0;
+      convergeRotation(head.current, [
+        -look.current.y * .13 + profile.headPitch + nod,
+        look.current.x * .19,
+        profile.headTilt + thinkTilt + greetingTilt,
+      ], reducedMotion ? 1 : 1 - Math.exp(-delta * 8));
     }
 
     if (root.current) {
       const idleFloat = reducedMotion ? 0 : Math.sin(t * 1.02) * .023 * profile.energy * intensity;
-      const happyBounce = !reducedMotion && (emotion === 'happy' || emotion === 'greeting') ? Math.abs(Math.sin(t * 1.5)) * .035 * intensity : 0;
+      const happyBounce = !reducedMotion && (emotion === 'happy' || (emotion === 'greeting' && t < 2.7)) ? Math.abs(Math.sin(t * 1.5)) * .035 * intensity : 0;
       root.current.position.y = idleFloat + happyBounce;
       root.current.rotation.x = emotion === 'listening' ? -.025 : emotion === 'warning' ? .012 : 0;
       root.current.rotation.y = reducedMotion ? 0 : Math.sin(t * .32) * .012 * profile.energy * intensity;
@@ -518,12 +497,12 @@ function Character({
     }
 
     const earPulse = !reducedMotion && emotion === 'listening' ? 1 + Math.sin(t * 2.2) * .12 : 1;
-    earLeft.current?.scale.setScalar(earPulse);
+    earLeft.current?.scale.setScalar(1);
     earRight.current?.scale.setScalar(earPulse);
 
-    const targets = armTargets(emotion, t, intensity, reducedMotion, handPose);
-    animateArm(primaryArm.current, primaryHand.current, targets.primary, delta, -1, reducedMotion);
-    animateArm(secondaryArm.current, secondaryHand.current, targets.secondary, delta, 1, reducedMotion);
+    const pose = resolveMascotPose(emotion, t, intensity, reducedMotion, handPose);
+    animateArm(primaryArm.current, primaryHand.current, pose.primaryArm, delta, -1, reducedMotion);
+    animateArm(secondaryArm.current, secondaryHand.current, pose.secondaryArm, delta, 1, reducedMotion);
   });
 
   return (
@@ -539,6 +518,44 @@ function Character({
   );
 }
 
+function CanvasDiagnostics() {
+  const gl = useThree((state) => state.gl);
+  const id = useId();
+  const frames = useRef(0);
+
+  useEffect(() => {
+    const rendererId = id;
+    const qa = window.__MRESALAT_MASCOT_QA__ ?? { liveCanvases: 0, renderers: {} };
+    window.__MRESALAT_MASCOT_QA__ = qa;
+    qa.liveCanvases += 1;
+    document.documentElement.dataset.mascotLiveCanvases = String(qa.liveCanvases);
+    return () => {
+      delete qa.renderers[rendererId];
+      qa.liveCanvases = Math.max(0, qa.liveCanvases - 1);
+      document.documentElement.dataset.mascotLiveCanvases = String(qa.liveCanvases);
+    };
+  }, [id]);
+
+  useFrame(() => {
+    frames.current += 1;
+    if (frames.current % 30 !== 0 || !window.__MRESALAT_MASCOT_QA__) return;
+    const stats = {
+      geometries: gl.info.memory.geometries,
+      textures: gl.info.memory.textures,
+      programs: gl.info.programs?.length ?? 0,
+    };
+    window.__MRESALAT_MASCOT_QA__.renderers[id] = stats;
+    document.documentElement.dataset.mascotRendererGeometries = String(stats.geometries);
+    document.documentElement.dataset.mascotRendererTextures = String(stats.textures);
+    document.documentElement.dataset.mascotRendererPrograms = String(stats.programs);
+  });
+  return null;
+}
+
+function updatePerspectiveFov(camera: PerspectiveCamera, fov: number) {
+  camera.fov = fov;
+}
+
 function CameraRig({ mode, view, debugView }: { mode: AssistantCharacterMode; view: AssistantView; debugView: AssistantDebugView }) {
   const camera = useThree((state) => state.camera);
   useEffect(() => {
@@ -547,6 +564,7 @@ function CameraRig({ mode, view, debugView }: { mode: AssistantCharacterMode; vi
     const targetY = faceOnly ? 1.3 : mode === 'portrait' ? 1.15 : .32;
     const angle = view === 'front' ? 0 : view === 'three-quarter' ? Math.PI / 4 : view === 'side' ? Math.PI / 2 : Math.PI;
     camera.position.set(Math.sin(angle) * radius, targetY + (faceOnly ? .03 : .15), Math.cos(angle) * radius);
+    if (camera instanceof PerspectiveCamera) updatePerspectiveFov(camera, faceOnly ? 28 : mode === 'portrait' ? 30 : 33);
     camera.lookAt(0, targetY, 0);
     camera.updateProjectionMatrix();
   }, [camera, debugView, mode, view]);
@@ -563,6 +581,7 @@ export default function SmartAssistantCanvas({
   debugView,
   animationKey,
   reducedMotion,
+  visibleRef,
 }: {
   emotion: AssistantEmotion;
   mode: AssistantCharacterMode;
@@ -573,24 +592,23 @@ export default function SmartAssistantCanvas({
   debugView: AssistantDebugView;
   animationKey: number;
   reducedMotion: boolean;
+  visibleRef: MutableRefObject<boolean>;
 }) {
-  const faceOnly = debugView === 'face';
-  const camera = { position: [0, faceOnly ? 1.33 : mode === 'portrait' ? 1.3 : .48, faceOnly ? 3.15 : mode === 'portrait' ? 4.05 : 6.35] as [number, number, number], fov: faceOnly ? 28 : mode === 'portrait' ? 30 : 33 };
   return (
     <Canvas
-      key={`${mode}-${debugView}`}
       aria-hidden="true"
-      camera={camera}
+      camera={initialCamera}
       dpr={[1, 1.5]}
       frameloop={reducedMotion ? 'demand' : 'always'}
-      gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+      gl={canvasGlOptions}
     >
       <ambientLight intensity={1.45} />
       <directionalLight position={[3.5, 4.5, 5]} intensity={1.7} color="#e8f5ff" />
       <directionalLight position={[-3, 1.5, 2.5]} intensity={.5} color={mascotPalette.teal} />
       <directionalLight position={[1, 2, -4]} intensity={.65} color="#cbdcff" />
       <CameraRig mode={mode} view={view} debugView={debugView} />
-      <Character emotion={emotion} gazeRef={gazeRef} motionIntensity={motionIntensity} handPose={handPose} animationKey={animationKey} reducedMotion={reducedMotion} />
+      <Character emotion={emotion} gazeRef={gazeRef} motionIntensity={motionIntensity} handPose={handPose} animationKey={animationKey} reducedMotion={reducedMotion} visibleRef={visibleRef} />
+      <CanvasDiagnostics />
     </Canvas>
   );
 }
