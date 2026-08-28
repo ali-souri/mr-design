@@ -92,3 +92,14 @@ test('sensitive actions stay behind visible, non-submitting boundaries', () => {
   assert.doesNotMatch(checkoutSource, /onConfirm=\{\(\) => location\.assign/);
   assert.match(communicationSource, /disabled aria-label="ارسال پیام نمایشی"/);
 });
+
+test('long RTL badges use scoped responsive containment without changing global pills', () => {
+  const globalCss = readFileSync(path.join(repositoryRoot, 'app', 'globals.css'), 'utf8');
+  const exampleCss = readFileSync(path.join(repositoryRoot, 'app', 'product-examples.css'), 'utf8');
+  assert.match(globalCss, /\.status-badge[^}]*white-space:\s*nowrap/);
+  assert.match(exampleCss, /\.health-provider-grid article header[^}]*flex-wrap:\s*wrap/);
+  assert.match(exampleCss, /\.health-provider-grid article header \.status-badge[^}]*white-space:\s*normal[^}]*overflow-wrap:\s*anywhere/);
+  assert.match(exampleCss, /\.product-example \.status-badge[^}]*flex-shrink:\s*0[^}]*max-width:\s*100%/);
+  assert.match(exampleCss, /\.external-product-gate > \.status-badge\.status-badge-warning/);
+  assert.match(exampleCss, /\.health-privacy-hero > \.status-badge\.status-badge-success/);
+});

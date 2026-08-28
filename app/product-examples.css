@@ -1,4 +1,11 @@
 .product-example { --domain-accent: #1976c9; --domain-soft: color-mix(in srgb, var(--domain-accent) 10%, var(--surface-default)); display: grid; gap: 24px; }
+.product-example .status-badge { flex-shrink: 0; max-width: 100%; }
+.provider-card header, .health-provider-grid article header, .insurance-product-grid header, .banking-service-grid header { gap: 8px; flex-wrap: wrap; }
+.provider-card header .status-badge, .health-provider-grid article header .status-badge, .insurance-product-grid header .status-badge, .banking-service-grid header .status-badge { min-width: 0; max-width: calc(100% - 54px); white-space: normal; overflow-wrap: anywhere; text-align: center; justify-content: center; line-height: 1.45; }
+.external-product-gate > .status-badge.status-badge-warning, .health-privacy-hero > .status-badge.status-badge-success { width: fit-content; height: auto; min-height: 30px; display: inline-flex; padding: 4px 11px; border-radius: var(--radius-pill); place-items: initial; }
+.external-product-gate > .status-badge.status-badge-warning { color: var(--status-warning); background: color-mix(in srgb, var(--status-warning) 16%, var(--surface-default)); }
+.health-privacy-hero > .status-badge.status-badge-success { color: var(--status-success); background: color-mix(in srgb, var(--status-success) 16%, var(--surface-default)); }
+.mbazar-seller-tools label.sr-only { width: 1px; height: 1px; min-height: 0; padding: 0; border: 0; }
 .product-example.accent-blue, .accent-blue { --domain-accent: #1976c9; }.product-example.accent-cyan, .accent-cyan { --domain-accent: #1199a7; }.product-example.accent-violet, .accent-violet { --domain-accent: #7357ba; }.product-example.accent-amber, .accent-amber { --domain-accent: #bf7611; }.product-example.accent-green, .accent-green { --domain-accent: #158364; }.product-example.accent-rose, .accent-rose { --domain-accent: #b94f69; }
 .product-breadcrumb { display: flex; align-items: center; gap: 8px; color: var(--text-muted); font-size: 12px; min-width: 0; }
 .product-breadcrumb a:hover { color: var(--action-primary); }.product-breadcrumb strong { color: var(--text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
