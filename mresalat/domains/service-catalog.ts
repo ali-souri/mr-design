@@ -1,4 +1,5 @@
 import type { MResalatIconName } from '@/mresalat/core/MResalatIcon';
+import { exampleRouteByServiceId } from '../examples/product/example-route-registry.ts';
 import type { ServiceComponentKey } from './service-component-registry';
 
 export type ServiceVerificationStatus = 'authenticated' | 'public' | 'safe-stop' | 'gated' | 'unavailable' | 'not-visible';
@@ -63,7 +64,7 @@ const core = ['service-surface', 'service-header', 'status-badge', 'safe-stop-no
 const components = (...keys: ServiceComponentKey[]): ServiceComponentKey[] => [...core, ...keys];
 const path = (record: Omit<AuditedServicePath, 'isMock'>): AuditedServicePath => ({ ...record, isMock: true });
 
-export const serviceCatalog: AuditedServicePath[] = [
+const auditedServiceCatalog: AuditedServicePath[] = [
   path({ ...STOP.gate, id: 'individual-membership', chapter: 1, domain: 'membership', titleFa: 'اشخاص حقیقی', titleEn: 'Individual membership', verificationStatus: 'gated', riskLevel: 'L2', surfaceKind: 'gate', componentKeys: components('external-login-gate', 'membership-form'), icon: 'profile', demoHref: '/segments/individual/membership' }),
   path({ ...STOP.auth, id: 'under-18-membership', chapter: 1, domain: 'membership', titleFa: 'عضویت زیر ۱۸ سال', titleEn: 'Under-18 membership', verificationStatus: 'authenticated', riskLevel: 'L2', surfaceKind: 'form', componentKeys: components('form-shell', 'membership-form'), icon: 'child', demoHref: '/segments/under-18/request' }),
   path({ ...STOP.auth, id: 'organization-membership', chapter: 1, domain: 'membership', titleFa: 'عضویت سازمانی', titleEn: 'Organization membership', verificationStatus: 'authenticated', riskLevel: 'L2', surfaceKind: 'form', componentKeys: components('form-shell', 'membership-form'), icon: 'organization', demoHref: '/segments/organization/request' }),
@@ -146,5 +147,9 @@ export const serviceCatalog: AuditedServicePath[] = [
   path({ ...STOP.notVisible, id: 'memorial', chapter: 12, domain: 'communication', titleFa: 'یادبود', titleEn: 'Memorial', verificationStatus: 'not-visible', riskLevel: 'L0', surfaceKind: 'unavailable', componentKeys: components('not-visible-state'), icon: 'help' }),
 ];
 
+export const serviceCatalog: AuditedServicePath[] = auditedServiceCatalog.map((service) => ({
+  ...service,
+  demoHref: exampleRouteByServiceId[service.id]?.href,
+}));
 export const serviceCatalogById = Object.fromEntries(serviceCatalog.map((item) => [item.id, item])) as Record<string, AuditedServicePath>;
 export const catalogDomains = [...new Set(serviceCatalog.map((item) => item.domain))].sort();

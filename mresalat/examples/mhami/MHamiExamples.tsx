@@ -1,0 +1,70 @@
+'use client';
+
+import { useMemo, useState, type FormEvent } from 'react';
+import { Badge } from '@/mresalat/core/primitives';
+import { MResalatIcon } from '@/mresalat/core/MResalatIcon';
+import { OtpInput } from '@/mresalat/segments/SegmentPhaseOne';
+import { DomainLanding, ExternalProductGate, Field, Panel, ProductExampleShell, SafeReview, SearchBox, SegmentedTabs, Stepper } from '../product/ProductExampleShell';
+
+const supporters = [
+  { id: 'S-104', name: 'حامی نمونه یک', relationship: 'حامی خانوادگی', status: 'فعال', since: '۱۴۰۴/۰۸' },
+  { id: 'S-228', name: 'حامی نمونه دو', relationship: 'همکار داوطلب', status: 'در انتظار بازبینی', since: '۱۴۰۵/۰۲' },
+  { id: 'S-310', name: 'پروفایل پوشانده', relationship: 'انجمن حامیان', status: 'فعال', since: '۱۴۰۳/۱۱' },
+];
+
+export function MHamiLanding() {
+  return <DomainLanding domainKey="mhami" lead={<section className="domain-lead mhami-lead"><div><span className="eyebrow">رابطه، اعتماد و توقف مسئولانه</span><h2>از یافتن حامی تا مرز OTP و ارزیابی مجوز</h2><p>هر مسیر، اثر احتمالی خود را پیش از بررسی هویت، ثبت عضویت یا ایجاد تعهد مالی توضیح می‌دهد.</p></div><div className="relationship-orbit"><span>عضو</span><i /><span>حامی</span><i /><span>انجمن</span></div></section>} />;
+}
+
+export function SupporterList() {
+  const [query, setQuery] = useState(''); const [mode, setMode] = useState('populated'); const [selected, setSelected] = useState<(typeof supporters)[number]>();
+  const rows = useMemo(() => mode === 'empty' ? [] : supporters.filter((item) => `${item.name} ${item.relationship}`.includes(query)), [query, mode]);
+  return <ProductExampleShell serviceId="my-supporters"><Panel title="حامیان من" eyebrow="داده‌های رابطه‌ای ساختگی" icon="family" actions={<SegmentedTabs value={mode} onChange={setMode} tabs={[{ id: 'populated', label: 'نمونه پُر' }, { id: 'empty', label: 'حالت خالی' }]} />}><SearchBox value={query} onChange={setQuery} placeholder="جستجو در نام یا نوع رابطه…" /><div className="supporter-table" role="list">{rows.map((supporter) => <button type="button" role="listitem" onClick={() => setSelected(supporter)} key={supporter.id}><span className="mock-avatar">ح</span><div><strong>{supporter.name}</strong><small>{supporter.relationship} · از {supporter.since}</small></div><Badge tone={supporter.status === 'فعال' ? 'success' : 'warning'}>{supporter.status}</Badge><MResalatIcon name="next" size={18} /></button>)}{rows.length === 0 && <div className="product-empty"><MResalatIcon name="family" size={26} /><strong>حامی‌ای در این نما نیست</strong><p>جستجو را پاک کنید یا حالت نمونه پُر را ببینید.</p></div>}</div></Panel>{selected && <aside className="detail-drawer" role="dialog" aria-modal="true" aria-label="جزئیات حامی"><button type="button" className="icon-button" aria-label="بستن" onClick={() => setSelected(undefined)}><MResalatIcon name="close" size={20} /></button><Badge tone="info">پروفایل ساختگی</Badge><h2>{selected.name}</h2><dl><div><dt>نوع رابطه</dt><dd>{selected.relationship}</dd></div><div><dt>وضعیت</dt><dd>{selected.status}</dd></div><div><dt>شناسه</dt><dd dir="ltr">•••{selected.id.slice(-3)}</dd></div></dl><p>هیچ اطلاعات تماس یا هویتی واقعی در این نما وجود ندارد.</p></aside>}</ProductExampleShell>;
+}
+
+export function BecomeSupporter() {
+  const [step, setStep] = useState(0); const [phone, setPhone] = useState(''); const [nationalId, setNationalId] = useState(''); const [error, setError] = useState('');
+  const review = (event: FormEvent) => { event.preventDefault(); if (phone.length < 10 || nationalId.length < 8) { setError('شماره و شناسه ساختگی را برای مرور کامل کنید.'); return; } setError(''); setStep(1); };
+  return <ProductExampleShell serviceId="become-supporter"><Stepper steps={['اطلاعات عضو', 'بررسی نمایشی', 'تأیید عضویت']} current={step} />{step === 0 ? <Panel title="حامی یک عضو شوید" eyebrow="شناسایی عضو" icon="advocacy"><form className="product-form compact-form" onSubmit={review}><Field label="شماره همراه ساختگی"><input dir="ltr" inputMode="tel" value={phone} onChange={(event) => setPhone(event.target.value.replace(/\D/g, '').slice(0, 11))} placeholder="09000000000" /></Field><Field label="شناسه ملی ساختگی"><input dir="ltr" inputMode="numeric" value={nationalId} onChange={(event) => setNationalId(event.target.value.replace(/\D/g, '').slice(0, 10))} placeholder="0000000000" /></Field>{error && <p className="field-error" role="alert">{error}</p>}<button className="button button-primary" type="submit">مرور بررسی عضو</button></form></Panel> : <SafeReview title="پیش‌نمایش بررسی عضو" rows={[{ label: 'همراه', value: `•••••••${phone.slice(-4)}` }, { label: 'شناسه', value: `••••••${nationalId.slice(-3)}` }, { label: 'اثر بعدی', value: 'بررسی عضو و ایجاد رابطه حمایتی' }, { label: 'وضعیت', value: 'هیچ بررسی‌ای انجام نشده' }]} action="بررسی و ثبت واقعی غیرفعال است" />}</ProductExampleShell>;
+}
+
+export function AssociationMembership() {
+  return <ProductExampleShell serviceId="association-membership"><div className="product-split"><Panel title="انجمن حامیان رسالت" eyebrow="عضویت جداگانه" icon="membership"><p className="panel-copy">عضویت انجمن یک زمینه مستقل با شرایط و درگاه ورود جداست. نسخه نمایشی فقط پیش‌نیازها را معرفی می‌کند.</p><ul className="requirement-list"><li><MResalatIcon name="success" size={17} />عضویت پایه در اکوسیستم</li><li><MResalatIcon name="success" size={17} />پذیرش شرایط انجمن</li><li><MResalatIcon name="lock" size={17} />ورود در سامانه مستقل</li></ul></Panel><ExternalProductGate title="ورود به سامانه انجمن" description="برای ادامه باید از درگاه مستقل انجمن وارد شوید. این دمو نام کاربری یا رمز عبور دریافت نمی‌کند." /></div></ProductExampleShell>;
+}
+
+export function ZeroFeeLoanRequest() {
+  const [step, setStep] = useState(0); const [otpState, setOtpState] = useState<'idle' | 'expired' | 'resent'>('idle');
+  return <ProductExampleShell serviceId="zero-fee-loan-request"><Stepper steps={['شرایط و شروع', 'تأیید OTP', 'ایجاد درخواست']} current={step} />{step === 0 ? <div className="product-split"><Panel title="وام قرض‌الحسنه بدون کارمزد" eyebrow="شروع درخواست" icon="loan"><p className="panel-copy">شرایط پایه و اثر احتمالی را مرور کنید. بررسی اهلیت یا ایجاد پرونده در این دمو انجام نمی‌شود.</p><ul className="requirement-list"><li><MResalatIcon name="success" size={17} />عضویت معتبر انجمن</li><li><MResalatIcon name="success" size={17} />شماره همراه تأییدشده در محصول واقعی</li><li><MResalatIcon name="warning" size={17} />OTP مرز توقف این ممیزی است</li></ul><button className="button button-primary" type="button" onClick={() => setStep(1)}>نمایش مرحله OTP</button></Panel><SafeReview rows={[{ label: 'نوع درخواست', value: 'قرض‌الحسنه بدون کارمزد' }, { label: 'اثر بعدی', value: 'آغاز احتمالی درخواست و بررسی هویت' }, { label: 'اجرای دمو', value: 'صفر؛ بدون درخواست مالی' }]} /></div> : <Panel title="کد شش‌رقمی" eyebrow="توقف پیش از تأیید" icon="lock"><div className="otp-layout"><div><p>کد نمایشی را برای آزمایش کنترل وارد کنید. دکمه تأیید عمداً غیرفعال است.</p><OtpInput length={6} /><div className="otp-meta" aria-live="polite"><span>{otpState === 'expired' ? 'زمان کد نمایشی پایان یافته' : otpState === 'resent' ? 'کد تازه فقط به‌صورت نمایشی درخواست شد' : '۰۱:۴۸ تا پایان زمان نمایشی'}</span><button type="button" onClick={() => setOtpState(otpState === 'expired' ? 'resent' : 'expired')}>{otpState === 'expired' ? 'ارسال مجدد نمایشی' : 'نمایش حالت منقضی'}</button></div></div><div className="otp-states"><Badge tone="neutral">خالی</Badge><Badge tone="warning">منقضی</Badge><Badge tone="success">ارسال مجدد نمایشی</Badge></div></div><button className="button button-primary" type="button" disabled>تأیید OTP و ایجاد درخواست</button></Panel>}</ProductExampleShell>;
+}
+
+const loanRows = [
+  { ref: 'LN-DEMO-104', status: 'نیازمند اقدام', date: '۱۴۰۵/۰۵/۲۸', amount: 'مبلغ پوشانده', query: 'در انتظار', repayment: 'ماهانه' },
+  { ref: 'LN-DEMO-088', status: 'در حال بررسی', date: '۱۴۰۵/۰۴/۱۱', amount: 'مبلغ پوشانده', query: 'پاسخ دریافت شد', repayment: 'مرحله‌ای' },
+  { ref: 'LN-DEMO-032', status: 'مختومه', date: '۱۴۰۴/۱۲/۲۰', amount: 'مبلغ پوشانده', query: 'تکمیل', repayment: 'ماهانه' },
+];
+
+export function LoanTracking() {
+  const [query, setQuery] = useState(''); const [status, setStatus] = useState('all'); const [repayment, setRepayment] = useState('all');
+  const rows = loanRows.filter((row) => (!query || row.ref.toLowerCase().includes(query.toLowerCase())) && (status === 'all' || row.status === status) && (repayment === 'all' || row.repayment === repayment));
+  return <ProductExampleShell serviceId="zero-fee-loan-tracking"><Panel title="پیگیری وام بدون کارمزد" eyebrow="فیلترهای ممیزی‌شده" icon="assessment"><div className="filter-grid"><Field label="جستجو"><input dir="ltr" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="LN-DEMO" /></Field><Field label="وضعیت"><select value={status} onChange={(event) => setStatus(event.target.value)}><option value="all">همه</option><option>نیازمند اقدام</option><option>در حال بررسی</option><option>مختومه</option></select></Field><Field label="نوع بازپرداخت"><select value={repayment} onChange={(event) => setRepayment(event.target.value)}><option value="all">همه</option><option>ماهانه</option><option>مرحله‌ای</option></select></Field><Field label="از تاریخ"><input type="date" /></Field><Field label="تا تاریخ"><input type="date" /></Field><Field label="بازه مبلغ"><select defaultValue="masked"><option value="masked">همه مبالغ پوشانده</option></select></Field></div><div className="filter-actions"><button className="button button-primary" type="button">اعمال فیلتر</button><button className="button button-ghost" type="button" onClick={() => { setQuery(''); setStatus('all'); setRepayment('all'); }}>بازنشانی</button></div><div className="responsive-table"><table><thead><tr><th>شناسه</th><th>وضعیت</th><th>تاریخ</th><th>مبلغ</th><th>استعلام</th><th>بازپرداخت</th></tr></thead><tbody>{rows.map((row) => <tr key={row.ref}><td dir="ltr">{row.ref}</td><td><Badge tone={row.status === 'نیازمند اقدام' ? 'warning' : row.status === 'مختومه' ? 'neutral' : 'info'}>{row.status}</Badge></td><td>{row.date}</td><td>{row.amount}</td><td>{row.query}</td><td>{row.repayment}</td></tr>)}</tbody></table>{rows.length === 0 && <div className="product-empty">نتیجه‌ای با این فیلترها نیست.</div>}</div></Panel></ProductExampleShell>;
+}
+
+export function MembershipCard() {
+  const [showQr, setShowQr] = useState(false);
+  return <ProductExampleShell serviceId="association-membership-card"><div className="product-split"><section className="digital-membership-card"><header><span><MResalatIcon name="membership" size={28} /></span><div><small>انجمن حامیان رسالت</small><strong>کارت عضویت نمایشی</strong></div></header><div className="card-person"><span className="mock-avatar">ح</span><div><strong>عضو نمونه</strong><small>شناسه ••••••۴۲</small></div></div><dl><div><dt>تاریخ عضویت</dt><dd>۱۴۰۴/۰۹/۱۸</dd></div><div><dt>وضعیت</dt><dd>فعال · نمایشی</dd></div></dl><div className={`qr-placeholder ${showQr ? 'revealed' : ''}`} aria-label="کد QR غیرقابل اسکن">{showQr ? <><span /><span /><span /><i /></> : <MResalatIcon name="lock" size={26} />}</div></section><Panel title="کنترل حریم خصوصی" eyebrow="QR غیرقابل اسکن" icon="security"><p className="panel-copy">این کارت هویت واقعی ندارد و کد نمایش‌داده‌شده قابل استفاده نیست.</p><button className="button button-secondary" type="button" onClick={() => setShowQr(!showQr)}>{showQr ? 'پنهان‌کردن QR دمو' : 'نمایش QR دمو'}</button><button className="button button-ghost" type="button" disabled>دانلود / اشتراک‌گذاری غیرفعال</button><p className="privacy-note"><MResalatIcon name="warning" size={17} />تصویر کارت واقعی را در پیام‌رسان یا شبکه عمومی منتشر نکنید.</p></Panel></div></ProductExampleShell>;
+}
+
+export function BusinessLicense() {
+  const [step, setStep] = useState(0); const [file, setFile] = useState('');
+  return <ProductExampleShell serviceId="business-license-evaluation"><Stepper steps={['اطلاعات مجوز', 'مدرک', 'مرور و توقف']} current={step} />{step < 2 ? <Panel title="ارزیابی مجوز کاروکسب" eyebrow="فرم کامل نمایشی" icon="evidence"><form className="product-form" onSubmit={(event) => { event.preventDefault(); setStep(2); }}><div className="product-form-grid"><Field label="شناسه مجوز"><input required placeholder="LIC-DEMO-001" dir="ltr" /></Field><Field label="تاریخ صدور"><input required type="date" /></Field><Field label="تاریخ انقضا"><input required type="date" /></Field><Field label="نوع کسب‌وکار"><select required defaultValue=""><option value="" disabled>انتخاب کنید</option><option>فروشگاهی</option><option>خدماتی</option><option>تولیدی</option></select></Field><Field label="نوع فعالیت"><input required placeholder="فعالیت ساختگی" /></Field><Field label="مرجع صادرکننده"><select required defaultValue=""><option value="" disabled>انتخاب کنید</option><option>مرجع نمونه الف</option><option>مرجع نمونه ب</option></select></Field></div><label className="document-drop"><MResalatIcon name="evidence" size={24} /><strong>{file || 'انتخاب فایل نمایشی'}</strong><small>فایل از دستگاه خوانده یا بارگذاری نمی‌شود.</small><input className="sr-only" type="button" onClick={() => setFile('license-demo.pdf · آماده مرور')} /></label><button className="button button-secondary" type="button" onClick={() => { setFile('license-demo.pdf · آماده مرور'); setStep(1); }}>شبیه‌سازی انتخاب فایل</button><button className="button button-primary" type="submit">مرور نهایی</button></form></Panel> : <SafeReview title="خلاصه ارزیابی مجوز" rows={[{ label: 'شناسه', value: 'LIC-DEMO-001' }, { label: 'مدرک', value: file || 'فایل انتخاب نشده' }, { label: 'اعتبارسنجی', value: 'انجام نشده' }, { label: 'اثر ثبت', value: 'ارسال مدرک و درخواست ارزیابی' }]} action="بارگذاری و ارسال واقعی غیرفعال است" />}</ProductExampleShell>;
+}
+
+export const mhamiScreens: Record<string, React.ComponentType> = {
+  supporters: SupporterList,
+  'become-supporter': BecomeSupporter,
+  association: AssociationMembership,
+  'loan-request': ZeroFeeLoanRequest,
+  'loan-tracking': LoanTracking,
+  'membership-card': MembershipCard,
+  'business-license': BusinessLicense,
+};

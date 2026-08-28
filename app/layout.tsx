@@ -5,6 +5,7 @@ import './segmentation.css';
 import './segmentation-phase-two.css';
 import './segmentation-phase-three.css';
 import './catalog.css';
+import './product-examples.css';
 import { MBazarCartProvider } from '@/mresalat/mbazar/cart-state';
 import { MResalatContextProvider } from '@/mresalat/contexts/context-state';
 

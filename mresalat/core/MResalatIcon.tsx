@@ -76,6 +76,8 @@ export const iconMap = {
   close: X,
   view: Eye,
   remove: Trash2,
+  send: ArrowLeft,
+  logo: PanelsTopLeft,
 } satisfies Record<string, LucideIcon>;
 
 export type MResalatIconName = keyof typeof iconMap;
@@ -83,7 +85,7 @@ export const iconGalleryNames = Object.keys(iconMap) as MResalatIconName[];
 
 export function MResalatIcon({ name, size = 20, strokeWidth = 1.8, className, label }: {
   name: MResalatIconName;
-  size?: 16 | 20 | 24 | 32;
+  size?: number;
   strokeWidth?: number;
   className?: string;
   label?: string;

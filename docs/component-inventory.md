@@ -101,3 +101,17 @@ This list reflects the exported React components in `mresalat/` for v0.4.
 - `CatalogStateGallery` — loading, empty, gated and unavailable reference states.
 
 The typed catalog source lives in `mresalat/domains/service-catalog.ts`; every `componentKey` resolves through `mresalat/domains/service-component-registry.ts`.
+
+## Interactive product examples
+
+- `ProductGallery` — visual `/examples` index for all 12 audited domains and 69 mapped service paths.
+- `ProductExampleShell`, `DomainLanding`, `DemoBoundary` — route identity, domain navigation, risk context, and catalog-backed safe-stop copy.
+- `Panel`, `Field`, `Stepper`, `SegmentedTabs`, `SearchBox`, `SafeReview` — accessible composition primitives for forms, filters, lists, multi-step flows, and high-impact review.
+- `ExternalProductGate`, `UnavailableProduct` — deliberate separate-login, observed 404, and audited-not-visible product states.
+- `ProviderSearch` — provider discovery and preview for M-Amouzesh and M-Donap.
+- `AmountPad`, `InstallmentDashboard` — shared finance controls and the M-Aghsat Plus / M-Aghsat / M-Nessieh family.
+- `VehicleInsuranceForm` — third-party, comprehensive, and motorcycle variants without pricing or underwriting logic.
+- `BankingRequestForm` — current account, card, child-loan, and marriage-loan request shells ending before submission.
+- `MessagingExperience`, `SupportComposer` — M-Payam / M-Payam Plus conversations and support/campaign composers without real sends.
+
+Product modules are grouped under `mresalat/examples/` by domain. Route pages under `app/examples/` stay thin, explicit, and delegate to those typed domain compositions. M-Bazar remains in `mresalat/mbazar/` and is reused as the product-quality reference.

@@ -1,0 +1,75 @@
+'use client';
+
+import Link from 'next/link';
+import { useMemo, useState } from 'react';
+import { Badge } from '@/mresalat/core/primitives';
+import { MResalatIcon, type MResalatIconName } from '@/mresalat/core/MResalatIcon';
+import { DomainLanding, Field, Panel, ProductExampleShell, SafeReview, SearchBox, SegmentedTabs, UnavailableProduct } from '../product/ProductExampleShell';
+
+export function CommunicationLanding() {
+  return <DomainLanding domainKey="communication" lead={<section className="domain-lead communication-lead"><div><span className="eyebrow">پیدا کردن، پرسیدن و ارتباط امن</span><h2>نه پیام واقعی؛ نه موقعیت دقیق</h2><p>همه گفتگوها ساختگی‌اند، ارسال‌ها در مرز composer متوقف می‌شوند و نقشه هرگز مجوز مکان را خودکار درخواست نمی‌کند.</p></div><div className="comm-signal"><i /><i /><i /><span><MResalatIcon name="messages" size={27} /></span></div></section>} />;
+}
+
+const conversations = [
+  { id: 'C-D-104', name: 'گفتگوی نمونه خدمات', preview: 'پیش‌نمایش کاملاً ساختگی پیام…', time: '۱۰:۲۴', unread: 2, kind: 'خدمت' },
+  { id: 'C-D-088', name: 'پشتیبان نمایشی', preview: 'هیچ داده خصوصی بارگیری نشده است.', time: 'دیروز', unread: 0, kind: 'پشتیبانی' },
+  { id: 'C-D-061', name: 'گروه نمونه انجمن', preview: 'آخرین رویداد نمایشی گفتگو', time: 'شنبه', unread: 5, kind: 'گروه' },
+];
+
+export function MessagingExperience({ plus = false }: { plus?: boolean }) {
+  const serviceId = plus ? 'mpayam-plus' : 'mpayam'; const [query, setQuery] = useState(''); const [selected, setSelected] = useState(conversations[0]); const [draft, setDraft] = useState(''); const [tab, setTab] = useState(plus ? 'channels' : 'all');
+  const rows = useMemo(() => conversations.filter((item) => !query || `${item.name} ${item.preview}`.includes(query)), [query]);
+  return <ProductExampleShell serviceId={serviceId}><section className={`messaging-layout ${plus ? 'plus' : ''}`}><aside className="conversation-sidebar"><header><div><small>{plus ? 'M‑Payam Plus' : 'M‑Payam'}</small><h2>{plus ? 'کانال‌ها و گفتگوها' : 'پیام‌ها'}</h2></div><button type="button" disabled aria-label="گفتگوی جدید"><MResalatIcon name="add" size={18} /></button></header><SearchBox value={query} onChange={setQuery} placeholder="جستجوی گفتگوی ساختگی…" /><SegmentedTabs value={tab} onChange={setTab} tabs={plus ? [{ id: 'channels', label: 'کانال‌ها' }, { id: 'direct', label: 'مستقیم' }] : [{ id: 'all', label: 'همه' }, { id: 'unread', label: 'خوانده‌نشده' }]} /><div className="conversation-list">{rows.filter((item) => tab !== 'unread' || item.unread > 0).map((item) => <button type="button" className={selected.id === item.id ? 'selected' : ''} onClick={() => setSelected(item)} key={item.id}><span className="mock-avatar">{item.name[0]}</span><div><strong>{item.name}</strong><small>{item.preview}</small></div><time>{item.time}</time>{item.unread > 0 && <b>{item.unread.toLocaleString('fa-IR')}</b>}</button>)}</div></aside><section className="conversation-preview"><header><span className="mock-avatar">{selected.name[0]}</span><div><strong>{selected.name}</strong><small>{selected.kind} · هویت ساختگی</small></div><Badge tone="success">Demo</Badge></header><div className="message-history"><p className="system-message">محتوای این گفتگو ساختگی است و پیام خصوصی واقعی باز نشده است.</p><div className="message received"><span>این یک پیام نمونه برای آزمایش فاصله، خوانایی و حالت خوانده‌نشده است.</span><time>۱۰:۲۳</time></div><div className="message sent"><span>پاسخ نمونه، بدون ارسال به هیچ فرد یا سامانه‌ای.</span><time>۱۰:۲۴</time></div></div><footer className="message-composer"><button type="button" disabled aria-label="افزودن پیوست"><MResalatIcon name="add" size={19} /></button><label><span className="sr-only">متن پیام نمایشی</span><textarea rows={1} value={draft} onChange={(event) => setDraft(event.target.value)} placeholder="پیام نمایشی بنویسید…" /></label><button type="button" disabled aria-label="ارسال پیام نمایشی" aria-describedby="send-boundary"><MResalatIcon name="send" size={19} /></button><small id="send-boundary">ارسال واقعی همیشه غیرفعال است.</small></footer></section></section></ProductExampleShell>;
+}
+
+export function MPayam() { return <MessagingExperience />; }
+export function MPayamPlus() { return <MessagingExperience plus />; }
+
+export function RasanAdvisor() {
+  const [category, setCategory] = useState('membership'); const [draft, setDraft] = useState(''); const categories = [{ id: 'membership', label: 'عضویت', icon: 'membership' as const }, { id: 'credit', label: 'اعتبار', icon: 'credit' as const }, { id: 'market', label: 'خرید', icon: 'cart' as const }, { id: 'other', label: 'سایر', icon: 'help' as const }];
+  return <ProductExampleShell serviceId="rasan-advisor"><section className="advisor-hero"><span><MResalatIcon name="assistant" size={38} /></span><div><small>رسان · مشاور آنلاین عمومی</small><h2>موضوع را انتخاب و پرسش را آماده کنید</h2><p>ارسال پرسش می‌تواند نمایندگی شما در برابر پشتیبانی باشد؛ دمو پیش از ارسال متوقف می‌شود.</p></div></section><div className="product-split"><Panel title="موضوع پرسش" eyebrow="دسته‌بندی" icon="grid"><div className="advisor-categories" role="radiogroup">{categories.map((item) => <button type="button" role="radio" aria-checked={category === item.id} className={category === item.id ? 'selected' : ''} onClick={() => setCategory(item.id)} key={item.id}><MResalatIcon name={item.icon} size={21} />{item.label}</button>)}</div></Panel><Panel title="پیش‌نویس برای مشاور" eyebrow="ارسال نمایندگی‌شده" icon="messages"><Field label="پرسش نمایشی" helper="اطلاعات ملی، مالی یا سلامت وارد نکنید."><textarea rows={5} value={draft} onChange={(event) => setDraft(event.target.value)} placeholder="پرسش خود را بدون داده شخصی بنویسید…" /></Field><p className="privacy-note"><MResalatIcon name="warning" size={17} />با ارسال در محصول واقعی، متن شما برای پاسخ‌گو قابل مشاهده می‌شود.</p><button className="button button-primary" type="button" disabled>ارسال غیرفعال است</button></Panel></div></ProductExampleShell>;
+}
+
+const searchResults = [
+  { group: 'خدمت', title: 'افتتاح حساب جاری', detail: 'نمونه محصول بانکی', href: '/examples/banking/current-account', icon: 'bank' as const },
+  { group: 'محصول', title: 'کالای دیجیتال', detail: 'دسته ام‌بازار', href: '/examples/mbazar/category/digital', icon: 'product' as const },
+  { group: 'راهنما', title: 'مرز امن پرداخت', detail: 'راهنمای طراحی سیستم', href: '/catalog/mbazar-cart-checkout', icon: 'security' as const },
+  { group: 'خدمت', title: 'یافتن مرکز سلامت', detail: 'جستجوی عمومی ارائه‌دهنده', href: '/examples/msalamat', icon: 'health' as const },
+];
+
+export function GlobalSearch() {
+  const [query, setQuery] = useState(''); const [category, setCategory] = useState('همه'); const rows = searchResults.filter((item) => (!query || `${item.title} ${item.detail}`.includes(query)) && (category === 'همه' || item.group === category));
+  return <ProductExampleShell serviceId="global-search"><section className="global-search-hero"><span className="eyebrow">جستجو در اکوسیستم</span><h2>چه چیزی می‌خواهید پیدا کنید؟</h2><SearchBox value={query} onChange={setQuery} placeholder="خدمت، محصول یا راهنما…" /></section><div className="search-category-row" role="tablist" aria-label="گروه نتیجه">{['همه', 'خدمت', 'محصول', 'راهنما'].map((item) => <button type="button" role="tab" aria-selected={category === item} className={category === item ? 'active' : ''} onClick={() => setCategory(item)} key={item}>{item}</button>)}</div>{!query && <Panel title="جستجوهای اخیر" eyebrow="فقط روی این صفحه" icon="time"><div className="recent-searches">{['وام کودک', 'مرکز آموزشی', 'همراه‌بانک'].map((item) => <button type="button" onClick={() => setQuery(item)} key={item}><MResalatIcon name="time" size={16} />{item}</button>)}</div></Panel>}<Panel title="نتیجه‌ها" eyebrow={`${rows.length.toLocaleString('fa-IR')} نتیجه نمایشی`} icon="search"><div className="grouped-search-results">{rows.map((item) => <Link href={item.href} key={item.href}><span><MResalatIcon name={item.icon} size={21} /></span><div><small>{item.group}</small><strong>{item.title}</strong><p>{item.detail}</p></div><MResalatIcon name="next" size={17} /></Link>)}{rows.length === 0 && <div className="product-empty">نتیجه‌ای پیدا نشد. عبارت کوتاه‌تری وارد کنید.</div>}</div></Panel></ProductExampleShell>;
+}
+
+export function MapExample() {
+  const [query, setQuery] = useState(''); const [gate, setGate] = useState(false);
+  return <ProductExampleShell serviceId="map"><section className="map-layout"><aside><h2>خدمات نزدیک</h2><SearchBox value={query} onChange={setQuery} placeholder="محله یا نام خدمت…" /><div className="map-filters">{['شعبه', 'مرکز سلامت', 'فروشگاه', 'مرکز آموزش'].map((item) => <button type="button" key={item}>{item}</button>)}</div><button className="button button-secondary" type="button" onClick={() => setGate(true)}><MResalatIcon name="location" size={17} />استفاده از مکان من</button><p>مجوز مکان فقط بعد از اقدام صریح شما مطرح می‌شود؛ مرورگر هرگز خودکار پرسیده نمی‌شود.</p></aside><div className="map-canvas" aria-label="نقشه ساختگی بدون مختصات واقعی"><span className="map-road r1" /><span className="map-road r2" /><span className="map-road r3" /><i className="map-pin p1"><MResalatIcon name="location" size={20} /></i><i className="map-pin p2"><MResalatIcon name="location" size={20} /></i><i className="map-pin p3"><MResalatIcon name="location" size={20} /></i><div className="map-watermark">نقشه نمایشی · بدون مختصات</div></div></section>{gate && <div className="product-dialog-backdrop"><section className="product-dialog location-gate" role="dialog" aria-modal="true" aria-labelledby="location-title"><span><MResalatIcon name="location" size={34} /></span><h2 id="location-title">اجازه مکان دقیق؟</h2><p>نسخه نمایشی هرگز به API مکان مرورگر درخواست نمی‌فرستد. این صفحه فقط متن و کنترل لازم پیش از درخواست را نشان می‌دهد.</p><div><button className="button button-primary" type="button" disabled>درخواست واقعی غیرفعال</button><button className="button button-ghost" type="button" onClick={() => setGate(false)}>فعلاً نه</button></div></section></div>}</ProductExampleShell>;
+}
+
+export function SupportComposer({ campaign = false }: { campaign?: boolean }) {
+  const serviceId = campaign ? 'arbaeen-pavilion' : 'support-chat'; const [category, setCategory] = useState(campaign ? 'contribution' : 'account'); const [draft, setDraft] = useState(''); const [attachment, setAttachment] = useState(false); const [review, setReview] = useState(false); const [amount, setAmount] = useState('');
+  return <ProductExampleShell serviceId={serviceId}><section className={campaign ? 'arbaeen-hero' : 'support-intro'}><span><MResalatIcon name={campaign ? 'advocacy' : 'support'} size={35} /></span><div><small>{campaign ? 'موکب اربعین تا اربعین' : 'پشتیبانی ام‌رسالت'}</small><h2>{campaign ? 'همراهی را تا مرز پرداخت مرور کنید' : 'موضوع را مشخص کنید تا زمینه حفظ شود'}</h2><p>{campaign ? 'اطلاعات پویش و ورودی مبلغ ساختگی است؛ هیچ پرداختی انجام نمی‌شود.' : 'پیش‌نویس و پیوست فقط در حافظه صفحه‌اند و ارسال نمی‌شوند.'}</p></div></section>{review ? <SafeReview title={campaign ? 'مرور همیاری موکب' : 'مرور پیام پشتیبانی'} rows={campaign ? [{ label: 'پویش', value: 'موکب اربعین تا اربعین' }, { label: 'مبلغ', value: `${Number(amount || 0).toLocaleString('fa-IR')} ریال نمایشی` }, { label: 'پرداخت', value: 'انجام نمی‌شود' }] : [{ label: 'دسته', value: category }, { label: 'پیام', value: draft || 'خالی' }, { label: 'پیوست', value: attachment ? 'پیوست ساختگی آماده مرور' : 'ندارد' }, { label: 'ارسال', value: 'انجام نمی‌شود' }]} action={campaign ? 'پرداخت واقعی غیرفعال است' : 'ارسال واقعی غیرفعال است'} /> : <Panel title={campaign ? 'جزئیات همیاری' : 'گفتگوی پشتیبانی'} eyebrow="composer نمایشی" icon={campaign ? 'gift' : 'messages'}><div className="support-category-grid" role="radiogroup">{(campaign ? [{ id: 'contribution', label: 'همیاری نقدی' }, { id: 'info', label: 'فقط اطلاعات' }] : [{ id: 'account', label: 'حساب' }, { id: 'membership', label: 'عضویت' }, { id: 'market', label: 'ام‌بازار' }, { id: 'other', label: 'سایر' }]).map((item) => <button type="button" role="radio" aria-checked={category === item.id} className={category === item.id ? 'selected' : ''} onClick={() => setCategory(item.id)} key={item.id}>{item.label}</button>)}</div>{campaign && <Field label="مبلغ همیاری نمایشی"><input dir="ltr" inputMode="numeric" value={amount} onChange={(event) => setAmount(event.target.value.replace(/\D/g, '').slice(0, 10))} placeholder="0" /></Field>}<Field label={campaign ? 'یادداشت اختیاری' : 'پیام'} helper="اطلاعات حساس وارد نکنید."><textarea rows={5} value={draft} onChange={(event) => setDraft(event.target.value)} placeholder="متن ساختگی…" /></Field>{!campaign && <button className="attachment-control" type="button" onClick={() => setAttachment(!attachment)}><MResalatIcon name="evidence" size={19} /><span><strong>{attachment ? 'demo-file.pdf' : 'افزودن پیوست نمایشی'}</strong><small>فایل واقعی خوانده یا بارگذاری نمی‌شود</small></span></button>}<button className="button button-primary" type="button" disabled={campaign ? !amount : !draft} onClick={() => setReview(true)}>مرور پیش از {campaign ? 'پرداخت' : 'ارسال'}</button></Panel>}</ProductExampleShell>;
+}
+
+export function SupportChat() { return <SupportComposer />; }
+export function ArbaeenPavilion() { return <SupportComposer campaign />; }
+
+export function AppDownload() {
+  const platforms: Array<{ label: string; detail: string; icon: MResalatIconName }> = [{ label: 'Android', detail: 'دریافت از منبع رسمی پس از تأیید', icon: 'product' }, { label: 'نسخه وب', detail: 'استفاده در مرورگر پشتیبانی‌شده', icon: 'grid' }];
+  return <ProductExampleShell serviceId="mresalat-app-download"><section className="app-download-hero"><div className="app-mark"><MResalatIcon name="logo" size={38} /></div><div><span className="eyebrow">اپلیکیشن ام‌رسالت</span><h2>همه خدمات در یک ورودی عمومی</h2><p>این صفحه فقط اطلاعات نصب را نشان می‌دهد و فایل تأییدنشده ارائه نمی‌کند.</p></div></section><div className="download-platform-grid">{platforms.map((platform) => <article key={platform.label}><span><MResalatIcon name={platform.icon} size={25} /></span><h3>{platform.label}</h3><p>{platform.detail}</p><button className="button button-secondary" type="button" disabled>لینک تأییدشده در دمو موجود نیست</button></article>)}</div><Panel title="پیش از نصب" eyebrow="چک‌لیست امنیتی" icon="security"><ul className="requirement-list"><li><MResalatIcon name="success" size={17} />منبع رسمی و نام ناشر را بررسی کنید</li><li><MResalatIcon name="success" size={17} />مجوزهای برنامه را بخوانید</li><li><MResalatIcon name="warning" size={17} />از فایل‌های ارسال‌شده در پیام‌ها استفاده نکنید</li></ul></Panel></ProductExampleShell>;
+}
+
+export function Memorial() { return <UnavailableProduct serviceId="memorial" notVisible />; }
+
+export const communicationScreens: Record<string, React.ComponentType> = {
+  mpayam: MPayam,
+  'mpayam-plus': MPayamPlus,
+  rasan: RasanAdvisor,
+  search: GlobalSearch,
+  map: MapExample,
+  support: SupportChat,
+  arbaeen: ArbaeenPavilion,
+  'app-download': AppDownload,
+  memorial: Memorial,
+};
