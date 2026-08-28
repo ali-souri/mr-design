@@ -58,3 +58,83 @@
 @media (max-width: 800px) { .product-example { gap: 18px; }.product-hero { min-height: 0; padding: 26px; flex-direction: column; align-items: flex-start; }.product-split, .health-record-layout { grid-template-columns: 1fr; }.product-panel { padding: 20px; }.product-stepper { display: flex; overflow-x: auto; }.product-stepper li { min-width: 150px; }.product-form-grid, .filter-grid, .filter-grid.compact { grid-template-columns: 1fr 1fr; }.provider-results, .health-provider-grid, .voucher-grid, .campaign-grid, .life-plan-grid, .finance-action-grid, .banking-service-grid, .insurance-product-grid, .icap-action-grid, .download-platform-grid, .domain-service-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }.provider-filters, .transaction-toolbar { align-items: stretch; flex-direction: column; }.provider-filters .product-field, .provider-filters .product-search { width: 100%; }.credit-overview, .examples-product-hero { grid-template-columns: 1fr; }.examples-product-hero aside { max-width: 520px; }.transaction-summary { grid-template-columns: 1fr; }.installment-list { grid-template-columns: 1fr; }.appointment-list article { grid-template-columns: auto minmax(0, 1fr) auto; }.appointment-list article > div:last-child { grid-column: 2 / -1; }.form-designer { grid-template-columns: 1fr; }.form-designer > aside { grid-template-columns: repeat(2, 1fr); }.entry-choice-grid { grid-template-columns: 1fr; }.mobile-bank-hero { grid-template-columns: 1fr; justify-items: center; padding: 28px; }.messaging-layout { grid-template-columns: 1fr; min-height: 780px; }.conversation-sidebar { max-height: 330px; border-inline-end: 0; border-bottom: 1px solid var(--border-subtle); }.map-layout { grid-template-columns: 1fr; }.map-layout > aside { border-inline-end: 0; border-bottom: 1px solid var(--border-subtle); }.map-canvas { min-height: 420px; }.domain-lead { align-items: flex-start; flex-direction: column; }.membership-lead ol { min-width: 0; width: 100%; }.relationship-orbit, .learning-compare { white-space: normal; }.product-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 560px) { .product-breadcrumb { overflow-x: auto; white-space: nowrap; padding-bottom: 4px; }.product-hero { padding: 21px; border-radius: 22px; }.product-hero h1 { font-size: 27px; }.domain-route-strip { margin-inline: -2px; }.product-panel { padding: 16px; border-radius: 18px; }.product-panel > header { align-items: flex-start; flex-wrap: wrap; }.panel-actions { width: 100%; margin: 4px 0 0; }.product-form-grid, .filter-grid, .filter-grid.compact, .provider-results, .health-provider-grid, .voucher-grid, .campaign-grid, .life-plan-grid, .finance-action-grid, .banking-service-grid, .insurance-product-grid, .icap-action-grid, .download-platform-grid, .domain-service-grid, .product-gallery { grid-template-columns: 1fr; }.product-stepper { margin-inline: -1px; }.safe-review dl div, .definition-list div { grid-template-columns: 1fr; gap: 3px; }.membership-intro { grid-template-columns: 1fr; }.device-preview { min-height: 180px; }.tracking-search { grid-template-columns: 1fr; }.signatory-list article, .supporter-table > button, .saya-form-list article { grid-template-columns: auto minmax(0, 1fr) auto; }.signatory-list article > button, .saya-form-list article > button { grid-column: 2; justify-self: start; }.organization-actions, .filter-actions, .product-dialog footer { align-items: stretch; flex-direction: column; }.otp-layout { grid-template-columns: 1fr; }.otp-states { grid-template-columns: repeat(3, auto); justify-content: start; }.digital-membership-card { min-height: 390px; padding: 22px; }.digital-membership-card dl { gap: 15px; }.transaction-toolbar .product-tabs { width: 100%; }.transaction-list > button, .activity-list article, .purchase-history article, .contribution-history article { grid-template-columns: auto minmax(0, 1fr) auto; }.transaction-list button > b, .activity-list article > b, .purchase-history article > b, .contribution-history article dl { grid-column: 2 / -1; justify-self: start; }.credit-overview { grid-template-columns: 1fr; }.credit-balance { min-height: 200px; padding: 22px; }.credit-balance strong { font-size: 28px; }.transaction-summary { gap: 8px; }.health-service-picker, .learning-search-hero, .saya-header, .banking-hub-hero, .installment-hero, .health-privacy-hero, .insurance-portal-hero, .icap-hero, .advisor-hero, .support-intro, .arbaeen-hero, .app-download-hero { align-items: flex-start; flex-direction: column; padding: 21px; }.health-service-picker .product-tabs { width: 100%; }.health-nav-grid { grid-template-columns: 1fr; }.appointment-list article { grid-template-columns: auto minmax(0, 1fr); }.appointment-list .badge, .appointment-list article > div:last-child { grid-column: 2; justify-self: start; }.record-list article { grid-template-columns: auto 1fr auto; }.record-list button { grid-column: 2; justify-self: start; }.insurance-portal-hero > div > div { flex-direction: column; }.insurance-shield { align-self: center; }.insurance-facts { grid-template-columns: 1fr; }.insurance-facts article { border-inline-end: 0; border-bottom: 1px solid var(--border-subtle); }.form-designer > aside { grid-template-columns: 1fr; }.entry-choice-grid { grid-template-columns: 1fr; }.banking-security-stamp { width: 100%; }.locked-service-list { grid-template-columns: 1fr; }.mobile-bank-hero { gap: 26px; padding: 22px; }.phone-frame { width: 185px; height: 320px; }.messaging-layout { min-height: 740px; }.conversation-sidebar { max-height: 320px; padding: 14px; }.message-history { padding: 18px 13px; }.message { max-width: 84%; }.message-composer { grid-template-columns: 1fr auto; }.message-composer > button:first-child { display: none; }.message-composer small { grid-column: 1 / -1; }.map-layout > aside { padding: 18px; }.map-canvas { min-height: 360px; }.domain-lead { padding: 23px; }.membership-lead ol { grid-template-columns: 1fr; }.relationship-orbit { flex-wrap: wrap; }.domain-service-card { grid-template-columns: auto auto minmax(0, 1fr); }.domain-service-card > svg:last-child { grid-column: 3; }.examples-product-hero { padding: 30px 24px; border-radius: 24px; }.examples-product-hero h1 { font-size: 32px; }.product-domain-card > p { min-height: 0; } }
 @media (prefers-reduced-motion: reduce) { .finance-action, .domain-service-card { transition: none; }.finance-action:hover, .domain-service-card:hover { transform: none; } }
+
+/* Unified examples discovery */
+.product-discovery { margin-top: 28px; padding: 24px; border: 1px solid var(--border-subtle); border-radius: 24px; background: linear-gradient(135deg, color-mix(in srgb, var(--action-primary) 5%, var(--surface-default)), var(--surface-default)); box-shadow: var(--shadow-sm); }
+.product-discovery > header, .gallery-section-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
+.product-discovery h2, .gallery-section-heading h2 { margin: 4px 0 2px; font-size: clamp(21px, 3vw, 28px); }
+.product-discovery header p, .gallery-section-heading p { margin: 0; color: var(--text-secondary); font-size: 11px; }
+.product-discovery output { flex: 0 0 auto; padding: 10px 13px; border: 1px solid color-mix(in srgb, var(--action-primary) 18%, var(--border-subtle)); border-radius: 13px; color: var(--text-secondary); background: var(--surface-elevated); font-size: 10px; }
+.product-discovery output strong { color: var(--action-primary); font-size: 15px; }
+.product-discovery-toolbar { display: grid; grid-template-columns: minmax(240px, 1fr) minmax(210px, auto) auto; align-items: stretch; gap: 10px; margin-top: 20px; }
+.product-discovery-search { min-width: 0; min-height: 54px; display: flex; align-items: center; gap: 10px; padding: 0 16px; border: 1px solid var(--border-subtle); border-radius: 16px; color: var(--text-muted); background: var(--surface-input); transition: border-color var(--motion-fast), box-shadow var(--motion-fast); }
+.product-discovery-search:focus-within { border-color: var(--accent-cyan); box-shadow: 0 0 0 4px rgb(22 168 183 / 10%); }
+.product-discovery-search input { width: 100%; min-width: 0; height: 100%; border: 0; outline: 0; color: var(--text-primary); background: transparent; font: inherit; font-size: 12px; }
+.product-discovery-search input::placeholder { color: var(--text-muted); }
+.product-discovery-sort { min-height: 54px; display: grid; grid-template-columns: auto minmax(135px, 1fr); align-items: center; gap: 8px; padding: 0 13px; border: 1px solid var(--border-subtle); border-radius: 16px; color: var(--text-muted); background: var(--surface-elevated); font-size: 9px; }
+.product-discovery-sort select { min-width: 0; height: 36px; border: 0; outline: 0; color: var(--text-primary); background: transparent; font: inherit; font-size: 10px; cursor: pointer; }
+.product-discovery-reset { min-height: 54px; white-space: nowrap; }
+.product-discovery-reset:disabled { opacity: .45; cursor: not-allowed; }
+.product-domain-filters { display: flex; gap: 7px; padding: 4px 2px 8px; margin-top: 13px; overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-width: thin; }
+.product-domain-filters button { min-height: 38px; flex: 0 0 auto; display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px; border: 1px solid var(--border-subtle); border-radius: var(--radius-pill); color: var(--text-secondary); background: var(--surface-elevated); cursor: pointer; font: inherit; font-size: 10px; }
+.product-domain-filters button small { min-width: 21px; padding: 1px 5px; border-radius: var(--radius-pill); color: var(--text-muted); background: var(--surface-secondary); text-align: center; font-size: 8px; }
+.product-domain-filters button.active { color: white; border-color: var(--action-primary); background: var(--action-primary); }
+.product-domain-filters button.active small { color: var(--action-primary); background: white; }
+.product-gallery-section, .product-route-index { margin-top: 46px; scroll-margin-top: 88px; }
+.gallery-section-heading > div { min-width: 0; }
+.gallery-section-heading > a, .gallery-section-heading > span { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 5px; color: var(--action-primary); font-size: 10px; font-weight: 700; }
+.product-domain-card > header > .mresalat-service-icon { border-radius: 14px; }
+.product-domain-card > header > .status-badge { min-width: 0; max-width: 100%; height: auto; white-space: normal; overflow-wrap: anywhere; text-align: center; justify-content: center; line-height: 1.4; }
+.product-route-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 13px; margin-top: 20px; }
+.product-route-card { --domain-soft: color-mix(in srgb, var(--domain-accent) 9%, var(--surface-default)); min-width: 0; min-height: 230px; display: flex; flex-direction: column; gap: 12px; padding: 18px; border: 1px solid var(--border-subtle); border-radius: 20px; background: var(--surface-default); box-shadow: var(--shadow-sm); transition: transform var(--motion-fast), border-color var(--motion-fast), box-shadow var(--motion-fast); }
+.product-route-card:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--domain-accent) 55%, var(--border-subtle)); box-shadow: var(--shadow-md); }
+.product-route-card > header { min-width: 0; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 11px; }
+.product-route-card > header > div { min-width: 0; }
+.product-route-card h3 { margin: 0; overflow-wrap: anywhere; font-size: 14px; line-height: 1.65; }
+.product-route-card header small { display: block; overflow: hidden; color: var(--domain-accent); font-size: 8px; text-overflow: ellipsis; white-space: nowrap; }
+.product-route-card > header > svg { color: var(--text-muted); }
+.route-product-identity { min-width: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; color: var(--text-muted); font-size: 9px; }
+.route-product-identity span:first-child { color: var(--domain-accent); font-weight: 750; }
+.route-product-identity i { width: 4px; height: 4px; border-radius: 50%; background: var(--border-strong); }
+.product-route-card > p { margin: 0; color: var(--text-secondary); font-size: 10px; line-height: 1.8; }
+.product-route-card > footer { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 9px; padding-top: 12px; margin-top: auto; border-top: 1px solid var(--border-subtle); }
+.product-route-card footer > span { min-width: 0; display: flex; flex-wrap: wrap; gap: 5px; }
+.product-route-card .status-badge { min-width: 0; max-width: 100%; height: auto; padding-inline: 8px; white-space: normal; overflow-wrap: anywhere; text-align: center; justify-content: center; line-height: 1.4; }
+.product-route-card footer strong { color: var(--domain-accent); font-size: 9px; }
+.product-discovery-empty { min-height: 240px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 28px; margin-top: 20px; border: 1px dashed var(--border-strong); border-radius: 20px; color: var(--text-muted); background: var(--surface-secondary); text-align: center; }
+.product-discovery-empty h3 { margin: 6px 0 0; color: var(--text-primary); }
+.product-discovery-empty p { margin: 0 0 8px; color: var(--text-secondary); font-size: 10px; }
+
+@media (max-width: 1050px) {
+  .product-route-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .product-discovery-toolbar { grid-template-columns: minmax(220px, 1fr) minmax(200px, auto); }
+  .product-discovery-reset { grid-column: 1 / -1; justify-self: start; min-height: 42px; }
+}
+
+@media (max-width: 800px) {
+  .product-discovery { padding: 20px; }
+  .product-discovery > header, .gallery-section-heading { align-items: flex-start; flex-direction: column; gap: 12px; }
+  .product-discovery-toolbar { grid-template-columns: 1fr 1fr; }
+  .product-discovery-search { grid-column: 1 / -1; }
+  .product-discovery-reset { grid-column: auto; justify-self: stretch; }
+  .product-gallery-section, .product-route-index { margin-top: 38px; }
+}
+
+@media (max-width: 560px) {
+  .product-discovery { padding: 17px; border-radius: 20px; }
+  .product-discovery output { width: 100%; text-align: center; }
+  .product-discovery-toolbar { grid-template-columns: 1fr; }
+  .product-discovery-search, .product-discovery-sort, .product-discovery-reset { grid-column: 1; width: 100%; }
+  .product-discovery-sort { grid-template-columns: 85px minmax(0, 1fr); }
+  .product-domain-filters { margin-inline: -17px; padding-inline: 17px; }
+  .product-route-grid { grid-template-columns: 1fr; }
+  .product-route-card { min-height: 0; padding: 16px; }
+  .product-route-card > footer { align-items: flex-start; flex-direction: column; }
+  .product-domain-card > header { grid-template-columns: auto minmax(0, 1fr); }
+  .product-domain-card > header > .status-badge { grid-column: 2; justify-self: start; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-route-card { transition: none; }
+  .product-route-card:hover { transform: none; }
+}

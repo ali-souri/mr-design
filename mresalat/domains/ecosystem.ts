@@ -1,6 +1,6 @@
 import type { MResalatIconName } from '@/mresalat/core/MResalatIcon';
 
-export type ServiceSourceType = 'live-mresalat' | 'project-documented' | 'conceptual';
+export type ServiceSourceType = 'live-mresalat' | 'project-documented' | 'conceptual' | 'designed-fallback';
 export type ServiceIdentitySource = 'official-asset' | 'mresalat-system-designed';
 
 export type MResalatServiceAction = {
@@ -204,5 +204,21 @@ export const conceptualServices: MResalatService[] = [{
   example: { label: 'طبقه‌بندی', value: 'مفهومی / مستند پروژه', detail: 'با سرویس‌های جاری صفحه عمومی مخلوط نشده است.', isMock: true },
   source: { type: 'project-documented', reference: '/seller', reviewedAt: '2026-08-22', verification: 'login-visible-only', note: 'در بازبینی صفحه عمومی فعلی پیدا نشد.' },
 }];
+
+export const designedFallbackServices: MResalatService[] = [{
+  id: 'communication-access', slug: 'communication-access', titleFa: 'ارتباط و دسترسی', titleEn: 'communication-access', category: 'communication',
+  description: 'هویت گروهی برای مسیرهای ارتباطی و دسترسی که نشان رسمی مستقل و قابل اتکایی در دارایی‌های پروژه ندارند.',
+  identity: { source: 'mresalat-system-designed', glyph: 'M+', accent: '#b8731a' },
+  actions: [
+    { label: 'جستجو', icon: 'search', evidence: 'homepage-visible' }, { label: 'نقشه', icon: 'location', evidence: 'homepage-visible' },
+    { label: 'پشتیبانی و دسترسی', icon: 'support', evidence: 'homepage-visible' },
+  ],
+  assistantPrompt: 'برای جستجو، نقشه یا یکی از مسیرهای دسترسی راهنمایی می‌خواهید؟',
+  example: { label: 'هویت گروهی', value: 'مسیرهای ارتباط و دسترسی', detail: 'این نشان، fallback طراحی سیستم است و لوگوی رسمی یک محصول مستقل نیست.', isMock: true },
+  source: { type: 'designed-fallback', reference: 'MResalat System identity fallback', reviewedAt: '2026-08-22', verification: 'public-visible', note: 'برای مسیرهای بدون نشان رسمی مستقل استفاده می‌شود.' },
+}];
+
+export const ecosystemIdentityServices = [...ecosystemServices, ...conceptualServices, ...designedFallbackServices];
+export const ecosystemServiceById = Object.fromEntries(ecosystemIdentityServices.map((service) => [service.id, service])) as Record<string, MResalatService>;
 
 export type EcosystemService = MResalatService;

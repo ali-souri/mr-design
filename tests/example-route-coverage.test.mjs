@@ -3,7 +3,9 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import test from 'node:test';
 import { serviceCatalog } from '../mresalat/domains/service-catalog.ts';
+import { ecosystemServiceById } from '../mresalat/domains/ecosystem.ts';
 import { exampleDomains, exampleRoutes, routeSlug } from '../mresalat/examples/product/example-route-registry.ts';
+import { filterServiceDiscoveryItems, serviceDiscoveryItems, serviceIdentityCoverage, sortServiceDiscoveryItems } from '../mresalat/examples/product/service-discovery.ts';
 
 const repositoryRoot = path.resolve(import.meta.dirname, '..');
 const productSourceRoot = path.join(repositoryRoot, 'mresalat', 'examples');
@@ -56,6 +58,66 @@ test('every domain has a landing page and every mapped route resolves through an
     assert.ok(exampleRoutes.some((route) => route.domain === domain.key), `${domain.key} needs mapped services`);
   }
   for (const route of exampleRoutes) assert.ok(mappedRouteHasPage(route), `${route.serviceId} does not resolve through an app route: ${route.href}`);
+});
+
+test('examples discovery exposes all 69 routes with valid ecosystem identities', () => {
+  assert.equal(serviceDiscoveryItems.length, 69);
+  assert.deepEqual(new Set(serviceDiscoveryItems.map((item) => item.service.id)), new Set(serviceCatalog.map((service) => service.id)));
+  for (const item of serviceDiscoveryItems) {
+    assert.equal(item.route.href, item.service.demoHref, `${item.service.id} must keep its direct example route`);
+    assert.equal(item.identity, ecosystemServiceById[item.route.ecosystemServiceId], `${item.service.id} must resolve its registered ecosystem identity`);
+    if (item.identity.identity.source === 'official-asset') {
+      assert.ok(item.identity.identity.asset, `${item.identity.id} needs its official asset path`);
+      assert.ok(existsSync(path.join(repositoryRoot, 'public', item.identity.identity.asset.replace(/^\//, ''))), `${item.identity.id} official asset must exist`);
+    }
+  }
+  assert.deepEqual(serviceIdentityCoverage, { official: 60, designedFallback: 9 });
+});
+
+test('discovery search finds representative actions in all 12 product domains', () => {
+  const cases = [
+    ['عضویت', 'membership', 'individual-membership'],
+    ['حامی', 'mhami', 'my-supporters'],
+    ['سفارش', 'mbazar', 'mbazar-orders'],
+    ['ام‌آموزش', 'learning', 'mamouzesh'],
+    ['برداشت اعتبار', 'mhesam', 'credit-withdrawal'],
+    ['همیاری', 'heavenly-resalat', 'my-contributions'],
+    ['نوبت', 'msalamat', 'my-appointments'],
+    ['بیمه بدنه', 'mbime', 'comprehensive-insurance'],
+    ['سایا', 'auxiliary', 'saya'],
+    ['رهیار', 'rahyar', 'your-rahyar'],
+    ['SATNA', 'banking', 'satna-transfer'],
+    ['ام‌پیام', 'communication', 'mpayam'],
+  ];
+  for (const [query, domain, serviceId] of cases) {
+    const results = filterServiceDiscoveryItems(query);
+    assert.ok(results.some((item) => item.route.domain === domain && item.service.id === serviceId), `${query} must find ${serviceId}`);
+  }
+  assert.ok(filterServiceDiscoveryItems('ساتنا').some((item) => item.service.id === 'satna-transfer'));
+  assert.ok(filterServiceDiscoveryItems('M-Hesam').some((item) => item.service.id === 'credit-withdrawal'));
+  assert.equal(sortServiceDiscoveryItems(filterServiceDiscoveryItems('بیمه بدنه'), 'audit', 'بیمه بدنه')[0].service.id, 'comprehensive-insurance');
+  assert.equal(sortServiceDiscoveryItems(filterServiceDiscoveryItems('نوبت'), 'audit', 'نوبت')[0].service.id, 'my-appointments');
+});
+
+test('domain filters reduce results and all discovery sorts are deterministic', () => {
+  const expectedCounts = [4, 7, 11, 2, 10, 2, 4, 5, 4, 2, 9, 9];
+  assert.deepEqual(exampleDomains.map((domain) => filterServiceDiscoveryItems('', domain.key).length), expectedCounts);
+  for (const sort of ['audit', 'fa', 'en', 'count-desc', 'count-asc']) {
+    const first = sortServiceDiscoveryItems(serviceDiscoveryItems, sort).map((item) => item.service.id);
+    const second = sortServiceDiscoveryItems(serviceDiscoveryItems, sort).map((item) => item.service.id);
+    assert.deepEqual(first, second, `${sort} sort must be deterministic`);
+    assert.equal(new Set(first).size, 69, `${sort} sort must preserve all routes`);
+  }
+});
+
+test('ProductGallery contains the unified search, domain filters, sort and service index', () => {
+  const source = readFileSync(path.join(productSourceRoot, 'product', 'ProductGallery.tsx'), 'utf8');
+  assert.match(source, /product-discovery-search/);
+  assert.match(source, /product-domain-filters/);
+  assert.match(source, /product-discovery-sort/);
+  assert.match(source, /product-route-grid/);
+  assert.match(source, /<MResalatServiceIcon service=\{identity\}/);
+  assert.doesNotMatch(source, /<ServiceExamples/);
 });
 
 test('every new product experience has an explicit App Router page', () => {

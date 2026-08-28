@@ -15,9 +15,12 @@ export type ExampleDomainKey =
 export type ExampleRoute = {
   serviceId: string;
   domain: ExampleDomainKey;
+  ecosystemServiceId: string;
   href: string;
   source: 'product-example' | 'existing-mbazar';
 };
+
+type ExampleRouteSeed = Omit<ExampleRoute, 'ecosystemServiceId'>;
 
 export type ExampleDomain = {
   key: ExampleDomainKey;
@@ -25,25 +28,54 @@ export type ExampleDomain = {
   titleEn: string;
   description: string;
   href: string;
+  ecosystemServiceId: string;
   accent: 'blue' | 'cyan' | 'violet' | 'amber' | 'green' | 'rose';
 };
 
 export const exampleDomains: ExampleDomain[] = [
-  { key: 'membership', titleFa: 'عضویت', titleEn: 'Membership', description: 'هویت، سرپرستی، امضاداران و پیگیری درخواست', href: '/examples/membership', accent: 'blue' },
-  { key: 'mhami', titleFa: 'ام‌حامی و انجمن', titleEn: 'M-Hami + Supporters', description: 'حامیان، عضویت انجمن، وام و ارزیابی مجوز', href: '/examples/mhami', accent: 'violet' },
-  { key: 'mbazar', titleFa: 'ام‌بازار و SAT', titleEn: 'M-Bazar + SAT', description: 'کشف، خرید، سفارش، اقساط و خدمات پس از خرید', href: '/examples/mbazar', accent: 'amber' },
-  { key: 'learning', titleFa: 'یادگیری', titleEn: 'Learning', description: 'جستجوی مرکز و مرور ارائه‌دهندگان آموزشی', href: '/examples/learning', accent: 'cyan' },
-  { key: 'mhesam', titleFa: 'ام‌حسام و اعتبار', titleEn: 'M-Hesam + Credit', description: 'تراکنش، اعتبار، بن، MQR و خدمات اقساطی', href: '/examples/mhesam', accent: 'green' },
-  { key: 'heavenly-resalat', titleFa: 'رسالت آسمانی', titleEn: 'Contributions', description: 'کمپین‌های همیاری و سابقه مشارکت نمایشی', href: '/examples/heavenly-resalat', accent: 'rose' },
-  { key: 'msalamat', titleFa: 'ام‌سلامت', titleEn: 'M-Salamat', description: 'ارائه‌دهنده، نوبت و دسترسی حریم‌محور به پرونده', href: '/examples/msalamat', accent: 'cyan' },
-  { key: 'mbime', titleFa: 'ام‌بیمه', titleEn: 'M-Bime', description: 'محصولات خودرو، موتورسیکلت و بیمه عمر', href: '/examples/mbime', accent: 'blue' },
-  { key: 'auxiliary', titleFa: 'سامانه‌های مکمل', titleEn: 'Auxiliary systems', description: 'سایا، ام‌اتکا، مرآت و آیکاپ', href: '/examples/auxiliary', accent: 'violet' },
-  { key: 'rahyar', titleFa: 'رهیار', titleEn: 'Rahyar', description: 'بازنمایی صادقانه وضعیت دسترسی‌ناپذیر ممیزی', href: '/examples/rahyar', accent: 'rose' },
-  { key: 'banking', titleFa: 'پیشخوان و بانکداری', titleEn: 'Virtual Counter + Banking', description: 'درخواست‌ها، درگاه‌های بانکی و راهنمای همراه‌بانک', href: '/examples/banking', accent: 'green' },
-  { key: 'communication', titleFa: 'ارتباط و دسترسی', titleEn: 'Communication + Access', description: 'پیام، مشاور، جستجو، نقشه و پشتیبانی', href: '/examples/communication', accent: 'amber' },
+  { key: 'membership', titleFa: 'عضویت', titleEn: 'Membership', description: 'هویت، سرپرستی، امضاداران و پیگیری درخواست', href: '/examples/membership', ecosystemServiceId: 'membership', accent: 'blue' },
+  { key: 'mhami', titleFa: 'ام‌حامی و انجمن', titleEn: 'M-Hami + Supporters', description: 'حامیان، عضویت انجمن، وام و ارزیابی مجوز', href: '/examples/mhami', ecosystemServiceId: 'mhami', accent: 'violet' },
+  { key: 'mbazar', titleFa: 'ام‌بازار و SAT', titleEn: 'M-Bazar + SAT', description: 'کشف، خرید، سفارش، اقساط و خدمات پس از خرید', href: '/examples/mbazar', ecosystemServiceId: 'mbazar', accent: 'amber' },
+  { key: 'learning', titleFa: 'یادگیری', titleEn: 'Learning', description: 'جستجوی مرکز و مرور ارائه‌دهندگان آموزشی', href: '/examples/learning', ecosystemServiceId: 'mamoozesh', accent: 'cyan' },
+  { key: 'mhesam', titleFa: 'ام‌حسام و اعتبار', titleEn: 'M-Hesam + Credit', description: 'تراکنش، اعتبار، بن، MQR و خدمات اقساطی', href: '/examples/mhesam', ecosystemServiceId: 'mhesam', accent: 'green' },
+  { key: 'heavenly-resalat', titleFa: 'رسالت آسمانی', titleEn: 'Contributions', description: 'کمپین‌های همیاری و سابقه مشارکت نمایشی', href: '/examples/heavenly-resalat', ecosystemServiceId: 'heavenly-mission', accent: 'rose' },
+  { key: 'msalamat', titleFa: 'ام‌سلامت', titleEn: 'M-Salamat', description: 'ارائه‌دهنده، نوبت و دسترسی حریم‌محور به پرونده', href: '/examples/msalamat', ecosystemServiceId: 'msalamat', accent: 'cyan' },
+  { key: 'mbime', titleFa: 'ام‌بیمه', titleEn: 'M-Bime', description: 'محصولات خودرو، موتورسیکلت و بیمه عمر', href: '/examples/mbime', ecosystemServiceId: 'mbime', accent: 'blue' },
+  { key: 'auxiliary', titleFa: 'سامانه‌های مکمل', titleEn: 'Auxiliary systems', description: 'سایا، ام‌اتکا، مرآت و آیکاپ', href: '/examples/auxiliary', ecosystemServiceId: 'saya', accent: 'violet' },
+  { key: 'rahyar', titleFa: 'رهیار', titleEn: 'Rahyar', description: 'بازنمایی صادقانه وضعیت دسترسی‌ناپذیر ممیزی', href: '/examples/rahyar', ecosystemServiceId: 'rahyar', accent: 'rose' },
+  { key: 'banking', titleFa: 'پیشخوان و بانکداری', titleEn: 'Virtual Counter + Banking', description: 'درخواست‌ها، درگاه‌های بانکی و راهنمای همراه‌بانک', href: '/examples/banking', ecosystemServiceId: 'pishkhan', accent: 'green' },
+  { key: 'communication', titleFa: 'ارتباط و دسترسی', titleEn: 'Communication + Access', description: 'پیام، مشاور، جستجو، نقشه و پشتیبانی', href: '/examples/communication', ecosystemServiceId: 'mpayam', accent: 'amber' },
 ];
 
-export const exampleRoutes: ExampleRoute[] = [
+const defaultIdentityByDomain: Record<ExampleDomainKey, string> = {
+  membership: 'membership',
+  mhami: 'mhami',
+  mbazar: 'mbazar',
+  learning: 'mamoozesh',
+  mhesam: 'mhesam',
+  'heavenly-resalat': 'heavenly-mission',
+  msalamat: 'msalamat',
+  mbime: 'mbime',
+  auxiliary: 'auxiliary-systems',
+  rahyar: 'rahyar',
+  banking: 'pishkhan',
+  communication: 'communication-access',
+};
+
+const identityOverridesByServiceId: Record<string, string> = {
+  'association-membership': 'supporters-association',
+  'zero-fee-loan-request': 'supporters-association',
+  'zero-fee-loan-tracking': 'supporters-association',
+  'association-membership-card': 'supporters-association',
+  'sat-booth-purchase': 'sat',
+  saya: 'saya',
+  mpayam: 'mpayam',
+  'mpayam-plus': 'mpayam',
+  'rasan-advisor': 'advisor',
+  'support-chat': 'advisor',
+};
+
+const exampleRouteSeeds: ExampleRouteSeed[] = [
   { serviceId: 'individual-membership', domain: 'membership', href: '/examples/membership/individual', source: 'product-example' },
   { serviceId: 'under-18-membership', domain: 'membership', href: '/examples/membership/under-18', source: 'product-example' },
   { serviceId: 'organization-membership', domain: 'membership', href: '/examples/membership/organization', source: 'product-example' },
@@ -114,6 +146,11 @@ export const exampleRoutes: ExampleRoute[] = [
   { serviceId: 'mresalat-app-download', domain: 'communication', href: '/examples/communication/app-download', source: 'product-example' },
   { serviceId: 'memorial', domain: 'communication', href: '/examples/communication/memorial', source: 'product-example' },
 ];
+
+export const exampleRoutes: ExampleRoute[] = exampleRouteSeeds.map((route) => ({
+  ...route,
+  ecosystemServiceId: identityOverridesByServiceId[route.serviceId] ?? defaultIdentityByDomain[route.domain],
+}));
 
 export const exampleRouteByServiceId = Object.fromEntries(exampleRoutes.map((route) => [route.serviceId, route])) as Record<string, ExampleRoute>;
 export const exampleDomainByKey = Object.fromEntries(exampleDomains.map((domain) => [domain.key, domain])) as Record<ExampleDomainKey, ExampleDomain>;
