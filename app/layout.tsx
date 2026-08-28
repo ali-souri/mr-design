@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   icons: { icon: '/brand/mresalat-logo.svg' },
 };
 
-const themeScript = `(function(){try{var p=localStorage.getItem('mresalat-theme')||'system';var d=p==='dark'||(p==='system'&&matchMedia('(prefers-color-scheme:dark)').matches);document.documentElement.dataset.theme=d?'dark':'light';document.documentElement.style.colorScheme=d?'dark':'light'}catch(e){document.documentElement.dataset.theme='light'}})();`;
+const themeScript = `(function(){try{var q=new URLSearchParams(location.search).get('catalog-theme');var p=q==='light'||q==='dark'?q:(localStorage.getItem('mresalat-theme')||'system');var d=p==='dark'||(p==='system'&&matchMedia('(prefers-color-scheme:dark)').matches);document.documentElement.dataset.theme=d?'dark':'light';document.documentElement.style.colorScheme=d?'dark':'light'}catch(e){document.documentElement.dataset.theme='light'}})();`;
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
