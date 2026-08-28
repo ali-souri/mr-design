@@ -47,7 +47,7 @@ export function ServiceExamples() {
         <footer className="service-source"><MResalatIcon name="evidence" size={16} /><span><strong>منبع عملکرد</strong><small>{selected.source.reference} · بازبینی {selected.source.reviewedAt}</small></span><Badge tone={selected.identity.source === 'official-asset' ? 'info' : 'neutral'}>{selected.identity.source === 'official-asset' ? 'دارایی رسمی' : 'طراحی MResalat System'}</Badge></footer>
       </article>
 
-      <section className="conceptual-examples" aria-labelledby="conceptual-services"><div><span className="eyebrow">Conceptual / project-documented</span><h2 id="conceptual-services">نمونه‌های مفهومی و مستند پروژه</h2><p>این بخش عمداً از خدمات جاری جداست.</p></div>{conceptualServices.map((service) => <article key={service.id}><MResalatServiceIcon service={service} size={48} /><div><strong>{service.titleFa}</strong><p>{service.description}</p></div><Badge tone="warning">غیرقابل تأیید در سایت عمومی</Badge></article>)}</section>
+      <section className="conceptual-examples" aria-labelledby="conceptual-services"><div><span className="eyebrow">Conceptual / project-documented</span><h2 id="conceptual-services">نمونه‌های مفهومی و مستند پروژه</h2><p>این بخش عمداً از خدمات جاری جداست.</p></div>{conceptualServices.map((service) => <article key={service.id}><MResalatServiceIcon service={service} size={48} /><div><strong>{service.titleFa}</strong><p>{service.description}</p></div><Badge tone="warning" wrap="multiline">غیرقابل تأیید در سایت عمومی</Badge></article>)}</section>
     </>
   );
 }

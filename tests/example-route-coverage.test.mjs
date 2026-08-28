@@ -155,13 +155,25 @@ test('sensitive actions stay behind visible, non-submitting boundaries', () => {
   assert.match(communicationSource, /disabled aria-label="ارسال پیام نمایشی"/);
 });
 
-test('long RTL badges use scoped responsive containment without changing global pills', () => {
+test('standard and multiline badges preserve readable RTL wrapping contracts', () => {
   const globalCss = readFileSync(path.join(repositoryRoot, 'app', 'globals.css'), 'utf8');
   const exampleCss = readFileSync(path.join(repositoryRoot, 'app', 'product-examples.css'), 'utf8');
-  assert.match(globalCss, /\.status-badge[^}]*white-space:\s*nowrap/);
+  const primitiveSource = readFileSync(path.join(repositoryRoot, 'mresalat', 'core', 'primitives.tsx'), 'utf8');
+  const learningSource = readFileSync(path.join(productSourceRoot, 'learning', 'LearningExamples.tsx'), 'utf8');
+  const serviceSource = readFileSync(path.join(repositoryRoot, 'mresalat', 'examples', 'ServiceExamples.tsx'), 'utf8');
+  const gallerySource = readFileSync(path.join(productSourceRoot, 'product', 'ProductGallery.tsx'), 'utf8');
+
+  assert.match(globalCss, /\.status-badge[^}]*inline-size:\s*max-content[^}]*flex:\s*0 0 auto[^}]*white-space:\s*nowrap[^}]*overflow-wrap:\s*normal/);
+  assert.match(globalCss, /\.status-badge-multiline[^}]*white-space:\s*normal[^}]*word-break:\s*normal[^}]*overflow-wrap:\s*break-word/);
+  assert.match(primitiveSource, /wrap\?: 'standard' \| 'multiline'/);
+  assert.match(primitiveSource, /status-badge-multiline/);
   assert.match(exampleCss, /\.health-provider-grid article header[^}]*flex-wrap:\s*wrap/);
-  assert.match(exampleCss, /\.health-provider-grid article header \.status-badge[^}]*white-space:\s*normal[^}]*overflow-wrap:\s*anywhere/);
-  assert.match(exampleCss, /\.product-example \.status-badge[^}]*flex-shrink:\s*0[^}]*max-width:\s*100%/);
+  assert.match(exampleCss, /\.health-provider-grid article header > \.product-card-header-icon[^}]*flex:\s*0 0 auto/);
+  assert.doesNotMatch(`${globalCss}\n${exampleCss}`, /\.status-badge[^\{]*\{[^}]*overflow-wrap:\s*anywhere/);
+  assert.doesNotMatch(`${globalCss}\n${exampleCss}`, /\.status-badge[^\{]*\{[^}]*word-break:\s*break-all/);
+  assert.match(learningSource, /className="product-card-header-icon"[^>]*><MResalatIcon/);
+  assert.match(serviceSource, /<Badge tone="warning" wrap="multiline">غیرقابل تأیید در سایت عمومی<\/Badge>/);
+  assert.match(gallerySource, /<Badge tone="neutral">\{routes\.length\.toLocaleString\('fa-IR'\)\} مسیر<\/Badge>/);
   assert.match(exampleCss, /\.external-product-gate > \.status-badge\.status-badge-warning/);
   assert.match(exampleCss, /\.health-privacy-hero > \.status-badge\.status-badge-success/);
 });
