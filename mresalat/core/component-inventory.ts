@@ -1,5 +1,5 @@
 export type ComponentInventoryItem = {
-  category: 'Foundations' | 'Core' | 'Navigation' | 'AI' | 'RAG / Trust' | 'Journeys' | 'Secure' | 'Templates' | 'Motion' | 'Marketplace' | 'Documentation';
+  category: 'Foundations' | 'Core' | 'Navigation' | 'AI' | 'RAG / Trust' | 'Journeys' | 'Secure' | 'Templates' | 'Motion' | 'Marketplace' | 'Catalog' | 'Product Examples' | 'Documentation';
   name: string;
   purpose: string;
   variants: string[];
@@ -69,6 +69,38 @@ export const componentInventory: ComponentInventoryItem[] = [
   { category: 'Journeys', name: 'NextBestAction', purpose: 'نمایش اقدام اولویت‌دار متناسب با زمینه', variants: ['info', 'warning', 'success'], states: ['approval', 'expiry', 'journey'] },
   { category: 'Navigation', name: 'ChildSelector', purpose: 'انتخاب زیرزمینه فرزند در نقش والد', variants: ['buttons', 'route links'], states: ['Arya', 'Sara', 'selected'] },
   { category: 'Journeys', name: 'CrossServiceContextMarker', purpose: 'حفظ نشان زمینه میان خدمات اکوسیستم', variants: ['youth goal', 'organization credit'], states: ['active'] },
+  { category: 'Catalog', name: 'ServiceSurface', purpose: 'قاب canonical برای کارت و صفحه جزئیات مسیر ممیزی‌شده', variants: ['compact', 'detail'], states: ['light', 'dark', 'L0–L3'] },
+  { category: 'Catalog', name: 'ServiceHeader', purpose: 'عنوان دوزبانه، فصل، دامنه و سطح ریسک', variants: ['compact', 'detail'], states: ['FA primary', 'RTL/LTR mixed'] },
+  { category: 'Catalog', name: 'ServiceStatusBadge', purpose: 'نمایش متنی وضعیت شواهد مستقل از مجوز اقدام', variants: ['compact', 'descriptive'], states: ['authenticated', 'public', 'safe stop', 'gated', 'unavailable', 'not visible'] },
+  { category: 'Catalog', name: 'SafeStopNotice', purpose: 'شرح فارسی و انگلیسی مرز توقف هر دمو', variants: ['L0–L3'], states: ['informational', 'controlled', 'sensitive'] },
+  { category: 'Catalog', name: 'ExternalLoginGate', purpose: 'معرفی ورود مستقل بدون دریافت اطلاعات ورود', variants: ['service', 'medical record'], states: ['gated', 'disabled'] },
+  { category: 'Catalog', name: 'UnavailableServiceState', purpose: 'بازنمایی شواهد خطا یا عدم مشاهده بدون جعل گردش‌کار', variants: ['unavailable', 'not visible'], states: ['404 evidence', 'audited absence'] },
+  { category: 'Catalog', name: 'SensitiveDataPlaceholder', purpose: 'جانگهدار پوشانده برای داده شخصی، مالی و سلامت', variants: ['two to three lines'], states: ['redacted', 'synthetic', 'loading'] },
+  { category: 'Catalog', name: 'ServiceFilterBar', purpose: 'فیلتر پوشش فصل، دامنه، وضعیت و ریسک', variants: ['desktop sticky', 'mobile stacked'], states: ['default', 'filtered', 'empty'] },
+  { category: 'Catalog', name: 'EmptyServiceState', purpose: 'حالت خالی بازیابی‌پذیر برای فهرست و جستجو', variants: ['catalog', 'domain list'], states: ['empty', 'no results'] },
+  { category: 'Catalog', name: 'ServiceFormShell', purpose: 'فرم نمایشی با برچسب، کمک، خطا و توقف امن', variants: ['membership', 'finance', 'insurance', 'banking', 'auxiliary'], states: ['idle', 'error', 'reviewed', 'blocked submit'] },
+  { category: 'Catalog', name: 'ServiceActionSummary', purpose: 'مرور اثر، ریسک و مرز تأیید برای L2 و L3', variants: ['controlled', 'sensitive'], states: ['read only', 'confirmation disabled'] },
+  { category: 'Catalog', name: 'CatalogDomainSurface', purpose: 'ترکیب پیکربندی‌محور خانواده‌های ۱۲ فصل', variants: ['membership', 'support', 'marketplace', 'learning', 'finance', 'contribution', 'health', 'insurance', 'auxiliary', 'rahyar', 'banking', 'communication'], states: ['all audited evidence states'] },
+  { category: 'Catalog', name: 'CatalogExplorer', purpose: 'نمایش و ردیابی همه ۶۹ مسیر در فصل‌های ممیزی', variants: ['all chapters', 'filtered'], states: ['69/69', 'empty result'] },
+  { category: 'Catalog', name: 'CatalogStateGallery', purpose: 'مرجع حالت‌های بارگذاری، خالی، درگاه و خطا', variants: ['state matrix'], states: ['loading', 'empty', 'gated', 'unavailable'] },
+  { category: 'Product Examples', name: 'ProductGallery', purpose: 'نمایه بصری ۱۲ دامنه و ۶۹ تجربه محصول', variants: ['desktop gallery', 'mobile stack'], states: ['all domains', 'existing M-Bazar'] },
+  { category: 'Product Examples', name: 'ProductExampleShell', purpose: 'قاب مسیر محصول با ناوبری دامنه و مرز توقف ممیزی', variants: ['L0–L3', 'twelve domains'], states: ['interactive', 'gated', 'unavailable'] },
+  { category: 'Product Examples', name: 'DomainLanding', purpose: 'صفحه ورودی دامنه با مسیرهای قابل مرور', variants: ['gallery', 'domain lead'], states: ['all routes linked'] },
+  { category: 'Product Examples', name: 'DemoBoundary', purpose: 'مرز توقف متصل به رکورد ممیزی هر تجربه', variants: ['informational', 'sensitive'], states: ['L0–L3'] },
+  { category: 'Product Examples', name: 'Panel', purpose: 'بخش محتوایی مشترک برای ترکیب‌های دامنه‌ای', variants: ['form', 'list', 'guide', 'dashboard'], states: ['default', 'with actions'] },
+  { category: 'Product Examples', name: 'Stepper', purpose: 'نمایش معنایی مرحله جاری در فرایندهای چندگامی', variants: ['three step', 'four step'], states: ['upcoming', 'current', 'done'] },
+  { category: 'Product Examples', name: 'SegmentedTabs', purpose: 'تب و تغییر نمای دسترس‌پذیر برای فهرست‌ها و داشبوردها', variants: ['inline', 'scrollable mobile'], states: ['selected', 'unselected'] },
+  { category: 'Product Examples', name: 'SearchBox', purpose: 'جستجوی محلی داده‌های ساختگی با برچسب معنایی', variants: ['provider', 'transaction', 'conversation', 'global'], states: ['empty', 'query', 'no results'] },
+  { category: 'Product Examples', name: 'SafeReview', purpose: 'خلاصه اثر و توقف پیش از ارسال، پرداخت یا تعهد', variants: ['membership', 'finance', 'banking', 'contribution'], states: ['review', 'disabled execution'] },
+  { category: 'Product Examples', name: 'ExternalProductGate', purpose: 'مرز ورود مستقل بدون تقلید credential یا عملیات داخلی', variants: ['association', 'Merat', 'banking', 'medical record'], states: ['gated', 'disabled'] },
+  { category: 'Product Examples', name: 'UnavailableProduct', purpose: 'صفحه محصول برای وضعیت مشاهده‌شده 404 یا عدم مشاهده', variants: ['404', 'not visible'], states: ['retry', 'back', 'support'] },
+  { category: 'Product Examples', name: 'ProviderSearch', purpose: 'جستجو، فیلتر و پیش‌نمایش ارائه‌دهنده آموزشی', variants: ['M-Amouzesh', 'M-Donap'], states: ['results', 'empty', 'preview'] },
+  { category: 'Product Examples', name: 'AmountPad', purpose: 'ورودی مبلغ کاملاً محلی با پیشنهادهای ساختگی', variants: ['withdrawal', 'donation'], states: ['empty', 'entered'] },
+  { category: 'Product Examples', name: 'InstallmentDashboard', purpose: 'خانواده داشبوردهای اقساط، پلاس و نسیه', variants: ['plus', 'standard', 'deferred'], states: ['active', 'filtered', 'safe stop'] },
+  { category: 'Product Examples', name: 'VehicleInsuranceForm', purpose: 'فرم مشترک وسیله نقلیه بدون قیمت‌گذاری یا underwriting', variants: ['third party', 'comprehensive', 'motorcycle'], states: ['form', 'review'] },
+  { category: 'Product Examples', name: 'BankingRequestForm', purpose: 'خانواده درخواست بانکی با شرایط، فرم و مرور L3', variants: ['current account', 'card', 'child loan', 'marriage loan'], states: ['requirements', 'input', 'review'] },
+  { category: 'Product Examples', name: 'MessagingExperience', purpose: 'فهرست گفتگو، پیش‌نمایش و composer بدون پیام واقعی', variants: ['M-Payam', 'M-Payam Plus'], states: ['selected', 'unread', 'draft'] },
+  { category: 'Product Examples', name: 'SupportComposer', purpose: 'composer ایمن برای پشتیبانی و همیاری اربعین', variants: ['support', 'campaign'], states: ['draft', 'attachment mock', 'review'] },
   { category: 'Documentation', name: 'CodeExample', purpose: 'نمونه کد بازشونده و قابل کپی', variants: ['details panel'], states: ['collapsed', 'expanded', 'copied'] },
   { category: 'Documentation', name: 'GridLayoutDemo', purpose: 'نمایش تعاملی شبکه واقعی صفحه', variants: ['12-column', '4-column mobile'], states: ['overlay shown', 'overlay hidden'] },
 ];

@@ -163,7 +163,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .button-ghost { background: transparent; color: var(--action-primary); border: 1px solid var(--border-subtle); }
 .button-danger { background: var(--status-danger); color: white; }
 .button-block { width: 100%; }
-.status-badge { display: inline-flex; align-items: center; width: fit-content; min-height: 25px; padding: 3px 10px; border-radius: var(--radius-pill); font-size: 10px; font-weight: 700; white-space: nowrap; }
+.status-badge { display: inline-flex; align-items: center; inline-size: max-content; max-inline-size: 100%; flex: 0 0 auto; min-height: 25px; padding: 3px 10px; border-radius: var(--radius-pill); font-size: 10px; font-weight: 700; white-space: nowrap; word-break: normal; overflow-wrap: normal; hyphens: none; }
+.status-badge-multiline { inline-size: auto; max-inline-size: min(100%, 220px); justify-content: center; text-align: center; white-space: normal; word-break: normal; overflow-wrap: break-word; hyphens: none; line-height: 1.5; }
 .status-badge-info { color: #075c9c; background: #e8f3fb; }
 .status-badge-success { color: #0d7655; background: #e4f5ef; }
 .status-badge-warning { color: #9a5b04; background: #fff2d9; }

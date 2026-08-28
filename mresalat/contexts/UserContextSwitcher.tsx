@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { trackEvent } from '@/mresalat/core/analytics';
 import { MResalatIcon } from '@/mresalat/core/MResalatIcon';
 import { useMResalatContext } from './context-state';
@@ -9,7 +9,7 @@ export function UserContextSwitcher() {
   const { user, activeContext, setActiveContext } = useMResalatContext();
   const [open, setOpen] = useState(false);
   const [announcement, setAnnouncement] = useState('');
-  const menuId = useId();
+  const menuId = 'mresalat-context-switcher-menu';
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
 
@@ -72,4 +72,3 @@ export function UserContextSwitcher() {
     <span className="sr-only" aria-live="polite">{announcement}</span>
   </div>;
 }
-

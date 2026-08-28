@@ -9,6 +9,8 @@
     "dev": "vinext dev",
     "build": "vinext build",
     "test:mascot": "node --experimental-strip-types --test tests/mascot.test.mjs",
+    "test:catalog": "node --experimental-strip-types --test tests/catalog.test.mjs",
+    "test:examples": "node --experimental-strip-types --test tests/example-route-coverage.test.mjs",
     "start": "vinext start",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next"
   },

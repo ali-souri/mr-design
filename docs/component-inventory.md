@@ -87,3 +87,31 @@ This list reflects the exported React components in `mresalat/` for v0.4.
 
 - `CodeExample` — expandable representative TSX with copy feedback.
 - `GridLayoutDemo` — toggleable 12-column desktop / 4-column mobile grid overlay.
+
+## Audited service catalog
+
+- `ServiceSurface`, `ServiceHeader`, `ServiceStatusBadge` — canonical compact/detail composition with bilingual titles, chapter/domain traceability, evidence status and L0–L3 risk.
+- `SafeStopNotice`, `ServiceActionSummary` — explicit bilingual stop boundary plus impact/confirmation review for controlled and sensitive paths.
+- `ExternalLoginGate`, `UnavailableServiceState` — first-class gated, observed-unavailable and audited-not-visible evidence without invented behavior.
+- `SensitiveDataPlaceholder` — synthetic/redacted placeholder for personal, financial, message, location and health data.
+- `ServiceFilterBar`, `EmptyServiceState` — chapter, domain, audit-status and risk filtering with a recoverable empty result.
+- `ServiceFormShell` — labeled mock controls with help, safe validation, disabled real action and explicit no-submit feedback.
+- `CatalogDomainSurface` — config-driven domain composition spanning membership, support, existing M-Bazar, learning, finance, contributions, health, insurance, auxiliary systems, Rahyar, banking and communication.
+- `CatalogExplorer` — all 69 audited paths grouped into the exact 12 catalog chapters.
+- `CatalogStateGallery` — loading, empty, gated and unavailable reference states.
+
+The typed catalog source lives in `mresalat/domains/service-catalog.ts`; every `componentKey` resolves through `mresalat/domains/service-component-registry.ts`.
+
+## Interactive product examples
+
+- `ProductGallery` — visual `/examples` index for all 12 audited domains and 69 mapped service paths.
+- `ProductExampleShell`, `DomainLanding`, `DemoBoundary` — route identity, domain navigation, risk context, and catalog-backed safe-stop copy.
+- `Panel`, `Field`, `Stepper`, `SegmentedTabs`, `SearchBox`, `SafeReview` — accessible composition primitives for forms, filters, lists, multi-step flows, and high-impact review.
+- `ExternalProductGate`, `UnavailableProduct` — deliberate separate-login, observed 404, and audited-not-visible product states.
+- `ProviderSearch` — provider discovery and preview for M-Amouzesh and M-Donap.
+- `AmountPad`, `InstallmentDashboard` — shared finance controls and the M-Aghsat Plus / M-Aghsat / M-Nessieh family.
+- `VehicleInsuranceForm` — third-party, comprehensive, and motorcycle variants without pricing or underwriting logic.
+- `BankingRequestForm` — current account, card, child-loan, and marriage-loan request shells ending before submission.
+- `MessagingExperience`, `SupportComposer` — M-Payam / M-Payam Plus conversations and support/campaign composers without real sends.
+
+Product modules are grouped under `mresalat/examples/` by domain. Route pages under `app/examples/` stay thin, explicit, and delegate to those typed domain compositions. M-Bazar remains in `mresalat/mbazar/` and is reused as the product-quality reference.
