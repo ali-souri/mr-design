@@ -911,15 +911,32 @@ body { font-size: var(--type-body); line-height: 1.9; }
 html[data-theme='dark'] .ecosystem-prompt { background: linear-gradient(135deg, var(--brand-50), var(--accent-100)); }
 html[data-theme='dark'] .assistant-emotion-label { background: rgb(16 34 53 / 88%); }
 
-/* General home without the full-body assistant */
-.segment-hero-general { grid-template-columns: minmax(0, 1fr); gap: 28px; min-height: 410px; padding-block: 48px; background: radial-gradient(circle at 12% 4%, color-mix(in srgb, var(--accent-cyan) 14%, transparent), transparent 30%), linear-gradient(145deg, var(--surface-secondary), var(--surface-elevated)); }
-.segment-hero-general .segment-hero-copy { max-width: 800px; }
-.segment-hero-general .segment-hero-copy h1 { max-width: 780px; font-size: clamp(30px, 4.2vw, 48px); }
-.segment-hero-general .segment-hero-copy > p { max-width: 690px; font-size: 15px; }
-.segment-hero-general .assistant-shell { width: min(100%, 900px); padding: 0; background: transparent; border: 0; box-shadow: none; }
-.segment-hero-general .assistant-intro { margin-bottom: 14px; }
-.segment-hero-general .composer { min-height: 66px; background: var(--surface-elevated); box-shadow: var(--shadow-sm); }
-.segment-hero-general .prompt-row a { background: var(--surface-interactive); }
+/* General home: balanced 6/6 composition on the 12-column desktop grid. */
+.segment-hero-general { grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); align-items: center; gap: 48px; min-height: 360px; padding: 44px 48px; background: radial-gradient(circle at 10% 6%, color-mix(in srgb, var(--accent-cyan) 12%, transparent), transparent 29%), linear-gradient(145deg, var(--surface-secondary), var(--surface-default)); }
+.segment-hero-general .segment-hero-copy { min-width: 0; max-width: 620px; }
+.segment-hero-general .segment-hero-copy h1 { max-width: 620px; margin-bottom: 16px; font-size: clamp(34px, 3.4vw, 46px); }
+.segment-hero-general .segment-hero-copy > p { max-width: 590px; font-size: 15px; }
+.segment-hero-general .assistant-shell { width: min(100%, 560px); justify-self: end; padding: 22px; border: 1px solid color-mix(in srgb, var(--border-subtle) 78%, transparent); border-radius: var(--radius-lg); background: var(--surface-default); box-shadow: none; }
+.segment-hero-general .assistant-intro { gap: 12px; margin-bottom: 14px; }
+.segment-hero-general .assistant-intro strong { font-size: 18px; line-height: 1.55; }
+.segment-hero-general .assistant-intro small { color: var(--text-secondary); font-size: 13px; line-height: 1.65; }
+.segment-hero-general .ai-orb { width: 46px; height: 46px; border-radius: 15px; box-shadow: none; }
+.segment-hero-general .composer { height: 60px; min-height: 60px; padding: 6px 7px 6px 10px; border-color: color-mix(in srgb, var(--action-primary) 30%, var(--border-subtle)); border-radius: var(--radius-md); background: color-mix(in srgb, var(--surface-selected) 44%, var(--surface-default)); box-shadow: none; }
+.segment-hero-general .composer input::placeholder { color: var(--text-secondary); opacity: .82; }
+.segment-hero-general .composer button { width: 46px; height: 46px; border-radius: 14px; }
+.segment-hero-general .prompt-row { gap: 7px; margin-top: 12px; }
+.segment-hero-general .prompt-row a { min-height: 34px; display: inline-flex; align-items: center; padding: 4px 10px; color: var(--text-secondary); background: var(--surface-secondary); }
+html[data-theme='dark'] .segment-hero-general { background: radial-gradient(circle at 10% 6%, color-mix(in srgb, var(--accent-cyan) 9%, transparent), transparent 29%), linear-gradient(145deg, var(--surface-secondary), var(--surface-canvas)); }
+html[data-theme='dark'] .segment-hero-general .assistant-shell { border-color: color-mix(in srgb, var(--border-subtle) 62%, transparent); background: var(--surface-default); }
+html[data-theme='dark'] .segment-hero-general .composer { border-color: color-mix(in srgb, var(--action-primary) 42%, var(--border-subtle)); background: color-mix(in srgb, var(--surface-selected) 54%, var(--surface-default)); }
+
+@media (max-width: 1023px) {
+  .segment-hero-general { grid-template-columns: minmax(0, 1fr); gap: 24px; min-height: 0; padding: 36px; }
+  .segment-hero-general .segment-hero-copy { display: contents; }
+  .segment-hero-general .segment-hero-heading { order: 1; }
+  .segment-hero-general .assistant-shell { order: 2; width: 100%; max-width: 680px; justify-self: center; }
+  .segment-hero-general .segment-hero-copy > p { order: 3; max-width: 680px; margin: -6px auto 0; }
+}
 
 /* Ecosystem service identities */
 .mresalat-service-icon { --service-accent: var(--action-primary); position: relative; display: grid; place-items: center; flex: 0 0 auto; border-radius: 28%; background: color-mix(in srgb, var(--service-accent) 9%, var(--surface-elevated)); border: 1px solid color-mix(in srgb, var(--service-accent) 18%, var(--border-subtle)); overflow: hidden; }
@@ -969,7 +986,18 @@ html[data-theme='dark'] .assistant-emotion-label { background: rgb(16 34 53 / 88
 }
 
 @media (max-width: 640px) {
-  .segment-hero-general { padding-block: 28px; }.segment-hero-general .composer { min-height: 58px; }
+  .segment-hero-general { gap: 18px; padding: 24px 18px; }
+  .segment-hero-general .segment-hero-copy h1 { margin-bottom: 0; font-size: 28px; }
+  .segment-hero-general .assistant-shell { padding: 16px; border-radius: 20px; }
+  .segment-hero-general .assistant-intro { align-items: flex-start; margin-bottom: 12px; }
+  .segment-hero-general .assistant-intro strong { font-size: 16px; }
+  .segment-hero-general .assistant-intro small { display: flex; font-size: 12px; }
+  .segment-hero-general .ai-orb { width: 44px; height: 44px; }
+  .segment-hero-general .composer { height: 58px; min-height: 58px; }
+  .segment-hero-general .composer button { width: 44px; height: 44px; }
+  .segment-hero-general .prompt-row { gap: 6px; margin-top: 10px; }
+  .segment-hero-general .prompt-row a { min-height: 32px; padding-inline: 9px; font-size: 12px; }
+  .segment-hero-general .segment-hero-copy > p { margin: 0; font-size: 14px; }
   .service-discovery { padding: 18px; }.service-discovery-head { align-items: stretch; flex-direction: column; }.service-search { width: 100%; }
   .service-selector-grid, .service-identity-showcase { grid-template-columns: 1fr; }.service-selector-grid > button { min-height: 74px; }
   .service-example { padding: 18px; border-radius: 20px; }.service-example-head { align-items: flex-start; flex-direction: column; }.service-example-head h2 { font-size: 23px; }
