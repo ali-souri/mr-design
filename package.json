@@ -11,6 +11,10 @@
     "test:mascot": "node --experimental-strip-types --test tests/mascot.test.mjs",
     "test:catalog": "node --experimental-strip-types --test tests/catalog.test.mjs",
     "test:examples": "node --experimental-strip-types --test tests/example-route-coverage.test.mjs",
+    "test:docs": "node --test tests/showcase-docs.test.mjs",
+    "catalog:capture": "node scripts/export-design-system-catalog.mjs --capture-only",
+    "catalog:prototype": "node scripts/export-design-system-catalog.mjs --prototype",
+    "catalog:pdf": "node scripts/export-design-system-catalog.mjs",
     "start": "vinext start",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next"
   },

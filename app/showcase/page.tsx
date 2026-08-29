@@ -22,8 +22,9 @@ import { SegmentComponentShowcase } from '@/mresalat/segments/SegmentPhaseOne';
 import { SegmentPhaseTwoShowcase } from '@/mresalat/segments/SegmentPhaseTwo';
 import { PhaseThreeShowcase } from '@/mresalat/contexts/PhaseThreeShowcase';
 import { serviceCatalog, serviceCatalogChapters } from '@/mresalat/domains/service-catalog';
+import { DocumentationLanding } from '@/mresalat/docs/DocumentationLanding';
 
-export const metadata: Metadata = { title: 'مرجع کدنویسی سیستم' };
+export const metadata: Metadata = { title: 'مستندات توسعه‌دهنده و Showcase' };
 
 const sections = [
   ['brand', 'برند'], ['typography', 'تایپوگرافی'], ['color', 'رنگ'], ['foundations', 'پایه‌ها'], ['grid', 'شبکه و چیدمان'],
@@ -45,7 +46,8 @@ function ShowcaseSection({ id, eyebrow, title, description, children }: { id: st
 export default function ShowcasePage() {
   return (
     <AppShell active="system">
-      <div className="showcase-layout">
+      <DocumentationLanding />
+      <div className="showcase-layout" id="legacy-showcase">
         <aside className="showcase-toc"><BrandLogo /><strong>فهرست مرجع</strong>{sections.map(([id, label]) => <a href={`#${id}`} key={id}>{label}</a>)}<a href="/examples">نمونه‌های اکوسیستم</a><a href="/qa">بازبینی مسیرها</a></aside>
         <div className="showcase-content">
           <header className="showcase-v2-hero"><div><Badge tone="success">v0.4 · coded reference</Badge><h1>MResalat System</h1><p>مرجع اجرایی برای ساخت تجربه‌های خوانا، قابل اعتماد و سازگار در اکوسیستم ام‌رسالت.</p><div><a className="button button-primary" href="/examples">دیدن نمونه‌ها<MResalatIcon name="next" size={16} /></a><a className="button button-ghost" href="#grid">قواعد چیدمان</a></div></div><ParallaxLayer className="showcase-orbit" strength={10}><span><MResalatIcon name="assistant" size={32} /></span><i /><i /><i /></ParallaxLayer></header>

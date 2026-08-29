@@ -39,7 +39,7 @@ export function SegmentExperience({ segment, view, shellActive = 'segments' }: {
 
         {view === 'home' && <>
           <ParallaxLayer className={`segment-hero ${segment.id === 'general' ? 'segment-hero-general' : ''}`} strength={isYoung ? 22 : 7}>
-            <div className="segment-hero-copy"><span className="eyebrow">{segment.home.eyebrow}</span><h1>{segment.home.title}</h1><p>{segment.home.intro}</p>{isYoung && <div className="young-decor" aria-hidden="true"><span /><span /><span /></div>}</div>
+            <div className="segment-hero-copy"><div className="segment-hero-heading"><span className="eyebrow">{segment.home.eyebrow}</span><h1>{segment.home.title}</h1></div><p>{segment.home.intro}</p>{isYoung && <div className="young-decor" aria-hidden="true"><span /><span /><span /></div>}</div>
             {showCharacter ? <div className={`segment-assistant-stage ${isYoung ? 'segment-assistant-young' : ''}`}><SmartAssistant3D mode="complete" emotion={isYoung ? 'happy' : 'listening'} /><AssistantShell variant={segment.assistantVariant} title="از اینجا شروع کنید" placeholder={segment.home.prompt} /></div> : <AssistantShell variant={segment.assistantVariant} title={isOperational ? 'دستیار عملیات' : 'نیازتان را بگویید؛ مسیر را با هم پیدا می‌کنیم'} placeholder={segment.home.prompt} prompts={segment.id === 'general' ? [{ label: 'عضویت ام‌رسالت', href: '/examples' }, { label: 'ام‌بازار', href: '/examples' }, { label: 'مشاوره آنلاین', href: '/examples' }] : undefined} />}
           </ParallaxLayer>
           {isOperational ? <><QuickActions segment={segment} /><Metrics segment={segment} /></> : <><Metrics segment={segment} /><QuickActions segment={segment} /></>}

@@ -20,6 +20,7 @@
 .DS_Store
 *.pem
 *.tsbuildinfo
+__pycache__/
 
 # debug
 npm-debug.log*
@@ -38,3 +39,6 @@ next-env.d.ts
 /outputs/
 /work/
 /.openai/*.tgz
+/public/catalog-book-generated/
+/output/pdf/
+/tmp/pdfs/
